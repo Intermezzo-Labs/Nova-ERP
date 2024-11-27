@@ -22,17 +22,22 @@
   ];
 </script>
 
-<div class="flex h-screen">
+<div class="flex flex-col lg:flex-row min-h-screen bg-background text-foreground">
   <Sidebar />
-  <div class="flex-grow bg-gray-100">
+  <main class="flex-1 flex flex-col w-full ml-[72px] lg:ml-64">
     <Header />
-    <div class="p-6">
-      <ProgressBar progress="38" label="Your Sales tools progress" />
-      <div class="mt-6 space-y-6">
-        {#each actions as action}
-          <ActionCard {action} />
-        {/each}
+    <div class="flex-1 overflow-y-auto">
+      <div class="p-4 sm:p-6 lg:p-8 mx-auto w-full max-w-7xl">
+        <div class="max-w-5xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8">
+            <ProgressBar progress="38" label="Your Sales tools progress" />
+            <div class="grid gap-4 lg:gap-6">
+              {#each actions as action}
+                <ActionCard {action} />
+              {/each}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 </div>
