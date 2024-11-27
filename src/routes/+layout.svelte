@@ -27,5 +27,11 @@
 </svelte:head>
 
 <div class="min-h-screen bg-background transition-colors duration-300">
+  <button
+    class="fixed top-4 right-4 p-2 rounded-lg bg-card border border-border"
+    on:click={toggleTheme}
+  >
+    {theme === 'dark' ? '🌞' : '🌙'}
+  </button>
   <slot />
 </div>
