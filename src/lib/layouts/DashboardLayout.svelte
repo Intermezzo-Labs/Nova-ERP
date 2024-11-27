@@ -29,12 +29,11 @@
     <div class="flex-1 overflow-y-auto">
       <div class="p-4 sm:p-6 lg:p-8 mx-auto w-full max-w-7xl">
         <div class="max-w-5xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8">
-            <ProgressBar progress="38" label="Your Sales tools progress" />
-            <div class="grid gap-4 lg:gap-6">
-              {#each actions as action}
-                <ActionCard {action} />
-              {/each}
-            </div>
+          <ProgressBar progress="38" label="Your Sales tools progress" />
+          <div class="grid gap-4 sm:gap-6">
+            {#each actions as action}
+              <ActionCard {action} />
+            {/each}
           </div>
         </div>
       </div>
