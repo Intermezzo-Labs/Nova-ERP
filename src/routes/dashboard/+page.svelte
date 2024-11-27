@@ -1,50 +1,30 @@
 <script lang="ts">
-  interface StatCard {
-    title: string;
-    value: string;
-    change: string;
-    trend: 'up' | 'down';
-  }
+  import ProgressBar from '$lib/components/ProgressBar.svelte';
+  import ActionCard from '$lib/components/ActionCard.svelte';
 
-  const stats: StatCard[] = [
-    { title: 'Total Revenue', value: '$45,231.89', change: '+20.1%', trend: 'up' },
-    { title: 'Active Users', value: '2,338', change: '+15.3%', trend: 'up' },
-    { title: 'Pending Orders', value: '12', change: '-2.3%', trend: 'down' },
-    { title: 'Customer Satisfaction', value: '98%', change: '+4.4%', trend: 'up' }
+  let actions = [
+    {
+      title: 'Recommended: All you need to get started',
+      subtitle: 'Set up the basics',
+      description: 'Import your contacts, invite teammates, and understand properties.',
+      progress: 83,
+      time: 'About 2 minutes left',
+    },
+    {
+      title: 'Close more deals faster with Sales Hub',
+      subtitle: 'Track your deals in one place',
+      description: 'Create a custom pipeline and never lose track of a sale again.',
+      progress: 0,
+      time: 'About 4 minutes left',
+    },
   ];
 </script>
 
-<div class="space-y-8">
-  <div class="flex justify-between items-center">
-    <h1 class="text-3xl font-bold text-primary">Dashboard</h1>
-    <div class="flex space-x-4">
-      <button class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity">
-        New Report
-      </button>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    {#each stats as stat}
-      <div class="p-6 bg-card rounded-xl border border-border">
-        <h3 class="text-sm font-medium text-muted-foreground">{stat.title}</h3>
-        <p class="text-2xl font-bold mt-2 text-primary">{stat.value}</p>
-        <p class="mt-2 text-sm {stat.trend === 'up' ? 'text-green-500' : 'text-red-500'}">
-          {stat.change}
-        </p>
-      </div>
+<div class="max-w-5xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8">
+  <ProgressBar progress="38" label="Your Sales tools progress" />
+  <div class="grid gap-4 sm:gap-6">
+    {#each actions as action}
+      <ActionCard {action} />
     {/each}
-  </div>
-
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <div class="p-6 bg-card rounded-xl border border-border">
-      <h2 class="text-xl font-semibold mb-4">Recent Activity</h2>
-      <!-- Add activity content -->
-    </div>
-    
-    <div class="p-6 bg-card rounded-xl border border-border">
-      <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
-      <!-- Add quick actions -->
-    </div>
   </div>
 </div>

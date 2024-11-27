@@ -1,37 +1,17 @@
-<!-- // src/routes/+layout.svelte -->
 <script lang="ts">
   import '../app.postcss';
-  import { onMount } from 'svelte';
-  
-  let mounted = false;
-  let theme = 'dark';
-  
-  onMount(() => {
-    mounted = true;
-    // Check system preference
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    theme = prefersDark ? 'dark' : 'light';
-    document.documentElement.classList.toggle('dark', prefersDark);
-  });
-
-  function toggleTheme() {
-    theme = theme === 'dark' ? 'light' : 'dark';
-    document.documentElement.classList.toggle('dark');
-  }
+  import Sidebar from '$lib/components/navigation/Sidebar.svelte';
+  import Header from '$lib/components/Header.svelte';
 </script>
 
-<svelte:head>
-  <title>Nova - Open Source ERP Platform</title>
-  <meta name="description" content="Transform your business with Nova ERP, the open source platform featuring AI-powered insights and seamless integrations for unparalleled efficiency." />
-  <meta name="theme-color" content={theme === 'dark' ? '#1a1a1a' : '#ffffff'} />
-</svelte:head>
-
-<div class="min-h-screen bg-background transition-colors duration-300">
-  <button
-    class="fixed top-4 right-4 p-2 rounded-lg bg-card border border-border"
-    on:click={toggleTheme}
-  >
-    {theme === 'dark' ? '🌞' : '🌙'}
-  </button>
-  <slot />
+<div class="flex flex-col lg:flex-row min-h-screen bg-background text-foreground">
+  <Sidebar />
+  <main class="flex-1 flex flex-col w-full ml-[72px] lg:ml-64">
+    <Header />
+    <div class="flex-1 overflow-y-auto">
+      <div class="p-4 sm:p-6 lg:p-8 mx-auto w-full max-w-7xl">
+        <slot />
+      </div>
+    </div>
+  </main>
 </div>

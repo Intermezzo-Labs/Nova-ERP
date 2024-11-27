@@ -1,5 +1,4 @@
 <script>
-  import Sidebar from '$lib/components/navigation/Sidebar.svelte';
   import Header from '$lib/components/Header.svelte';
   import ProgressBar from '$lib/components/ProgressBar.svelte';
   import ActionCard from '$lib/components/ActionCard.svelte';
@@ -23,7 +22,6 @@
 </script>
 
 <div class="flex flex-col lg:flex-row min-h-screen bg-background text-foreground">
-  <Sidebar />
   <main class="flex-1 flex flex-col w-full ml-[72px] lg:ml-64">
     <Header />
     <div class="flex-1 overflow-y-auto">
