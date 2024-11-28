@@ -15,3 +15,12 @@ export interface InvoiceTemplate {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface WebsiteTemplate {
+    id: string;
+    name: string;
+    description: string;
+    thumbnail?: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
