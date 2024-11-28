@@ -24,7 +24,7 @@
 	const navItems: NavItem[] = [
 		{ label: 'Dashboard', href: '/dashboard', icon: '📊' },
 		{ label: 'CRM', href: '/dashboard/modules/crm', icon: '👥', submenu: crmMenuItems },
-		{ label: 'Business Cards', href: '/dashboard/modules/business-card', icon: '📇' },
+		{ label: 'Templates', href: '/dashboard/modules/business-card', icon: '📇' },
 		{ label: 'Settings', href: '/dashboard/settings', icon: '⚙️' }
 	];
 </script>

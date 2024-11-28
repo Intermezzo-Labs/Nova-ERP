@@ -2,6 +2,7 @@
     import { page } from '$app/stores';
     import type { PageData } from './$types';
     import type { Contact, TableColumn } from '$lib/types/crm';
+	import { Button } from '$lib/components/ui/button';
     
     export let data: PageData;
     
@@ -37,18 +38,12 @@
     <div class="mb-8 flex items-center justify-between">
         <h1 class="text-3xl font-bold text-gray-500">Contacts</h1>
         <div class="flex gap-4">
-            <button
-                class="rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
-                type="button"
-            >
+            <Button type="button" variant="outline" size="lg" class="mt-2">
                 Create Contact
-            </button>
-            <button
-                class="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50"
-                type="button"
-            >
-                Export Selected
-            </button>
+            </Button>
+            <Button type="button" variant="outline" size="lg" class="mt-2">
+                Import Contacts
+            </Button>
         </div>
     </div>
     
