@@ -15,12 +15,30 @@ export const load: PageServerLoad = async ({ locals }) => {
     let userData;
     try {
         userData = await getNovaUser(user.id);
+        if (!userData) {
+            // If no user exists in nova_users, create initial record
+            userData = await createNovaUser({
+                id: user.id,
+                firstName: user.user_metadata?.first_name || '',
+                lastName: user.user_metadata?.last_name || '',
+                email: user.email || '',
+                role: 'User',
+                status: 'Active'
+            });
+        }
     } catch (e) {
-        console.error('Error fetching user data:', e);
+        console.error('Error fetching/creating user data:', e);
+        throw error(500, {
+            message: 'Failed to load user data',
+            cause: e instanceof Error ? e.message : 'Unknown error'
+        });
     }
 
-    const form = await superValidate(userData || undefined, zod(profileFormSchema));
-    return { form };
+    const form = await superValidate(userData, zod(profileFormSchema));
+    return { 
+        form,
+        userData 
+    };
 };
 
 export const actions: Actions = {
@@ -37,24 +55,26 @@ export const actions: Actions = {
 
         try {
             const existingUser = await getNovaUser(user.id);
+            let updatedUser;
             
             if (existingUser) {
-                // Update existing user
-                await updateNovaUser({
+                updatedUser = await updateNovaUser({
                     id: user.id,
                     ...form.data
                 });
             } else {
-                // Create new user
-                await createNovaUser({
-                    id: user.id,
-                    ...form.data
+                updatedUser = await createNovaUser({
+                    ...form.data,
+                    email: user.email || '',
+                    role: 'User',
+                    status: 'Active'
                 });
             }
 
             return {
                 form,
-                success: true
+                success: true,
+                userData: updatedUser
             };
         } catch (e) {
             console.error('Error saving user data:', e);

@@ -1,7 +1,7 @@
 import { supabase } from '$lib/supabaseClient';
 import type { CreateNovaUser, NovaUser, UpdateNovaUser } from '$lib/types/user';
 
-export async function createNovaUser(userData: CreateNovaUser): Promise<NovaUser> {
+export async function createNovaUser(userData: CreateNovaUser & { id: string }): Promise<NovaUser> {
     try {
         const { data, error } = await supabase
             .from('nova_users')
@@ -36,14 +36,22 @@ export async function createNovaUser(userData: CreateNovaUser): Promise<NovaUser
 }
 
 export async function getNovaUser(id: string): Promise<NovaUser | null> {
-    const { data, error } = await supabase
-        .from('nova_users')
-        .select()
-        .eq('id', id)
-        .single();
+    try {
+        const { data, error } = await supabase
+            .from('nova_users')
+            .select('*')
+            .eq('id', id)
+            .maybeSingle();
 
-    if (error) throw new Error(error.message);
-    return data ? transformNovaUser(data) : null;
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        return data ? transformNovaUser(data) : null;
+    } catch (error) {
+        console.error('Error in getNovaUser:', error);
+        throw error;
+    }
 }
 
 export async function updateNovaUser(userData: UpdateNovaUser): Promise<NovaUser> {

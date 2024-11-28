@@ -131,7 +131,3 @@
 
     <Button type="submit">Save Profile</Button>
 </form>
-
-{#if browser}
-	<SuperDebug data={$formData} />
-{/if}
