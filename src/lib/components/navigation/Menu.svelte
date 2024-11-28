@@ -14,7 +14,6 @@
 
 <nav
     class="menu w-64"
-    role="navigation"
     aria-label="CRM Navigation"
 >
     <ul

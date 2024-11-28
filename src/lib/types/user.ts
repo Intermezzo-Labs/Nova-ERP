@@ -20,3 +20,19 @@ export type CreateNovaUser = Omit<NovaUser, 'id' | 'createdAt' | 'updatedAt'>;
 
 // Helper type for updating a user (all fields optional except id)
 export type UpdateNovaUser = Partial<Omit<NovaUser, 'id'>> & { id: string };
+export interface NovaUser {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    company?: string;
+    phone?: string;
+    address?: string;
+    role: 'Admin' | 'Manager' | 'User';
+    status: 'Active' | 'Inactive';
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export type CreateNovaUser = Omit<NovaUser, 'createdAt' | 'updatedAt'>;
+export type UpdateNovaUser = Partial<CreateNovaUser> & { id: string };

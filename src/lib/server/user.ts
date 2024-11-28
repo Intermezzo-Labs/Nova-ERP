@@ -2,23 +2,37 @@ import { supabase } from '$lib/supabaseClient';
 import type { CreateNovaUser, NovaUser, UpdateNovaUser } from '$lib/types/user';
 
 export async function createNovaUser(userData: CreateNovaUser): Promise<NovaUser> {
-    const { data, error } = await supabase
-        .from('nova_users')
-        .insert([{
-            first_name: userData.firstName,
-            last_name: userData.lastName,
-            email: userData.email,
-            company: userData.company,
-            phone: userData.phone,
-            address: userData.address,
-            role: userData.role,
-            status: userData.status
-        }])
-        .select()
-        .single();
+    try {
+        const { data, error } = await supabase
+            .from('nova_users')
+            .insert([{
+                id: userData.id,
+                first_name: userData.firstName,
+                last_name: userData.lastName,
+                email: userData.email,
+                company: userData.company,
+                phone: userData.phone,
+                address: userData.address,
+                role: userData.role || 'User',
+                status: userData.status || 'Active'
+            }])
+            .select()
+            .single();
 
-    if (error) throw new Error(error.message);
-    return transformNovaUser(data);
+        if (error) {
+            console.error('Error creating nova user:', error);
+            throw new Error(`Failed to create user: ${error.message}`);
+        }
+
+        if (!data) {
+            throw new Error('No data returned after creating user');
+        }
+
+        return transformNovaUser(data);
+    } catch (error) {
+        console.error('Error in createNovaUser:', error);
+        throw error;
+    }
 }
 
 export async function getNovaUser(id: string): Promise<NovaUser | null> {
