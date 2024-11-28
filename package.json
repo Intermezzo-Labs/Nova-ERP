@@ -12,6 +12,7 @@
 		"lint": "prettier --check . && eslint .",
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run",
+		"test:user": "vitest src/lib/server/__tests__/user.test.ts",
 		"supabase-start": "npx supabase start"
 	},
 	"devDependencies": {
