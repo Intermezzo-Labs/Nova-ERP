@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { Sun, Moon } from 'lucide-svelte';
 	import { resetMode, setMode } from 'mode-watcher';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import { Button } from '$lib/components/ui/button';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+
+	import * as Avatar from '$lib/components/ui/avatar';
 
 	let searchQuery = '';
+	export let email;
 </script>
 
 <header
@@ -104,14 +107,11 @@
 				</button>
 
 				<!-- Avatar -->
-				<div
-					class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl
-                  bg-gradient-to-br from-primary/80 via-blue-500/80 to-violet-500/80 font-medium
-                  text-primary-foreground shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105
-                  hover:shadow-xl"
-				>
-					<span class="text-sm font-semibold">SA</span>
-				</div>
+
+				<Avatar.Root class="h-8 w-8">
+					<!-- <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" /> -->
+					<Avatar.Fallback>{email}</Avatar.Fallback>
+				</Avatar.Root>
 			</div>
 		</div>
 	</div>

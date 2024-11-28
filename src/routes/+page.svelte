@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ActionData, SubmitFunction } from './$types.js';
-	import UserAuthForm from '$lib/components/UserAuthForm.svelte';
+	import UserAuthForm from './_components/user-auth-form.svelte';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { Mail } from 'lucide-svelte';
 

@@ -2,7 +2,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { type Actions, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types.js';
-import { displayFormSchema } from './DisplayForm.svelte';
+import { displayFormSchema } from './display-form.svelte';
 
 export const load: PageServerLoad = async () => {
 	return {

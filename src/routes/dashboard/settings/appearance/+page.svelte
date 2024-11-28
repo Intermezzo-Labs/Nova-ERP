@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import type { PageData } from './$types.js';
-	import AppearanceForm from './AppearanceForm.svelte';
+	import AppearanceForm from './appearance-form.svelte';
 
 	export let data: PageData;
 </script>
