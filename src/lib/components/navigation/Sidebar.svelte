@@ -21,10 +21,15 @@
 		{ id: 'tasks', name: 'Tasks', route: '/modules/crm/tasks', badge: 5 }
 	];
 
+	const templatesMenuItems: MenuItem[] = [
+		{ id: 'business-cards', name: 'Business Cards', route: '/dashboard/modules/templates/business-cards' },
+		{ id: 'invoices', name: 'Invoices', route: '/dashboard/modules/templates/invoices' }
+	];
+
 	const navItems: NavItem[] = [
 		{ label: 'Dashboard', href: '/dashboard', icon: '📊' },
 		{ label: 'CRM', href: '/dashboard/modules/crm', icon: '👥', submenu: crmMenuItems },
-		{ label: 'Templates', href: '/dashboard/modules/business-card', icon: '📇' },
+		{ label: 'Templates', href: '/dashboard/modules/templates', icon: '📇', submenu: templatesMenuItems },
 		{ label: 'Settings', href: '/dashboard/settings', icon: '⚙️' }
 	];
 </script>

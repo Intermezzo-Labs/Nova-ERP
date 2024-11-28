@@ -38,10 +38,10 @@
     <div class="mb-8 flex items-center justify-between">
         <h1 class="text-3xl font-bold text-gray-500">Contacts</h1>
         <div class="flex gap-4">
-            <Button type="button" variant="outline" size="lg" class="mt-2">
+            <Button type="button" size="lg" class="mt-2">
                 Create Contact
             </Button>
-            <Button type="button" variant="outline" size="lg" class="mt-2">
+            <Button type="button" size="lg" class="mt-2">
                 Import Contacts
             </Button>
         </div>
