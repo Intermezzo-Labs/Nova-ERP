@@ -7,8 +7,8 @@ import { createNovaUser, getNovaUser, updateNovaUser } from '$lib/server/user';
 import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ locals }) => {
-    const { data: { user }, error } = await locals.supabase.auth.getUser();
-    if (error || !user) {
+    const { session, user } = await locals.safeGetSession();
+    if (!session || !user) {
         throw error(401, 'Unauthorized');
     }
 
@@ -43,8 +43,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
     default: async (event) => {
-        const { data: { user }, error } = await event.locals.supabase.auth.getUser();
-        if (error || !user) {
+        const { session, user } = await event.locals.safeGetSession();
+        if (!session || !user) {
             throw error(401, 'Unauthorized');
         }
 

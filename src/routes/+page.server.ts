@@ -2,12 +2,12 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { createNovaUser, getNovaUser } from '$lib/server/user';
 
-export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
-	const { data: { user }, error } = await supabase.auth.getUser();
+export const load: PageServerLoad = async ({ url, locals: { safeGetSession } }) => {
+	const { session } = await safeGetSession();
 
 	// if the user is already logged in return them to the account page
-	if (user && !error) {
-		throw redirect(303, '/dashboard');
+	if (session) {
+		redirect(303, '/dashboard');
 	}
 
 	return { url: url.origin };
