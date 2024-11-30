@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import type { PageData } from './$types.js';
 	import ProfileForm from './profile-form.svelte';
 	export let data: PageData;
