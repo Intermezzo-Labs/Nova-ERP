@@ -1,127 +1,133 @@
 <script lang="ts" context="module">
-	import { z } from 'zod';
-	export const profileFormSchema = z.object({
-		username: z
-			.string()
-			.min(2, 'Username must be at least 2 characters.')
-			.max(30, 'Username must not be longer than 30 characters'),
-		email: z.string({ required_error: 'Please select an email to display' }).email(),
-		bio: z.string().min(4).max(160).default('I own a computer.'),
-		urls: z.array(z.string().url()).default(['https://shadcn.com', 'https://twitter.com/shadcn'])
-	});
-	export type ProfileFormSchema = typeof profileFormSchema;
+    import { z } from 'zod';
+    import type { UserRole, UserStatus } from '$lib/types/user';
+
+    export const profileFormSchema = z.object({
+        firstName: z.string().min(2, 'First name must be at least 2 characters.'),
+        lastName: z.string().min(2, 'Last name must be at least 2 characters.'),
+        email: z.string().email('Please enter a valid email address'),
+        company: z.string().optional(),
+        phone: z.string().optional(),
+        address: z.string().optional(),
+        role: z.enum(['Admin', 'Manager', 'User'] as const),
+        status: z.enum(['Active', 'Inactive'] as const)
+    });
+    export type ProfileFormSchema = typeof profileFormSchema;
 </script>
 
 <script lang="ts">
-	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { tick } from 'svelte';
-	import { cn } from '$lib/utils.js';
-	import { browser } from '$app/environment';
-	import * as Form from '$lib/components/ui/form';
-	import * as Select from '$lib/components/ui/select';
-	import Input from '$lib/components/ui/input/input.svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
-	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+    import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
+    import { zodClient } from 'sveltekit-superforms/adapters';
+    import { browser } from '$app/environment';
+    import * as Form from '$lib/components/ui/form';
+    import * as Select from '$lib/components/ui/select';
+    import Input from '$lib/components/ui/input/input.svelte';
+    import Button from '$lib/components/ui/button/button.svelte';
+    import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 
-	export let data: SuperValidated<Infer<ProfileFormSchema>>;
+    export let data: SuperValidated<Infer<ProfileFormSchema>>;
 
-	const form = superForm(data, {
-		validators: zodClient(profileFormSchema)
-	});
+    const form = superForm(data, {
+        validators: zodClient(profileFormSchema)
+    });
 
-	const { form: formData, enhance } = form;
+    const { form: formData, enhance } = form;
 
-	function addUrl() {
-		$formData.urls = [...$formData.urls, ''];
-
-		tick().then(() => {
-			const urlInputs = Array.from(
-				document.querySelectorAll<HTMLElement>("#profile-form input[name='urls']")
-			);
-			const lastInput = urlInputs[urlInputs.length - 1];
-			lastInput && lastInput.focus();
-		});
-	}
-
-	$: selectedEmail = {
-		label: $formData.email,
-		value: $formData.email
-	};
+    const roles: UserRole[] = ['Admin', 'Manager', 'User'];
+    const statuses: UserStatus[] = ['Active', 'Inactive'];
 </script>
 
-<form method="POST" class="space-y-8" use:enhance id="profile-form">
-	<Form.Field {form} name="username">
-		<Form.Control let:attrs>
-			<Form.Label>Username</Form.Label>
-			<Input placeholder="@shadcn" {...attrs} bind:value={$formData.username} />
-		</Form.Control>
-		<Form.Description>
-			This is your public display name. It can be your real name or a pseudonym. You can only change
-			this once every 30 days.
-		</Form.Description>
-		<Form.FieldErrors />
-	</Form.Field>
+<form method="POST" class="space-y-8" use:enhance>
+    <Form.Field {form} name="firstName">
+        <Form.Control let:attrs>
+            <Form.Label>First Name</Form.Label>
+            <Input {...attrs} bind:value={$formData.firstName} />
+        </Form.Control>
+        <Form.FieldErrors />
+    </Form.Field>
 
-	<Form.Field {form} name="email">
-		<Form.Control let:attrs>
-			<Form.Label>Email</Form.Label>
-			<Select.Root
-				selected={selectedEmail}
-				onSelectedChange={(s) => {
-					s && ($formData.email = s.value);
-				}}
-			>
-				<Select.Trigger {...attrs}>
-					<Select.Value placeholder="Select a verified email to display" />
-				</Select.Trigger>
-				<Select.Content>
-					<Select.Item value="m@example.com" label="m@example.com" />
-					<Select.Item value="m@google.com" label="m@google.com" />
-					<Select.Item value="m@support.com" label="m@supporte.com" />
-				</Select.Content>
-			</Select.Root>
-			<input hidden name={attrs.name} bind:value={$formData.email} />
-		</Form.Control>
-		<Form.Description>
-			You can manage verified email addresses in your <a href="/examples/forms">email settings</a>.
-		</Form.Description>
-		<Form.FieldErrors />
-	</Form.Field>
-	<Form.Field {form} name="bio">
-		<Form.Control let:attrs>
-			<Form.Label>Bio</Form.Label>
-			<Textarea {...attrs} bind:value={$formData.bio} />
-		</Form.Control>
-		<Form.Description>
-			You can <span>@mention</span> other users and organizations to link to them.
-		</Form.Description>
-		<Form.FieldErrors />
-	</Form.Field>
-	<div>
-		<Form.Fieldset {form} name="urls">
-			<Form.Legend>URLs</Form.Legend>
-			{#each $formData.urls as _, i}
-				<Form.ElementField {form} name="urls[{i}]">
-					<Form.Description class={cn(i !== 0 && 'sr-only')}>
-						Add links to your website, blog, or social media profiles.
-					</Form.Description>
-					<Form.Control let:attrs>
-						<Input {...attrs} bind:value={$formData.urls[i]} />
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.ElementField>
-			{/each}
-		</Form.Fieldset>
-		<Button type="button" variant="outline" size="sm" class="mt-2" on:click={addUrl}>
-			Add URL
-		</Button>
-	</div>
+    <Form.Field {form} name="lastName">
+        <Form.Control let:attrs>
+            <Form.Label>Last Name</Form.Label>
+            <Input {...attrs} bind:value={$formData.lastName} />
+        </Form.Control>
+        <Form.FieldErrors />
+    </Form.Field>
 
-	<Form.Button>Update profile</Form.Button>
+    <Form.Field {form} name="email">
+        <Form.Control let:attrs>
+            <Form.Label>Email</Form.Label>
+            <Input type="email" {...attrs} bind:value={$formData.email} />
+        </Form.Control>
+        <Form.FieldErrors />
+    </Form.Field>
+
+    <Form.Field {form} name="company">
+        <Form.Control let:attrs>
+            <Form.Label>Company</Form.Label>
+            <Input {...attrs} bind:value={$formData.company} />
+        </Form.Control>
+        <Form.Description>Optional: Enter your company name</Form.Description>
+        <Form.FieldErrors />
+    </Form.Field>
+
+    <Form.Field {form} name="phone">
+        <Form.Control let:attrs>
+            <Form.Label>Phone</Form.Label>
+            <Input type="tel" {...attrs} bind:value={$formData.phone} />
+        </Form.Control>
+        <Form.Description>Optional: Enter your phone number</Form.Description>
+        <Form.FieldErrors />
+    </Form.Field>
+
+    <Form.Field {form} name="address">
+        <Form.Control let:attrs>
+            <Form.Label>Address</Form.Label>
+            <Textarea {...attrs} bind:value={$formData.address} />
+        </Form.Control>
+        <Form.Description>Optional: Enter your address</Form.Description>
+        <Form.FieldErrors />
+    </Form.Field>
+
+    <Form.Field {form} name="role">
+        <Form.Control let:attrs>
+            <Form.Label>Role</Form.Label>
+            <Select.Root
+                selected={{ value: $formData.role, label: $formData.role }}
+                onSelectedChange={(s) => s && ($formData.role = s.value as UserRole)}
+            >
+                <Select.Trigger {...attrs}>
+                    <Select.Value placeholder="Select a role" />
+                </Select.Trigger>
+                <Select.Content>
+                    {#each roles as role}
+                        <Select.Item value={role} label={role} />
+                    {/each}
+                </Select.Content>
+            </Select.Root>
+        </Form.Control>
+        <Form.FieldErrors />
+    </Form.Field>
+
+    <Form.Field {form} name="status">
+        <Form.Control let:attrs>
+            <Form.Label>Status</Form.Label>
+            <Select.Root
+                selected={{ value: $formData.status, label: $formData.status }}
+                onSelectedChange={(s) => s && ($formData.status = s.value as UserStatus)}
+            >
+                <Select.Trigger {...attrs}>
+                    <Select.Value placeholder="Select a status" />
+                </Select.Trigger>
+                <Select.Content>
+                    {#each statuses as status}
+                        <Select.Item value={status} label={status} />
+                    {/each}
+                </Select.Content>
+            </Select.Root>
+        </Form.Control>
+        <Form.FieldErrors />
+    </Form.Field>
+
+    <Button type="submit">Save Profile</Button>
 </form>
-
-{#if browser}
-	<SuperDebug data={$formData} />
-{/if}
