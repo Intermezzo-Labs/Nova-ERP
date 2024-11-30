@@ -6,23 +6,23 @@
 		{
 			title: 'Profile',
 			href: '/dashboard/settings'
-		},
-		{
-			title: 'Account',
-			href: '/dashboard/settings/account'
-		},
-		{
-			title: 'Appearance',
-			href: '/dashboard/settings/appearance'
-		},
-		{
-			title: 'Notifications',
-			href: '/dashboard/settings/notifications'
-		},
-		{
-			title: 'Display',
-			href: '/dashboard/settings/display'
 		}
+		// {
+		// 	title: 'Account',
+		// 	href: '/dashboard/settings/account'
+		// },
+		// {
+		// 	title: 'Appearance',
+		// 	href: '/dashboard/settings/appearance'
+		// },
+		// {
+		// 	title: 'Notifications',
+		// 	href: '/dashboard/settings/notifications'
+		// },
+		// {
+		// 	title: 'Display',
+		// 	href: '/dashboard/settings/display'
+		// }
 	];
 </script>
 
@@ -33,7 +33,7 @@
 	</div>
 	<Separator class="my-6" />
 	<div class="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-		<aside class="-mx-4 lg:w-1/5">
+		<aside class="lg:-mx-4 lg:w-1/5">
 			<SidebarNav items={sidebarNavItems} class="overflow-auto" />
 		</aside>
 		<div class="flex-1 lg:max-w-2xl">

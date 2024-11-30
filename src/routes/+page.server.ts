@@ -1,6 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { createNovaUser, getNovaUser } from '$lib/server/user';
 
 export const load: PageServerLoad = async ({ url, locals: { safeGetSession } }) => {
 	const { session } = await safeGetSession();
@@ -27,7 +26,7 @@ export const actions: Actions = {
 			return fail(400, { errors: { email: 'Please enter a valid email address' }, email });
 		}
 
-		const { error } = await supabase.auth.signInWithOtp({ 
+		const { error } = await supabase.auth.signInWithOtp({
 			email,
 			options: {
 				emailRedirectTo: `${event.url.origin}/auth/callback`

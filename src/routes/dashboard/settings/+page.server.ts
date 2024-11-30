@@ -1,87 +1,62 @@
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { type Actions, fail } from '@sveltejs/kit';
+import { type Actions, fail, redirect, error, json } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { profileFormSchema } from './profile-form.svelte';
-import { createNovaUser, getNovaUser, updateNovaUser } from '$lib/server/user';
-import { error } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ locals }) => {
-    const { session, user } = await locals.safeGetSession();
-    if (!session || !user) {
-        throw error(401, 'Unauthorized');
-    }
+export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase } }) => {
+	const { session, user } = await safeGetSession();
 
-    let userData;
-    try {
-        userData = await getNovaUser(user.id);
-        if (!userData) {
-            // If no user exists in nova_users, create initial record
-            userData = await createNovaUser({
-                id: user.id,
-                firstName: user.user_metadata?.first_name || '',
-                lastName: user.user_metadata?.last_name || '',
-                email: user.email || '',
-                role: 'User',
-                status: 'Active'
-            });
-        }
-    } catch (e) {
-        console.error('Error fetching/creating user data:', e);
-        throw error(500, {
-            message: 'Failed to load user data',
-            cause: e instanceof Error ? e.message : 'Unknown error'
-        });
-    }
+	if (!session || !user) {
+		redirect(303, '/');
+	}
 
-    const form = await superValidate(userData, zod(profileFormSchema));
-    return { 
-        form,
-        userData 
-    };
+	const { data } = await supabase.from('nova_users').select('*').eq('user_id', user.id).single();
+	const form = await superValidate({ ...(data?.preferences as object) }, zod(profileFormSchema));
+
+	return {
+		form
+	};
 };
 
 export const actions: Actions = {
-    default: async (event) => {
-        const { session, user } = await event.locals.safeGetSession();
-        if (!session || !user) {
-            throw error(401, 'Unauthorized');
-        }
+	default: async ({ locals: { safeGetSession, supabase }, request }) => {
+		const { session, user } = await safeGetSession();
+		if (!session || !user) {
+			throw error(401, 'Unauthorized');
+		}
 
-        const form = await superValidate(event, zod(profileFormSchema));
-        if (!form.valid) {
-            return fail(400, { form });
-        }
+		const preferences = await request.formData();
+		const form = await superValidate(preferences, zod(profileFormSchema));
+		if (!form.valid) {
+			return fail(400, { form });
+		}
 
-        try {
-            const existingUser = await getNovaUser(user.id);
-            let updatedUser;
-            
-            if (existingUser) {
-                updatedUser = await updateNovaUser({
-                    id: user.id,
-                    ...form.data
-                });
-            } else {
-                updatedUser = await createNovaUser({
-                    ...form.data,
-                    email: user.email || '',
-                    role: 'User',
-                    status: 'Active'
-                });
-            }
+		try {
+			const { error } = await supabase
+				.from('nova_users')
+				.upsert({
+					email: user.email!,
+					user_id: user.id,
+					preferences: form.data
+				})
+				.eq('user_id', user.id)
+				.select('*')
+				.single();
 
-            return {
-                form,
-                success: true,
-                userData: updatedUser
-            };
-        } catch (e) {
-            console.error('Error saving user data:', e);
-            return fail(500, {
-                form,
-                error: 'Failed to save user data'
-            });
-        }
-    }
+			if (error) throw error;
+
+			return json({
+				form,
+				success: true
+			});
+		} catch (e) {
+			console.error('Error saving user data:', e);
+
+			return fail(500, {
+				form,
+				error: 'Failed to save user data'
+			});
+		}
+	}
 };
