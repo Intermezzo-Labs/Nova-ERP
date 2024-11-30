@@ -3,6 +3,7 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { ModeWatcher } from 'mode-watcher';
+	import { isBrowser } from '@supabase/ssr';
 
 	export let data;
 
@@ -20,5 +21,7 @@
 	});
 </script>
 
-<ModeWatcher />
+{#if isBrowser()}
+	<ModeWatcher />
+{/if}
 <slot />
