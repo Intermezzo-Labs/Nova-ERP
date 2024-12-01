@@ -39,7 +39,7 @@
     }
     
     async function downloadBusinessCard() {
-        if (!cardRef) return;
+        if (!browser || !cardRef) return;
         
         try {
             const dataUrl = await toPng(cardRef, {
@@ -63,6 +63,7 @@
         <h1 class="text-2xl font-bold mb-4 sm:mb-0">Business Card Generator</h1>
         <Button 
             on:click={downloadBusinessCard}
+            disabled={!browser}
             class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
         >
             Download Business Card
