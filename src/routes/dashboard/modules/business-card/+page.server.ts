@@ -25,6 +25,20 @@ export const load: PageServerLoad = async ({ locals }) => {
             throw error(404, 'User data not found');
         }
 
+        // Sanitize the logo_url if it exists
+        if (userData.logo_url) {
+            try {
+                const { data: publicUrl } = await supabase
+                    .storage
+                    .from('logos')
+                    .getPublicUrl(userData.logo_url);
+                userData.logo_url = publicUrl.publicUrl;
+            } catch (e) {
+                console.error('Error getting public URL:', e);
+                userData.logo_url = ''; // fallback to empty
+            }
+        }
+
         return {
             userData
         };
