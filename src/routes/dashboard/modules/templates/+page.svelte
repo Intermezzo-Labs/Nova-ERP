@@ -6,7 +6,7 @@
     <h1 class="mb-6 text-3xl font-bold">Templates</h1>
     <div class="grid gap-6 md:grid-cols-3">
         <a 
-            href="/dashboard/modules/business-cards"
+            href="/dashboard/modules/business-card"
             class="rounded-lg border p-6 hover:bg-slate-50 dark:border-gray-700 dark:hover:bg-slate-800"
         >
             <h2 class="text-xl font-semibold">Business Cards</h2>

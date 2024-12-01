@@ -22,7 +22,7 @@
 	];
 
 	const templatesMenuItems: MenuItem[] = [
-		{ id: 'business-cards', name: 'Business Cards', route: '/dashboard/modules/business-cards' },
+		{ id: 'business-card', name: 'Business Cards', route: '/dashboard/modules/business-card' },
 		{ id: 'invoices', name: 'Invoices', route: '/dashboard/modules/invoices' },
 		{ id: 'websites', name: 'Websites', route: '/dashboard/modules/websites' }
 	];
