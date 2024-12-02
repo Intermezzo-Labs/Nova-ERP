@@ -1,8 +1,8 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import { z } from 'zod';
 	import { userRoles, userStatuses, type NovaUserPreferences } from '$lib/types/user';
 
-	export const profileFormSchema = z.object({
+	export const preferencesFormSchema = z.object({
 		firstName: z.string().min(2, 'First name must be at least 2 characters.'),
 		lastName: z.string().min(2, 'Last name must be at least 2 characters.'),
 		email: z.string().email('Please enter a valid email address'),
@@ -10,31 +10,46 @@
 		phone: z.string().optional(),
 		address: z.string().optional(),
 		role: z.enum(userRoles),
-		status: z.enum(userStatuses)
+		status: z.enum(userStatuses),
+		logoFile: z.custom<File>().optional()
 	});
-	export type ProfileFormSchema = typeof profileFormSchema;
-	profileFormSchema._output satisfies NovaUserPreferences;
+	export type PreferencesFormSchema = typeof preferencesFormSchema;
+	preferencesFormSchema._output satisfies NovaUserPreferences;
 </script>
 
 <script lang="ts">
-	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
+	import SuperDebug, { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as Form from '$lib/components/ui/form';
 	import * as Select from '$lib/components/ui/select';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+	import type { FormInputEvent } from '$lib/components/ui/input';
+	import { browser } from '$app/environment';
+	import type { Snippet } from 'svelte';
 
-	export let data: SuperValidated<Infer<ProfileFormSchema>>;
+	interface Props {
+		data: SuperValidated<Infer<PreferencesFormSchema>>;
+		logo: Snippet;
+	}
+	let { data, logo }: Props = $props();
 
 	const form = superForm(data, {
-		validators: zodClient(profileFormSchema)
+		validators: zodClient(preferencesFormSchema)
 	});
 
 	const { form: formData, enhance } = form;
+
+	let logoUrl: string | null = $state(null);
+	const selectLogoFile = async (event: FormInputEvent) => {
+		if (!event.currentTarget.files) return;
+		const [file] = event.currentTarget.files;
+		logoUrl = URL.createObjectURL(file);
+	};
 </script>
 
-<form method="POST" class="space-y-8" use:enhance>
+<form method="POST" class="space-y-8" use:enhance enctype="multipart/form-data">
 	<Form.Field {form} name="firstName">
 		<Form.Control let:attrs>
 			<Form.Label>First Name</Form.Label>
@@ -58,6 +73,29 @@
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
+
+	<fieldset class="space-y-4">
+		<picture>
+			{#if logoUrl}
+				<img src={logoUrl} alt="logo" class="h-48 object-contain" />
+			{:else if logo}
+				{@render logo()}
+			{/if}</picture
+		>
+		<Form.Field {form} name="logoFile">
+			<Form.Control let:attrs>
+				<Form.Label>Company Logo</Form.Label>
+				<Input
+					{...attrs}
+					bind:value={$formData.logoFile}
+					type="file"
+					accept="image/*"
+					on:change={selectLogoFile}
+				/>
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
+	</fieldset>
 
 	<Form.Field {form} name="company">
 		<Form.Control let:attrs>
@@ -93,6 +131,7 @@
 				selected={{ value: $formData.role, label: $formData.role }}
 				onSelectedChange={(s) => s && ($formData.role = s.value)}
 			>
+				<Select.Input name={attrs.name} />
 				<Select.Trigger {...attrs}>
 					<Select.Value placeholder="Select a role" />
 				</Select.Trigger>
@@ -113,6 +152,7 @@
 				selected={{ value: $formData.status, label: $formData.status }}
 				onSelectedChange={(s) => s && ($formData.status = s.value)}
 			>
+				<Select.Input name={attrs.name} />
 				<Select.Trigger {...attrs}>
 					<Select.Value placeholder="Select a status" />
 				</Select.Trigger>
@@ -126,5 +166,9 @@
 		<Form.FieldErrors />
 	</Form.Field>
 
-	<Button type="submit">Save Profile</Button>
+	<Button type="submit">Save preferences</Button>
 </form>
+
+{#if browser}
+	<SuperDebug data={$formData} />
+{/if}

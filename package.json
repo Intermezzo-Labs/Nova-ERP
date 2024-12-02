@@ -15,7 +15,7 @@
 		"test:user": "vitest src/lib/server/__tests__/user.test.ts",
 		"supabase-start": "npx supabase start",
 		"supabase-db-reset": "npx supabase db reset",
-		"supabase-type-gen": "npx supabase gen types typescript --local > ./src/types/database.types.ts"
+		"supabase-type-gen": "npx supabase gen types typescript --local > ./src/lib/types/database.types.ts"
 	},
 	"devDependencies": {
 		"@internationalized/date": "^3.6.0",
