@@ -13,4 +13,5 @@ export interface NovaUserPreferences {
 	address?: string;
 	role: UserRole;
 	status: UserStatus;
+	logoUrl?: string;
 }
