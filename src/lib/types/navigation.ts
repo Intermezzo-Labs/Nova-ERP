@@ -8,9 +8,9 @@ export interface MenuItem {
 
 export const BUSINESS_DOCUMENTS_MENU_ITEMS: MenuItem[] = [
     {
-        id: 'business-cards',
+        id: 'business-card',
         name: 'Business Cards',
-        route: '/dashboard/business-cards',
+        route: '/dashboard/business-card',
         icon: 'card' // We'll need to ensure this icon exists in your icon system
     },
     {
