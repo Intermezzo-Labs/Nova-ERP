@@ -31,6 +31,7 @@
 		{ label: 'Dashboard', href: '/dashboard', icon: '📊' },
 		{ label: 'CRM', href: '/dashboard/modules/crm', icon: '👥', submenu: crmMenuItems },
 		{ label: 'Templates', href: '/dashboard/modules/templates', icon: '📇', submenu: templatesMenuItems },
+		{ label: 'AI Agents', href: '/dashboard/modules/ai-agent', icon: '🤖' },
 		{ label: 'Settings', href: '/dashboard/settings', icon: '⚙️' }
 	];
 </script>
