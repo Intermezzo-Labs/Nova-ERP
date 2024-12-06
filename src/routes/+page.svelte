@@ -2,7 +2,7 @@
 	import type { ActionData, SubmitFunction } from './$types.js';
 	import UserAuthForm from './_components/user-auth-form.svelte';
 	import * as Alert from '$lib/components/ui/alert/index.js';
-	import { Mail } from 'lucide-svelte';
+	import { LucideOctagonMinus, Mail } from 'lucide-svelte';
 
 	export let form: ActionData;
 
@@ -20,7 +20,7 @@
 <div
 	class="container relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0"
 >
-	<div class="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+	<div class="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
 		<div
 			class="absolute inset-0 bg-cover"
 			style="
@@ -58,6 +58,11 @@
 				</div>
 				<UserAuthForm isLoading={loading} onSubmit={handleSubmit} />
 				{#if form?.errors?.email}
+					<Alert.Root variant="destructive">
+						<LucideOctagonMinus class="size-5" />
+						<Alert.Title>Error</Alert.Title>
+						<Alert.Description>{form.errors.email}</Alert.Description>
+					</Alert.Root>
 					<span class="error flex items-center text-sm">
 						{form?.errors?.email}
 					</span>
