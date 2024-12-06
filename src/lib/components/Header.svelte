@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { Sun, Moon } from 'lucide-svelte';
+	import { Sun, Moon, User, Bell } from 'lucide-svelte';
 	import { resetMode, setMode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-
-	import * as Avatar from '$lib/components/ui/avatar';
+	import Label from './ui/label/label.svelte';
 
 	let searchQuery = '';
 	export let email;
@@ -83,35 +82,42 @@
 				</DropdownMenu.Root>
 
 				<!-- Notifications -->
-				<button
-					class="relative rounded-xl p-2.5 transition-all duration-300 hover:scale-105 hover:bg-muted/50"
-					aria-label="Notifications"
-				>
-					<svg
-						class="h-5 w-5"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="1.5"
-							d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-						/>
-					</svg>
+				<Button variant="outline" class="relative" size="icon" disabled>
+					<Bell class="size-5" />
 					<span
-						class="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary ring-2 ring-background"
+						class="absolute right-0 top-0 h-2 w-2 rounded-full bg-secondary ring-2 ring-background"
 					></span>
-				</button>
+				</Button>
 
 				<!-- Avatar -->
 
-				<Avatar.Root class="h-8 w-8">
-					<!-- <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" /> -->
-					<Avatar.Fallback>{email}</Avatar.Fallback>
-				</Avatar.Root>
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger asChild let:builder>
+						<Button builders={[builder]} variant="outline" size="icon">
+							<User class="size-5" />
+							<span class="sr-only">User</span>
+						</Button>
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content align="end">
+						<DropdownMenu.Label>My Account</DropdownMenu.Label>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Group>
+							<DropdownMenu.Item href="/dashboard/settings">Profile</DropdownMenu.Item>
+							<DropdownMenu.Item disabled>Billing</DropdownMenu.Item>
+							<DropdownMenu.Item disabled>Settings</DropdownMenu.Item>
+						</DropdownMenu.Group>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Group>
+							<DropdownMenu.Item href="https://discord.gg/ASUcadTx" target="_blank">
+								Support
+							</DropdownMenu.Item>
+						</DropdownMenu.Group>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Group>
+							<DropdownMenu.Item href="/auth/logout">Logout</DropdownMenu.Item>
+						</DropdownMenu.Group>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
 			</div>
 		</div>
 	</div>
