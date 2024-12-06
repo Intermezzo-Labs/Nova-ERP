@@ -26,7 +26,9 @@
 </script>
 
 {#snippet logo()}
-	<img src={logoUrl} alt="logo" class="h-48 object-contain" />
+	{#if logoUrl}
+		<img src={logoUrl} alt="logo" class="h-48 object-contain" />
+	{/if}
 {/snippet}
 
 <div class="space-y-6">
