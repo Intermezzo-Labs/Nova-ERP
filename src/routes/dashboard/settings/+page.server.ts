@@ -45,11 +45,11 @@ export const actions = {
 			const { data } = form;
 			if (data.logoFile && data.logoFile instanceof File) {
 				const path = join(user.id, crypto.randomUUID());
-				const { error, data: logoData } = await supabase.storage
+				const { error: storageError, data: logoData } = await supabase.storage
 					.from('logos')
 					.upload(path, data.logoFile);
 
-				if (error) throw error;
+				if (storageError) throw storageError;
 
 				logoUrl = logoData.path;
 			}
@@ -67,7 +67,7 @@ export const actions = {
 			);
 
 			if (error) throw error;
-			form.data.logoFile = undefined;
+			delete form.data.logoFile;
 
 			return {
 				form,

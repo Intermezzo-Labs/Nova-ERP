@@ -10,21 +10,31 @@
 		submenu?: MenuItem[];
 	}
 
+	const buildMenuItem = (basePath: string) => (label: string, slug: string, badge?: number) =>
+		({
+			id: slug,
+			name: label,
+			badge,
+			route: `${basePath}/${slug}`
+		}) satisfies MenuItem;
+
+	const buildCrmMenuItem = buildMenuItem('/dashboard/modules/crm');
 	const crmMenuItems: MenuItem[] = [
-		{ id: 'contacts', name: 'Contacts', route: '/modules/crm/contacts' },
-		{ id: 'companies', name: 'Companies', route: '/modules/crm/companies' },
-		{ id: 'deals', name: 'Deals', route: '/modules/crm/deals' },
-		{ id: 'tickets', name: 'Tickets', route: '/modules/crm/tickets', badge: 3 },
-		{ id: 'lists', name: 'Lists', route: '/modules/crm/lists' },
-		{ id: 'inbox', name: 'Inbox', route: '/modules/crm/inbox', badge: 12 },
-		{ id: 'calls', name: 'Calls', route: '/modules/crm/calls' },
-		{ id: 'tasks', name: 'Tasks', route: '/modules/crm/tasks', badge: 5 }
+		buildCrmMenuItem('Contacts', 'contacts'),
+		buildCrmMenuItem('Companies', 'companies'),
+		buildCrmMenuItem('Deals', 'deals'),
+		buildCrmMenuItem('Tickets', 'tickets', 3),
+		buildCrmMenuItem('Lists', 'lists'),
+		buildCrmMenuItem('Inbox', 'inbox', 12),
+		buildCrmMenuItem('Calls', 'calls'),
+		buildCrmMenuItem('Tasks', 'tasks', 5)
 	];
 
+	const buildBaseModuleMenuItem = buildMenuItem('/dashboard/modules');
 	const templatesMenuItems: MenuItem[] = [
-		{ id: 'business-card', name: 'Business Cards', route: '/dashboard/modules/business-card' },
-		{ id: 'invoices', name: 'Invoices', route: '/dashboard/modules/invoices' },
-		{ id: 'websites', name: 'Websites', route: '/dashboard/modules/websites' }
+		buildBaseModuleMenuItem('Business Cards', 'business-card'),
+		buildBaseModuleMenuItem('Invoices', 'invoices'),
+		buildBaseModuleMenuItem('Websites', 'websites')
 	];
 
 	const navItems: NavItem[] = [
