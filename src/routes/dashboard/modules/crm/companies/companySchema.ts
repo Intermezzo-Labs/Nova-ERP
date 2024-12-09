@@ -1,4 +1,4 @@
-import { isMobilePhone, isURL } from 'validator';
+import validator from 'validator';
 import { z } from 'zod';
 
 export const companyFormSchema = z.object({
@@ -12,8 +12,8 @@ export const companyFormSchema = z.object({
 		province: z.string().optional(),
 		country: z.string()
 	}),
-	phone: z.string().refine(isMobilePhone).optional(),
-	website: z.string().refine(isURL).optional()
+	phone: z.string().refine(validator.isMobilePhone).optional(),
+	website: z.string().refine(validator.isURL).optional()
 });
 export type CompanyFormSchema = typeof companyFormSchema;
 export type CompanyDetails = z.infer<typeof companyFormSchema>;

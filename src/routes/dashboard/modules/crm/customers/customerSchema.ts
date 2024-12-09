@@ -1,10 +1,10 @@
+import validator from 'validator';
 import { z } from 'zod';
-import { isEmail, isMobilePhone } from 'validator';
 
 export const customerFormSchema = z.object({
 	name: z.string(),
-	phone: z.string().refine(isMobilePhone).optional(),
-	email: z.string().refine(isEmail).optional()
+	phone: z.string().refine(validator.isMobilePhone).optional(),
+	email: z.string().refine(validator.isEmail).optional()
 });
 export type CustomerFormSchema = typeof customerFormSchema;
 export type CustomerDetails = z.infer<typeof customerFormSchema>;
