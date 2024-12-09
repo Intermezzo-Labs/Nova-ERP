@@ -23,11 +23,11 @@ BEGIN
         SELECT 1
         FROM pg_policies
         WHERE schemaname = 'public'
-          AND tablename = 'company'
-          AND policyname = 'Users can view own data'
+          AND tablename = 'customer'
+          AND policyname = 'Users can view own customer data'
     ) THEN
         EXECUTE FORMAT(
-            'CREATE POLICY "Users can view own data" ON public.customer
+            'CREATE POLICY "Users can view own customer data" ON public.customer
                 FOR SELECT
                 USING (auth.uid() = user_id)'
         );
@@ -42,13 +42,32 @@ BEGIN
         SELECT 1
         FROM pg_policies
         WHERE schemaname = 'public'
-          AND tablename = 'company'
-          AND policyname = 'Users can update own data'
+          AND tablename = 'customer'
+          AND policyname = 'Users can update own customer data'
     ) THEN
         EXECUTE FORMAT(
-            'CREATE POLICY "Users can update own data" ON public.customer
+            'CREATE POLICY "Users can update own customer data" ON public.customer
                 FOR UPDATE
                 USING (auth.uid() = user_id)'
+        );
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create the "Service role can insert users" policy
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_policies
+        WHERE schemaname = 'public'
+          AND tablename = 'customer'
+          AND policyname = 'Service role can insert customer'
+    ) THEN
+        EXECUTE FORMAT(
+            'CREATE POLICY "Service role can insert customer" ON public.customer
+                FOR INSERT
+                WITH CHECK (true)'
         );
     END IF;
 END;

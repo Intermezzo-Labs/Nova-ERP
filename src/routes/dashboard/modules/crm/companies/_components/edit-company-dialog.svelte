@@ -3,18 +3,19 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import SuperDebug, { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
+	import SuperDebug, { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { browser } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
 	import { Store } from 'lucide-svelte';
-	import { companyFormSchema, type CompanyFormSchema } from '../companySchema';
+	import { updateCompanyFormSchema, type UpdateCompanyDetails } from '../companySchema';
 
-	export let data: SuperValidated<Infer<CompanyFormSchema>>;
+	export let data: UpdateCompanyDetails;
 
 	const form = superForm(data, {
-		validators: zodClient(companyFormSchema),
-		dataType: 'json'
+		validators: zodClient(updateCompanyFormSchema),
+		dataType: 'json',
+		applyAction: true
 	});
 
 	const { form: formData, enhance } = form;
@@ -22,14 +23,14 @@
 
 <Dialog.Root>
 	<Dialog.Trigger asChild let:builder>
-		<Button builders={[builder]}><Store class="mr-2 size-4" /> Add Company</Button>
+		<Button builders={[builder]}><Store class="mr-2 size-4" /> Edit Details</Button>
 	</Dialog.Trigger>
 	<Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
-		<form method="POST" use:enhance action="?/create">
+		<form method="POST" use:enhance action="?/update">
 			<Dialog.Header>
-				<Dialog.Title>Add company</Dialog.Title>
+				<Dialog.Title>Edit {data.name}</Dialog.Title>
 				<Dialog.Description>
-					Add company details and settings here and click save when you're done.
+					Update company details and settings here and click update when you're done.
 				</Dialog.Description>
 			</Dialog.Header>
 
@@ -57,7 +58,7 @@
 			{/if}
 
 			<Dialog.Footer>
-				<Form.Button>Save company</Form.Button>
+				<Form.Button>Update company</Form.Button>
 			</Dialog.Footer>
 		</form>
 	</Dialog.Content>

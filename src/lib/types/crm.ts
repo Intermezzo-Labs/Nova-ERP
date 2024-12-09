@@ -24,20 +24,3 @@ export interface FilterOptions {
 	page: number;
 	perPage: number;
 }
-
-interface Address {
-	street1: string;
-	street2?: string;
-	city: string;
-	state?: string;
-	province?: string;
-	country: string;
-}
-
-export interface CompanyDetails {
-	name: string;
-	description?: string;
-	address?: Address;
-	phoneNumber?: string;
-	website?: string;
-}
