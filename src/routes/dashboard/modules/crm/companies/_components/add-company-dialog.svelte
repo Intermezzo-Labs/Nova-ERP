@@ -7,7 +7,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { browser } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
-	import { Store } from 'lucide-svelte';
+	import { Plus } from 'lucide-svelte';
 	import { companyFormSchema, type CompanyFormSchema } from '../companySchema';
 
 	export let data: SuperValidated<Infer<CompanyFormSchema>>;
@@ -22,7 +22,7 @@
 
 <Dialog.Root>
 	<Dialog.Trigger asChild let:builder>
-		<Button builders={[builder]}><Store class="mr-2 size-4" /> Add Company</Button>
+		<Button builders={[builder]}><Plus class="mr-2 size-4" /> Add Company</Button>
 	</Dialog.Trigger>
 	<Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
 		<form method="POST" use:enhance action="?/create">

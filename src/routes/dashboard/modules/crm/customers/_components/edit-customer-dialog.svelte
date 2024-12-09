@@ -2,18 +2,17 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import { Textarea } from '$lib/components/ui/textarea';
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { browser } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
 	import { Pencil } from 'lucide-svelte';
-	import { updateCompanyFormSchema, type UpdateCompanyDetails } from '../companySchema';
+	import { updateCustomerFormSchema, type UpdateCustomerDetails } from '../customerSchema';
 
-	export let data: UpdateCompanyDetails;
+	export let data: UpdateCustomerDetails;
 
 	const form = superForm(data, {
-		validators: zodClient(updateCompanyFormSchema),
+		validators: zodClient(updateCustomerFormSchema),
 		dataType: 'json',
 		applyAction: true
 	});
@@ -23,32 +22,36 @@
 
 <Dialog.Root>
 	<Dialog.Trigger asChild let:builder>
-		<Button builders={[builder]}><Pencil class="mr-2 size-4" /> Edit Details</Button>
+		<Button builders={[builder]} variant="outline" size="sm">
+			<Pencil class="mr-2 size-4" /> Edit
+		</Button>
 	</Dialog.Trigger>
 	<Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
 		<form method="POST" use:enhance action="?/update">
 			<Dialog.Header>
 				<Dialog.Title>Edit {data.name}</Dialog.Title>
-				<Dialog.Description>
-					Update company details and settings here and click update when you're done.
-				</Dialog.Description>
 			</Dialog.Header>
 
 			<div class="grid gap-6 py-6">
 				<Form.Field {form} name="name">
 					<Form.Control let:attrs>
-						<Form.Label for="name">Name</Form.Label>
+						<Form.Label>Name</Form.Label>
 						<Input {...attrs} required bind:value={$formData.name} />
 					</Form.Control>
-					<Form.Description>Set the font you want to use in the dashboard.</Form.Description>
 					<Form.FieldErrors />
 				</Form.Field>
-				<Form.Field {form} name="description">
+				<Form.Field {form} name="email">
 					<Form.Control let:attrs>
-						<Form.Label for="name">Description</Form.Label>
-						<Textarea {...attrs} rows={3} bind:value={$formData.description} />
+						<Form.Label>Email</Form.Label>
+						<Input {...attrs} type="email" bind:value={$formData.email} />
 					</Form.Control>
-					<Form.Description>Set the font you want to use in the dashboard.</Form.Description>
+					<Form.FieldErrors />
+				</Form.Field>
+				<Form.Field {form} name="phone">
+					<Form.Control let:attrs>
+						<Form.Label>Phone</Form.Label>
+						<Input {...attrs} type="tel" bind:value={$formData.phone} />
+					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
@@ -58,7 +61,7 @@
 			{/if}
 
 			<Dialog.Footer>
-				<Form.Button>Update company</Form.Button>
+				<Form.Button>Update customer</Form.Button>
 			</Dialog.Footer>
 		</form>
 	</Dialog.Content>

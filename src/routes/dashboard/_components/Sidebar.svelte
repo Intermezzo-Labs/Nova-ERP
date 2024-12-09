@@ -20,7 +20,7 @@
 
 	const buildCrmMenuItem = buildMenuItem('/dashboard/modules/crm');
 	const crmMenuItems: MenuItem[] = [
-		buildCrmMenuItem('Contacts', 'contacts'),
+		buildCrmMenuItem('Customers', 'customers'),
 		buildCrmMenuItem('Companies', 'companies'),
 		buildCrmMenuItem('Deals', 'deals'),
 		buildCrmMenuItem('Tickets', 'tickets', 3),

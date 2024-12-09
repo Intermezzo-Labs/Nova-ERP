@@ -1,28 +1,28 @@
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { type Actions, fail } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
-import { companyFormSchema, updateCompanyFormSchema } from './companySchema';
+import type { PageServerLoad } from './$types.js';
+import { customerFormSchema, updateCustomerFormSchema } from './customerSchema.js';
 
 export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase } }) => {
 	const { user } = await safeGetSession();
 
 	if (!user) throw 'Missing user data';
 
-	const { data: companies, error } = await supabase
-		.from('company')
+	const { data: customers, error } = await supabase
+		.from('customer')
 		.select('*')
 		.eq('user_id', user.id)
 		.limit(20);
 
 	return {
-		form: await superValidate(zod(companyFormSchema)),
-		companies:
-			companies?.map((company) => ({
-				id: company.id,
-				created: new Date(company.created_at).toLocaleString(),
-				updated: new Date(company.updated_at).toLocaleString(),
-				details: companyFormSchema.parse(company.details)
+		form: await superValidate(zod(customerFormSchema)),
+		customers:
+			customers?.map((customer) => ({
+				id: customer.id,
+				created: new Date(customer.created_at).toLocaleString(),
+				updated: new Date(customer.updated_at).toLocaleString(),
+				details: customerFormSchema.parse(customer.details)
 			})) ?? [],
 		error
 	};
@@ -35,7 +35,7 @@ export const actions: Actions = {
 		if (!user) throw 'Missing user data';
 
 		const data = await request.formData();
-		const form = await superValidate(data, zod(companyFormSchema));
+		const form = await superValidate(data, zod(customerFormSchema));
 
 		if (!form.valid) {
 			return fail(400, {
@@ -43,7 +43,7 @@ export const actions: Actions = {
 			});
 		}
 
-		const { error } = await supabase.from('company').insert({
+		const { error } = await supabase.from('customer').insert({
 			details: form.data,
 			user_id: user.id
 		});
@@ -61,7 +61,7 @@ export const actions: Actions = {
 		if (!user) throw 'Missing user data';
 
 		const data = await request.formData();
-		const form = await superValidate(data, zod(updateCompanyFormSchema));
+		const form = await superValidate(data, zod(updateCustomerFormSchema));
 
 		if (!form.valid) {
 			return fail(400, {
@@ -72,7 +72,7 @@ export const actions: Actions = {
 		const { id, ...details } = form.data;
 
 		const { error } = await supabase
-			.from('company')
+			.from('customer')
 			.update({
 				details
 			})
