@@ -34,38 +34,287 @@ export type Database = {
   }
   public: {
     Tables: {
-      nova_users: {
+      company: {
         Row: {
           created_at: string
-          email: string
+          details: Json
           id: number
-          preferences: Json | null
-          role: string
-          status: string
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
-          email: string
+          details: Json
           id?: number
-          preferences?: Json | null
-          role?: string
-          status?: string
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
-          email?: string
+          details?: Json
           id?: number
-          preferences?: Json | null
-          role?: string
-          status?: string
           updated_at?: string
           user_id?: string
         }
         Relationships: []
+      }
+      customer: {
+        Row: {
+          created_at: string
+          details: Json
+          id: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          details: Json
+          id?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          details?: Json
+          id?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      customer_note: {
+        Row: {
+          created_at: string
+          customer_id: number
+          id: number
+          note: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: number
+          id?: number
+          note: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: number
+          id?: number
+          note?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_note_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customer"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoice: {
+        Row: {
+          company_id: number
+          created_at: string
+          customer_id: number
+          document_location: string
+          id: number
+          status: Database["public"]["Enums"]["invoice_status"]
+          total: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_id: number
+          created_at?: string
+          customer_id: number
+          document_location: string
+          id?: number
+          status?: Database["public"]["Enums"]["invoice_status"]
+          total: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company_id?: number
+          created_at?: string
+          customer_id?: number
+          document_location?: string
+          id?: number
+          status?: Database["public"]["Enums"]["invoice_status"]
+          total?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoice_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customer"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoice_note: {
+        Row: {
+          created_at: string
+          id: number
+          invoice_id: number
+          note: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          invoice_id: number
+          note: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          invoice_id?: number
+          note?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_note_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoice"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      line_item: {
+        Row: {
+          company_id: number
+          created_at: string
+          details: Json
+          id: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_id: number
+          created_at?: string
+          details: Json
+          id?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company_id?: number
+          created_at?: string
+          details?: Json
+          id?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "line_item_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nova_users: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: number
+          preferences: Json | null
+          role: Database["public"]["Enums"]["nova_user_role"]
+          status: Database["public"]["Enums"]["nova_user_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: number
+          preferences?: Json | null
+          role?: Database["public"]["Enums"]["nova_user_role"]
+          status?: Database["public"]["Enums"]["nova_user_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: number
+          preferences?: Json | null
+          role?: Database["public"]["Enums"]["nova_user_role"]
+          status?: Database["public"]["Enums"]["nova_user_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      product: {
+        Row: {
+          company_id: number
+          created_at: string
+          details: Json
+          id: number
+          line_item_id: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_id: number
+          created_at?: string
+          details: Json
+          id?: number
+          line_item_id: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company_id?: number
+          created_at?: string
+          details?: Json
+          id?: number
+          line_item_id?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_line_item_id_fkey"
+            columns: ["line_item_id"]
+            isOneToOne: false
+            referencedRelation: "line_item"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -75,7 +324,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      invoice_status:
+        | "Pending"
+        | "Canceled"
+        | "Stale"
+        | "Completed"
+        | "Rejected"
+      nova_user_role: "Admin" | "Manager" | "User"
+      nova_user_status: "Active" | "Inactive"
     }
     CompositeTypes: {
       [_ in never]: never

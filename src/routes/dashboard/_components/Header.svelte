@@ -3,10 +3,8 @@
 	import { resetMode, setMode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import Label from './ui/label/label.svelte';
 
 	let searchQuery = '';
-	export let email;
 </script>
 
 <header

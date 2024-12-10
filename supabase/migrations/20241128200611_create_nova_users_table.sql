@@ -1,3 +1,6 @@
+CREATE TYPE nova_user_role AS ENUM ('Admin', 'Manager', 'User');
+CREATE TYPE nova_user_status AS ENUM ('Active', 'Inactive');
+
 -- Create the updated_at trigger function
 CREATE OR REPLACE FUNCTION public.handle_updated_at()
 RETURNS TRIGGER AS $$
@@ -13,8 +16,8 @@ CREATE TABLE IF NOT EXISTS public.nova_users (
     user_id UUID REFERENCES auth.users NOT NULL UNIQUE,
     email TEXT,
     preferences JSONB,
-    role TEXT NOT NULL DEFAULT 'User' CHECK (role IN ('Admin', 'Manager', 'User')),
-    status TEXT NOT NULL DEFAULT 'Active' CHECK (status IN ('Active', 'Inactive')),
+    role nova_user_role NOT NULL DEFAULT 'User',
+    status nova_user_status NOT NULL DEFAULT 'Active',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
@@ -33,6 +36,7 @@ CREATE TRIGGER set_updated_at
     BEFORE UPDATE ON public.nova_users
     FOR EACH ROW
     EXECUTE FUNCTION public.handle_updated_at();
+    
 
 -- Enable Row-Level Security (RLS)
 ALTER TABLE public.nova_users ENABLE ROW LEVEL SECURITY;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import type { PageData } from './$types.js';
-	import PreferencesForm from './preferences-form.svelte';
+	import PreferencesForm from './profile-form.svelte';
 	export let data: PageData;
 
 	let logoUrl: string | null = null;

@@ -2,11 +2,14 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { type Actions, fail, redirect, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { preferencesFormSchema } from './preferences-form.svelte';
 import { join } from 'path';
-import type { NovaUserPreferences } from '$lib/types/user';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from 'lucide-svelte';
+import {
+	novaUserProfileFormSchema,
+	type NovaUserProfile,
+	type NovaUserProfileForm
+} from '$lib/types/user';
 
 export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase } }) => {
 	const { session, user } = await safeGetSession();
@@ -16,7 +19,7 @@ export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase 
 	}
 
 	const { data } = await getNovaUserPreferences(supabase, user.id);
-	const form = await superValidate(data?.preferences, zod(preferencesFormSchema));
+	const form = await superValidate(data?.preferences, zod(novaUserProfileFormSchema));
 
 	return {
 		form,
@@ -26,13 +29,13 @@ export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase 
 
 export const actions = {
 	default: async ({ locals: { safeGetSession, supabase }, request }) => {
-		const { session, user } = await safeGetSession();
-		if (!session || !user) {
+		const { user } = await safeGetSession();
+		if (!user) {
 			throw error(401, 'Unauthorized');
 		}
 
 		const formData = await request.formData();
-		const form = await superValidate(formData, zod(preferencesFormSchema));
+		const form = await superValidate(formData, zod(novaUserProfileFormSchema));
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -45,11 +48,11 @@ export const actions = {
 			const { data } = form;
 			if (data.logoFile && data.logoFile instanceof File) {
 				const path = join(user.id, crypto.randomUUID());
-				const { error, data: logoData } = await supabase.storage
+				const { error: storageError, data: logoData } = await supabase.storage
 					.from('logos')
 					.upload(path, data.logoFile);
 
-				if (error) throw error;
+				if (storageError) throw storageError;
 
 				logoUrl = logoData.path;
 			}
@@ -90,13 +93,10 @@ const getNovaUserPreferences = (supabase: SupabaseClient<Database>, userId: stri
 		.from('nova_users')
 		.select('preferences')
 		.eq('user_id', userId)
-		.returns<Array<{ preferences: NovaUserPreferences }>>()
+		.returns<Array<{ preferences: NovaUserProfile }>>()
 		.single();
 
-const mergePreferences = (
-	target: typeof preferencesFormSchema._output,
-	source?: Partial<NovaUserPreferences>
-) =>
+const mergePreferences = (target: NovaUserProfileForm, source?: Partial<NovaUserProfile>) =>
 	({
 		firstName: source?.firstName || target.firstName || '',
 		lastName: source?.lastName || target.lastName || '',
@@ -107,4 +107,4 @@ const mergePreferences = (
 		company: source?.company || target.company,
 		phone: source?.phone || target.phone,
 		logoUrl: source?.logoUrl
-	}) satisfies NovaUserPreferences;
+	}) satisfies NovaUserProfile;
