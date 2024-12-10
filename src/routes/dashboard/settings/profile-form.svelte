@@ -1,22 +1,3 @@
-<script lang="ts" module>
-	import { z } from 'zod';
-	import { userRoles, userStatuses, type NovaUserPreferences } from '$lib/types/user';
-
-	export const preferencesFormSchema = z.object({
-		firstName: z.string().min(2, 'First name must be at least 2 characters.'),
-		lastName: z.string().min(2, 'Last name must be at least 2 characters.'),
-		email: z.string().email('Please enter a valid email address'),
-		company: z.string().optional(),
-		phone: z.string().optional(),
-		address: z.string().optional(),
-		role: z.enum(userRoles),
-		status: z.enum(userStatuses),
-		logoFile: z.custom<File>().optional()
-	});
-	export type PreferencesFormSchema = typeof preferencesFormSchema;
-	preferencesFormSchema._output satisfies NovaUserPreferences;
-</script>
-
 <script lang="ts">
 	import SuperDebug, { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
@@ -28,15 +9,16 @@
 	import type { FormInputEvent } from '$lib/components/ui/input';
 	import { browser } from '$app/environment';
 	import type { Snippet } from 'svelte';
+	import { novaUserProfileFormSchema, userRoleEnum, userStatusEnum } from '$lib/types/user';
 
 	interface Props {
-		data: SuperValidated<Infer<PreferencesFormSchema>>;
+		data: SuperValidated<Infer<typeof novaUserProfileFormSchema>>;
 		logo: Snippet;
 	}
 	let { data, logo }: Props = $props();
 
 	const form = superForm(data, {
-		validators: zodClient(preferencesFormSchema)
+		validators: zodClient(novaUserProfileFormSchema)
 	});
 
 	const { form: formData, enhance } = form;
@@ -136,7 +118,7 @@
 					<Select.Value placeholder="Select a role" />
 				</Select.Trigger>
 				<Select.Content>
-					{#each userRoles as role}
+					{#each userRoleEnum.options as role}
 						<Select.Item value={role} label={role} />
 					{/each}
 				</Select.Content>
@@ -157,7 +139,7 @@
 					<Select.Value placeholder="Select a status" />
 				</Select.Trigger>
 				<Select.Content>
-					{#each userStatuses as status}
+					{#each userStatusEnum.options as status}
 						<Select.Item value={status} label={status} />
 					{/each}
 				</Select.Content>

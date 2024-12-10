@@ -1,49 +1,47 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { novaUserProfileSchema } from '$lib/types/user';
 
 export const load: PageServerLoad = async ({ locals }) => {
-    const { supabase } = locals;
-    const { session, user } = await locals.safeGetSession();
+	const { supabase } = locals;
+	const { user } = await locals.safeGetSession();
 
-    if (!session) {
-        throw error(401, 'Unauthorized');
-    }
+	if (!user) {
+		throw error(401, 'Unauthorized');
+	}
 
-    try {
-        const { data: userData, error: userError } = await supabase
-            .from('nova_users')
-            .select('*')
-            .eq('id', user?.id)
-            .single();
+	const { data: userData, error: userError } = await supabase
+		.from('nova_users')
+		.select('preferences')
+		.eq('user_id', user.id)
+		.single();
 
-        if (userError) {
-            console.error('Database error:', userError);
-            throw error(500, 'Error fetching user data');
-        }
+	if (userError) {
+		console.error('Database error:', userError);
+		// throw error(404, 'Error fetching user data');
+	}
 
-        if (!userData) {
-            throw error(404, 'User data not found');
-        }
+	if (!userData) {
+		console.warn('User data not found:', userData);
+		// throw error(404, 'User data not found');
+	}
 
-        // Sanitize the logo_url if it exists
-        if (userData.logo_url) {
-            try {
-                const { data: publicUrl } = await supabase
-                    .storage
-                    .from('logos')
-                    .getPublicUrl(userData.logo_url);
-                userData.logo_url = publicUrl.publicUrl;
-            } catch (e) {
-                console.error('Error getting public URL:', e);
-                userData.logo_url = ''; // fallback to empty
-            }
-        }
+	// Sanitize the logo_url if it exists
+	const sanitizedProfile = novaUserProfileSchema.safeParse(userData?.preferences);
+	if (sanitizedProfile.error) console.warn('woops', sanitizedProfile.error);
+	if (sanitizedProfile.success && sanitizedProfile.data.logoUrl) {
+		try {
+			const { data: publicUrl } = await supabase.storage
+				.from('logos')
+				.createSignedUrl(sanitizedProfile.data.logoUrl, 60);
+			sanitizedProfile.data.logoUrl = publicUrl?.signedUrl;
+		} catch (e) {
+			console.error('Error getting public URL:', e);
+			sanitizedProfile.data.logoUrl = ''; // fallback to empty
+		}
+	}
 
-        return {
-            userData
-        };
-    } catch (err) {
-        console.error('Server error:', err);
-        throw error(500, 'Internal server error');
-    }
+	return {
+		userData: sanitizedProfile.data
+	};
 };
