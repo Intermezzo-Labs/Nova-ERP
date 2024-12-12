@@ -14,7 +14,7 @@ services:
     container_name: nova-erp
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - '3000:3000'
     networks:
       - nova-network
 
@@ -23,8 +23,8 @@ services:
     container_name: nova-nginx
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/ssl:/etc/nginx/ssl
