@@ -36,6 +36,7 @@
 		"eslint-plugin-svelte": "^2.36.0",
 		"formsnap": "^1.0.1",
 		"globals": "^15.0.0",
+		"paneforge": "^0.0.6",
 		"prettier": "^3.3.2",
 		"prettier-plugin-svelte": "^3.2.6",
 		"prettier-plugin-tailwindcss": "^0.6.5",

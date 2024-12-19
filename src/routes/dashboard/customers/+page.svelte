@@ -1,82 +1,21 @@
 <script lang="ts">
-	import * as Table from '$lib/components/ui/table/index.js';
+	import type { PageData } from './$types';
+	import AddCustomerDialog from './_components/add-customer-dialog.svelte';
+	import { Users } from 'lucide-svelte';
 
-	const invoices = [
-		{
-			invoice: 'INV001',
-			paymentStatus: 'Paid',
-			totalAmount: '$250.00',
-			paymentMethod: 'Credit Card'
-		},
-		{
-			invoice: 'INV002',
-			paymentStatus: 'Pending',
-			totalAmount: '$150.00',
-			paymentMethod: 'PayPal'
-		},
-		{
-			invoice: 'INV003',
-			paymentStatus: 'Unpaid',
-			totalAmount: '$350.00',
-			paymentMethod: 'Bank Transfer'
-		},
-		{
-			invoice: 'INV004',
-			paymentStatus: 'Paid',
-			totalAmount: '$450.00',
-			paymentMethod: 'Credit Card'
-		},
-		{
-			invoice: 'INV005',
-			paymentStatus: 'Paid',
-			totalAmount: '$550.00',
-			paymentMethod: 'PayPal'
-		},
-		{
-			invoice: 'INV006',
-			paymentStatus: 'Pending',
-			totalAmount: '$200.00',
-			paymentMethod: 'Bank Transfer'
-		},
-		{
-			invoice: 'INV007',
-			paymentStatus: 'Unpaid',
-			totalAmount: '$300.00',
-			paymentMethod: 'Credit Card'
-		}
-	];
+	export let data: PageData;
 </script>
 
-<div class="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
-	<div class="flex items-center justify-between space-y-2">
-		<div>
-			<h2 class="text-2xl font-bold tracking-tight">Welcome back!</h2>
-			<p class="text-muted-foreground">Here's a list of your tasks for this month!</p>
-		</div>
-		<div class="flex items-center space-x-2">
-			<!-- <UserNav /> -->
+<div class="flex h-full p-2">
+	<div class="flex w-full rounded-md border border-dashed">
+		<div class="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
+			<Users class="h-10 w-10 text-muted-foreground" />
+
+			<h3 class="mt-4 text-lg font-semibold">No customers added</h3>
+			<p class="mb-4 mt-2 text-sm text-muted-foreground">
+				You have not added any customers. Add one below.
+			</p>
+			<AddCustomerDialog data={data.form} />
 		</div>
 	</div>
-
-	<Table.Root>
-		<Table.Caption>A list of your recent invoices.</Table.Caption>
-		<Table.Header>
-			<Table.Row>
-				<Table.Head class="w-[100px]">Invoice</Table.Head>
-				<Table.Head>Status</Table.Head>
-				<Table.Head>Method</Table.Head>
-				<Table.Head class="text-right">Amount</Table.Head>
-			</Table.Row>
-		</Table.Header>
-		<Table.Body>
-			{#each invoices as invoice, i (i)}
-				<Table.Row>
-					<Table.Cell class="font-medium">{invoice.invoice}</Table.Cell>
-					<Table.Cell>{invoice.paymentStatus}</Table.Cell>
-					<Table.Cell>{invoice.paymentMethod}</Table.Cell>
-					<Table.Cell class="text-right">{invoice.totalAmount}</Table.Cell>
-				</Table.Row>
-			{/each}
-		</Table.Body>
-	</Table.Root>
 </div>

@@ -3,8 +3,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Tabs from '$lib/components/ui/tabs';
-	import { ScrollArea } from '$lib/components/ui/scroll-area';
-	import EmptyPlaceholder from './_components/empty-placeholder.svelte';
+	import EmptyPlaceholder from '$lib/components/empty-placeholder.svelte';
 </script>
 
 <div class="px-4 py-6 lg:px-8">
@@ -31,9 +30,9 @@
 			</div>
 			<Separator class="my-4" />
 			<div class="relative">
-				<ScrollArea orientation="both">
+				<!-- <ScrollArea orientation="both">
 					<div class="flex space-x-4 pb-4">
-						<!-- {#each listenNowAlbums as album}
+						{#each listenNowAlbums as album}
                                         <AlbumArtwork
                                             {album}
                                             class="w-[250px]"
@@ -41,9 +40,9 @@
                                             width={250}
                                             height={330}
                                         />
-                                    {/each} -->
+                                    {/each}
 					</div>
-				</ScrollArea>
+				</ScrollArea> -->
 			</div>
 			<div class="mt-6 space-y-1">
 				<h2 class="text-2xl font-semibold tracking-tight">Made for You</h2>
@@ -51,9 +50,9 @@
 			</div>
 			<Separator class="my-4" />
 			<div class="relative">
-				<ScrollArea orientation="both">
+				<!-- <ScrollArea orientation="both">
 					<div class="flex space-x-4 pb-4">
-						<!-- {#each madeForYouAlbums as album}
+						{#each madeForYouAlbums as album}
                                         <AlbumArtwork
                                             {album}
                                             class="w-[150px]"
@@ -61,9 +60,9 @@
                                             width={150}
                                             height={150}
                                         />
-                                    {/each} -->
+                                    {/each}
 					</div>
-				</ScrollArea>
+				</ScrollArea> -->
 			</div>
 		</Tabs.Content>
 		<Tabs.Content value="podcasts" class="h-full flex-col border-none p-0 data-[state=active]:flex">
