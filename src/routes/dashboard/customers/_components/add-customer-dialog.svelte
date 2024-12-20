@@ -9,24 +9,26 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { UserPlus } from 'lucide-svelte';
 
-	export let data: SuperValidated<Infer<CustomerFormSchema>>;
+	const { data }: { data: SuperValidated<Infer<CustomerFormSchema>> } = $props();
+	let open = $state(false);
 
 	const form = superForm(data, {
 		validators: zodClient(customerFormSchema),
-		dataType: 'json'
+		dataType: 'json',
+		onResult: () => (open = false)
 	});
 
 	const { form: formData, enhance } = form;
 </script>
 
-<Dialog.Root>
+<Dialog.Root bind:open>
 	<Dialog.Trigger asChild let:builder>
 		<Button builders={[builder]}>
 			<UserPlus class="mr-2 size-4" /> Add customer
 		</Button>
 	</Dialog.Trigger>
 	<Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
-		<form method="POST" use:enhance action="?/create">
+		<form method="POST" use:enhance action="/dashboard/customers/?/create">
 			<Dialog.Header>
 				<Dialog.Title>Add customer</Dialog.Title>
 				<Dialog.Description>

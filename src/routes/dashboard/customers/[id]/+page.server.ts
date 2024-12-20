@@ -1,44 +1,101 @@
-import type { PageServerLoad } from './$types.js';
-import { customerFormSchema, type CustomerDetails } from '../customerSchema.js';
-import type { Tables } from '$lib/types/database.types.js';
+import type { Actions, PageServerLoad } from './$types.js';
+import { customerFormSchema, customerNoteFormSchema } from '../customerSchema.js';
+import { fail, redirect } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 
 export const load: PageServerLoad = async ({
 	parent,
 	params,
 	locals: { supabase, safeGetSession }
 }) => {
-	const { form, customers: rawCustomers } = await parent();
+	const { form, customers } = await parent();
 	const { user } = await safeGetSession();
 
-	const customers = rawCustomers?.map(parseCustomer) ?? [];
 	let selectedCustomer = customers?.find((c) => c.id === +params.id);
 	if (!selectedCustomer) {
 		const { data, error } = await supabase
 			.from('customer')
-			.select('*')
+			.select('*, customer_note(*)')
 			.eq('id', params.id)
 			.eq('user_id', user!.id)
 			.single();
+
 		if (error) throw error;
-		selectedCustomer = parseCustomer(data);
+
+		selectedCustomer = {
+			...data,
+			details: customerFormSchema.parse(data.details)
+		};
+		customers?.push(selectedCustomer);
 	}
+
+	if (!selectedCustomer) redirect(302, '/dashboard/customers');
 
 	return {
 		form,
 		customers,
-		selectedCustomer
+		selectedCustomer,
+		customerNoteForm: await superValidate(zod(customerNoteFormSchema))
 	};
 };
 
-export interface ICustomer extends Pick<Tables<'customer'>, 'id'> {
-	details: CustomerDetails;
-	created: string;
-	updated: string;
-}
+export const actions: Actions = {
+	'create-note': async ({ locals: { supabase, safeGetSession }, request, params }) => {
+		const { user } = await safeGetSession();
 
-const parseCustomer = (customer: Tables<'customer'>): ICustomer => ({
-	id: customer.id,
-	created: new Date(customer.created_at).toLocaleString(),
-	updated: new Date(customer.updated_at).toLocaleString(),
-	details: customerFormSchema.parse(customer.details)
-});
+		if (!user) throw 'Missing user data';
+		const data = await request.formData();
+		const form = await superValidate(data, zod(customerNoteFormSchema));
+
+		if (!form.valid) {
+			return fail(400, {
+				form
+			});
+		}
+
+		const { note } = form.data;
+
+		const { error } = await supabase.from('customer_note').insert({
+			note,
+			user_id: user.id,
+			customer_id: +params.id
+		});
+
+		if (error) throw error;
+
+		return {
+			form
+		};
+	}
+	// update: async ({ locals: { supabase, safeGetSession }, request }) => {
+	// 	const { user } = await safeGetSession();
+
+	// 	if (!user) throw 'Missing user data';
+
+	// 	const data = await request.formData();
+	// 	const form = await superValidate(data, zod(updateCustomerFormSchema));
+
+	// 	if (!form.valid) {
+	// 		return fail(400, {
+	// 			form
+	// 		});
+	// 	}
+
+	// 	const { id, ...details } = form.data;
+
+	// 	const { error } = await supabase
+	// 		.from('customer')
+	// 		.update({
+	// 			details
+	// 		})
+	// 		.eq('id', id);
+
+	// 	if (error) throw error;
+
+	// 	return {
+	// 		form,
+	// 		success: true
+	// 	};
+	// }
+};

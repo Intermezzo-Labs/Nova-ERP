@@ -21,9 +21,19 @@
 		ReplyAll,
 		Trash2
 	} from 'lucide-svelte';
-	import type { ICustomer } from '../+page.server';
+	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
+	import { customerNoteFormSchema, type CustomerNoteFormSchema } from '../../customerSchema';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import * as Form from '$lib/components/ui/form';
+	import type { Customer } from '../../+layout.server';
 
-	const { customer }: { customer: ICustomer } = $props();
+	const {
+		customer,
+		noteForm
+	}: {
+		customer: Customer;
+		noteForm: SuperValidated<Infer<CustomerNoteFormSchema>>;
+	} = $props();
 
 	const fullFormatter = new DateFormatter('en-US', {
 		dateStyle: 'medium',
@@ -36,7 +46,7 @@
 		minute: '2-digit',
 		hourCycle: 'h12'
 	});
-	let todayDate = now(getLocalTimeZone());
+	let todayDate = $state(now(getLocalTimeZone()));
 
 	function getClosestWeekend() {
 		const dayOfWeek = getDayOfWeek(todayDate, 'en-US');
@@ -45,6 +55,12 @@
 		}
 		return todayDate.add({ days: 6 - dayOfWeek }).toDate();
 	}
+
+	const form = superForm(noteForm, {
+		validators: zodClient(customerNoteFormSchema)
+	});
+
+	const { form: formData, enhance } = form;
 </script>
 
 <div class="mb-1 flex items-center p-2">
@@ -212,33 +228,50 @@
 					</div>
 				</div>
 			</div>
-			{#if customer.created}
+			{#if customer.created_at}
 				<div class="ml-auto text-xs text-muted-foreground">
-					{fullFormatter.format(new Date(customer.created))}
+					{fullFormatter.format(new Date(customer.created_at))}
 				</div>
 			{/if}
 		</div>
 		<Separator />
-		<div class="flex-1 overflow-y-auto whitespace-pre-wrap p-4 text-sm">
-			Lorem ipsum dolor sit, amet consectetur adipisicing elit. Modi assumenda, ad nulla atque unde
-			pariatur, fugiat enim natus non animi optio incidunt veniam sed ratione? Qui excepturi
-			blanditiis placeat ex!
-		</div>
+		{#if customer.customer_note.length}
+			<div class="flex-1 space-y-4 overflow-y-auto p-4 text-sm">
+				{#each customer.customer_note as note}
+					<article>
+						<header class="text-xs text-muted-foreground"><time>{note.created_at}</time></header>
+						<main class="whitespace-pre-wrap"><p>{note.note}</p></main>
+					</article>
+				{/each}
+			</div>
+		{:else}
+			<div class="p-8 text-center text-muted-foreground"><p>No notes for this customer</p></div>
+		{/if}
 		<Separator class="mt-auto" />
 		<div class="p-4">
-			<form>
+			<form method="POST" use:enhance action="?/create-note">
 				<div class="grid gap-4">
-					<Textarea class="p-4" placeholder={`Reply ${customer.details.name}...`} />
+					<Form.Field {form} name="note" autofocus>
+						<Form.Control let:attrs>
+							<Form.Label hidden>Note</Form.Label>
+							<Textarea
+								{...attrs}
+								required
+								bind:value={$formData.note}
+								class="p-4"
+								placeholder={`Reply to ${customer.details.name}...`}
+							/>
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
 					<div class="flex items-center">
 						<Label for="mute" class="flex items-center gap-2 text-xs font-normal">
 							<Switch id="mute" aria-label="Mute thread" /> Mute this thread
 						</Label>
-						<Button size="sm" class="ml-auto">Send</Button>
+						<Button size="sm" class="ml-auto" type="submit">Save</Button>
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
-{:else}
-	<div class="p-8 text-center text-muted-foreground">No message selected</div>
 {/if}

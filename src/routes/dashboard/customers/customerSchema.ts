@@ -12,3 +12,8 @@ export type CustomerDetails = z.infer<typeof customerFormSchema>;
 const hasId = z.object({ id: z.number() });
 export const updateCustomerFormSchema = customerFormSchema.merge(hasId);
 export type UpdateCustomerDetails = z.infer<typeof updateCustomerFormSchema>;
+
+export const customerNoteFormSchema = z.object({
+	note: z.string()
+});
+export type CustomerNoteFormSchema = typeof customerNoteFormSchema;

@@ -1,15 +1,11 @@
 <script lang="ts">
 	import { Search } from 'lucide-svelte';
 
-	import { mailStore } from './store';
 	import { Input } from '$lib/components/ui/input';
 	import { Separator } from '$lib/components/ui/select';
-	import * as Tabs from '$lib/components/ui/tabs';
 	import CustomerDisplay from './_components/customer-display.svelte';
 	import CustomerList from './_components/customer-list.svelte';
 
-	import { mails } from './data';
-	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 	import type { PageData } from './$types';
 	import AddCustomerDialog from '../_components/add-customer-dialog.svelte';
 
@@ -17,7 +13,7 @@
 </script>
 
 <div class="flex h-full flex-1 divide-x">
-	<section class="flex h-full max-w-lg flex-col">
+	<section class="flex h-full max-w-lg flex-col md:min-w-96">
 		<div class="flex items-center justify-between gap-4 px-4 py-2">
 			<h1 class="text-xl font-bold">Customers</h1>
 			<AddCustomerDialog data={data.form} />
@@ -33,9 +29,9 @@
 				</div>
 			</form>
 		</div>
-		<CustomerList customers={data.customers} />
+		<CustomerList customers={data.customers ?? []} />
 	</section>
 	<section class="flex h-full flex-1 flex-col">
-		<CustomerDisplay customer={data.selectedCustomer} />
+		<CustomerDisplay noteForm={data.customerNoteForm} customer={data.selectedCustomer} />
 	</section>
 </div>
