@@ -1,57 +1,65 @@
 <script lang="ts">
-	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import SuperDebug, { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { browser } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
-	import { Plus } from 'lucide-svelte';
 	import { customerFormSchema, type CustomerFormSchema } from '../customerSchema';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { UserPlus } from 'lucide-svelte';
 
-	export let data: SuperValidated<Infer<CustomerFormSchema>>;
-	export let open = false;
+	const { data }: { data: SuperValidated<Infer<CustomerFormSchema>> } = $props();
+	let open = $state(false);
 
 	const form = superForm(data, {
 		validators: zodClient(customerFormSchema),
-		dataType: 'json'
+		dataType: 'json',
+		onResult: () => (open = false)
 	});
 
 	const { form: formData, enhance } = form;
 </script>
 
-<Dialog.Root {open}>
+<Dialog.Root bind:open>
 	<Dialog.Trigger asChild let:builder>
-		<Button builders={[builder]}><Plus class="mr-2 size-4" /> Add Customer</Button>
+		<Button builders={[builder]}>
+			<UserPlus class="mr-2 size-4" /> Add customer
+		</Button>
 	</Dialog.Trigger>
 	<Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
-		<form method="POST" use:enhance action="?/create">
+		<form method="POST" use:enhance action="/dashboard/customers/?/create">
 			<Dialog.Header>
-				<Dialog.Title>Add company</Dialog.Title>
+				<Dialog.Title>Add customer</Dialog.Title>
 				<Dialog.Description>
-					Add company details and settings here and click save when you're done.
+					Add customer details and click save when you're done.
 				</Dialog.Description>
 			</Dialog.Header>
 
-			<div class="grid gap-6 py-6">
-				<Form.Field {form} name="name">
+			<div class="grid py-6">
+				<Form.Field {form} name="name" autofocus>
 					<Form.Control let:attrs>
 						<Form.Label>Name</Form.Label>
-						<Input {...attrs} required bind:value={$formData.name} />
+						<Input {...attrs} required bind:value={$formData.name} placeholder="Bruce Wayne" />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 				<Form.Field {form} name="email">
 					<Form.Control let:attrs>
 						<Form.Label>Email</Form.Label>
-						<Input {...attrs} type="email" bind:value={$formData.email} />
+						<Input
+							{...attrs}
+							type="email"
+							bind:value={$formData.email}
+							placeholder="bruce@way.ne"
+						/>
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 				<Form.Field {form} name="phone">
 					<Form.Control let:attrs>
 						<Form.Label>Phone</Form.Label>
-						<Input {...attrs} type="tel" bind:value={$formData.phone} />
+						<Input {...attrs} type="tel" bind:value={$formData.phone} placeholder="### ### ####" />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
