@@ -2,9 +2,12 @@
 	import { formatTimeAgo } from '../utils.js';
 	import { cn } from '$lib/utils.js';
 	import { goto } from '$app/navigation';
-	import type { Customer } from '../../+layout.server.js';
+	import type { Customer } from '../../+layout.server';
 
-	export let customers: Customer[];
+	const {
+		customers,
+		selectedCustomerId
+	}: { customers: Customer[]; selectedCustomerId: Customer['id'] } = $props();
 
 	function get_badge_variant_from_label(label: string) {
 		if (['work'].includes(label.toLowerCase())) {
@@ -26,10 +29,10 @@
 	{#each customers as customer}
 		<button
 			class={cn(
-				'flex w-full flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent'
-				// $mailStore.selected === item.id && 'bg-muted'
+				'flex w-full flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent',
+				selectedCustomerId === customer.id && 'bg-muted'
 			)}
-			on:click={() => handleCustomerClick(customer.id)}
+			onclick={() => handleCustomerClick(customer.id)}
 		>
 			<div class="flex w-full flex-col gap-1">
 				<div class="flex items-center">

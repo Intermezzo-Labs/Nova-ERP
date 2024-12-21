@@ -29,7 +29,7 @@
 				</div>
 			</form>
 		</div>
-		<CustomerList customers={data.customers ?? []} />
+		<CustomerList customers={data.customers ?? []} selectedCustomerId={data.selectedCustomer.id} />
 	</section>
 	<section class="flex h-full flex-1 flex-col">
 		<CustomerDisplay noteForm={data.customerNoteForm} customer={data.selectedCustomer} />
