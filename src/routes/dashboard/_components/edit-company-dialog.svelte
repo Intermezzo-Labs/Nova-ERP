@@ -7,10 +7,13 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { browser } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
-	import { Pencil } from 'lucide-svelte';
 	import { type UpdateCompanyDetails, updateCompanyFormSchema } from '$lib/schemas/company';
 
-	export let data: UpdateCompanyDetails;
+	type Props = {
+		data: UpdateCompanyDetails;
+		open: boolean;
+	};
+	let { data, open }: Props = $props();
 
 	const form = superForm(data, {
 		validators: zodClient(updateCompanyFormSchema),
@@ -21,10 +24,10 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<Dialog.Root>
-	<Dialog.Trigger asChild let:builder>
+<Dialog.Root {open} onOpenChange={(bool) => (open = bool)}>
+	<!-- <Dialog.Trigger asChild let:builder>
 		<Button builders={[builder]}><Pencil class="mr-2 size-4" /> Edit Details</Button>
-	</Dialog.Trigger>
+	</Dialog.Trigger> -->
 	<Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
 		<form method="POST" use:enhance action="?/update">
 			<Dialog.Header>

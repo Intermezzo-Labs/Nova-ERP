@@ -31,7 +31,5 @@
 		</div>
 		<CustomerList customers={data.customers ?? []} selectedCustomerId={data.selectedCustomer.id} />
 	</MainContainerLayout>
-	<section class="flex h-full flex-1 flex-col">
-		<CustomerDisplay noteForm={data.customerNoteForm} customer={data.selectedCustomer} />
-	</section>
+	<CustomerDisplay noteForm={data.customerNoteForm} customer={data.selectedCustomer} />
 </div>

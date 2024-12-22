@@ -22,10 +22,13 @@
 		Trash2
 	} from 'lucide-svelte';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { customerNoteFormSchema, type CustomerNoteFormSchema } from '../../../../../lib/schemas/customer';
+	import { customerNoteFormSchema, type CustomerNoteFormSchema } from '$lib/schemas/customer';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as Form from '$lib/components/ui/form';
 	import type { Customer } from '../../+layout.server';
+	import MainContainerLayout from '$lib/components/layouts/main-container-layout.svelte';
+	import { goto } from '$app/navigation';
+	import EditCustomerDialog from './edit-customer-dialog.svelte';
 
 	const {
 		customer,
@@ -61,9 +64,18 @@
 	});
 
 	const { form: formData, enhance } = form;
+
+	async function handleDelete() {
+		const response = await fetch(`/dashboard/customers/${customer.id}`, {
+			method: 'DELETE'
+		});
+		if (response.ok) goto('/dashboard/customers');
+	}
+
+	let openEditDialog = $state(false);
 </script>
 
-<div class="mb-1 flex items-center p-2">
+{#snippet actions()}
 	<div class="flex items-center gap-2">
 		<Tooltip.Root openDelay={0} group>
 			<Tooltip.Trigger
@@ -91,6 +103,7 @@
 			<Tooltip.Trigger
 				id="move_to_trash_tooltip"
 				class={buttonVariants({ variant: 'ghost', size: 'icon' })}
+				onclick={handleDelete}
 				disabled={!customer}
 			>
 				<Trash2 class="size-4" />
@@ -186,27 +199,31 @@
 			</Tooltip.Trigger>
 			<Tooltip.Content>Forward</Tooltip.Content>
 		</Tooltip.Root>
+		<Separator orientation="vertical" class="mx-2 h-6" />
+		<DropdownMenu.Root>
+			<DropdownMenu.Trigger
+				id="more_options_dropdown"
+				class={buttonVariants({ variant: 'ghost', size: 'icon' })}
+				disabled={!customer}
+			>
+				<EllipsisVertical class="size-4" />
+				<span class="sr-only">More</span>
+			</DropdownMenu.Trigger>
+			<DropdownMenu.Content align="end">
+				<DropdownMenu.Label>Manage</DropdownMenu.Label>
+				<DropdownMenu.Item onclick={() => (openEditDialog = true)}>Edit</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={handleDelete}>Delete</DropdownMenu.Item>
+				<DropdownMenu.Separator />
+				<DropdownMenu.Item>Mark as unread</DropdownMenu.Item>
+				<DropdownMenu.Item>Star thread</DropdownMenu.Item>
+				<DropdownMenu.Item>Add label</DropdownMenu.Item>
+				<DropdownMenu.Item>Mute thread</DropdownMenu.Item>
+			</DropdownMenu.Content>
+		</DropdownMenu.Root>
 	</div>
-	<Separator orientation="vertical" class="mx-2 h-6" />
-	<DropdownMenu.Root>
-		<DropdownMenu.Trigger
-			id="more_options_dropdown"
-			class={buttonVariants({ variant: 'ghost', size: 'icon' })}
-			disabled={!customer}
-		>
-			<EllipsisVertical class="size-4" />
-			<span class="sr-only">More</span>
-		</DropdownMenu.Trigger>
-		<DropdownMenu.Content align="end">
-			<DropdownMenu.Item>Mark as unread</DropdownMenu.Item>
-			<DropdownMenu.Item>Star thread</DropdownMenu.Item>
-			<DropdownMenu.Item>Add label</DropdownMenu.Item>
-			<DropdownMenu.Item>Mute thread</DropdownMenu.Item>
-		</DropdownMenu.Content>
-	</DropdownMenu.Root>
-</div>
-<Separator />
-{#if customer}
+{/snippet}
+
+<MainContainerLayout {actions} class="flex-1">
 	<div class="flex h-full flex-1 flex-col overflow-hidden">
 		<div class="flex items-start p-4">
 			<div class="flex items-start gap-4 text-sm">
@@ -274,4 +291,14 @@
 			</form>
 		</div>
 	</div>
-{/if}
+</MainContainerLayout>
+
+<EditCustomerDialog
+	data={{
+		id: customer.id,
+		name: customer.details.name,
+		email: customer.details.email,
+		phone: customer.details.phone
+	}}
+	open={openEditDialog}
+/>

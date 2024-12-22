@@ -18,6 +18,7 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
 		.from('customer')
 		.select('*, customer_note(*)')
 		.eq('user_id', user.id)
+		.order('updated_at', { ascending: false })
 		.limit(20);
 
 	const customers = data?.map(

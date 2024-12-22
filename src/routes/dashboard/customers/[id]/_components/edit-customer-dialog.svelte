@@ -9,23 +9,23 @@
 	import { Pencil } from 'lucide-svelte';
 	import { type UpdateCustomerDetails, updateCustomerFormSchema } from '$lib/schemas/customer';
 
-	export let data: UpdateCustomerDetails;
+	type Props = {
+		data: UpdateCustomerDetails;
+		open: boolean;
+	};
+	let { data, open = $bindable(false) }: Props = $props();
 
 	const form = superForm(data, {
 		validators: zodClient(updateCustomerFormSchema),
 		dataType: 'json',
-		applyAction: true
+		applyAction: true,
+		onResult: () => (open = false)
 	});
 
 	const { form: formData, enhance } = form;
 </script>
 
-<Dialog.Root>
-	<Dialog.Trigger asChild let:builder>
-		<Button builders={[builder]} variant="outline" size="sm">
-			<Pencil class="mr-2 size-4" /> Edit
-		</Button>
-	</Dialog.Trigger>
+<Dialog.Root bind:open onOpenChange={(bool) => (open = bool)}>
 	<Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
 		<form method="POST" use:enhance action="?/update">
 			<Dialog.Header>

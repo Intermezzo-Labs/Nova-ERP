@@ -1,5 +1,9 @@
 import type { Actions, PageServerLoad } from './$types.js';
-import { customerFormSchema, customerNoteFormSchema } from '../../../../lib/schemas/customer.js';
+import {
+	customerFormSchema,
+	customerNoteFormSchema,
+	updateCustomerFormSchema
+} from '$lib/schemas/customer';
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -67,35 +71,35 @@ export const actions: Actions = {
 		return {
 			form
 		};
+	},
+	update: async ({ locals: { supabase, safeGetSession }, request }) => {
+		const { user } = await safeGetSession();
+
+		if (!user) throw 'Missing user data';
+
+		const data = await request.formData();
+		const form = await superValidate(data, zod(updateCustomerFormSchema));
+
+		if (!form.valid) {
+			return fail(400, {
+				form
+			});
+		}
+
+		const { id, ...details } = form.data;
+
+		const { error } = await supabase
+			.from('customer')
+			.update({
+				details
+			})
+			.eq('id', id);
+
+		if (error) throw error;
+
+		return {
+			form,
+			success: true
+		};
 	}
-	// update: async ({ locals: { supabase, safeGetSession }, request }) => {
-	// 	const { user } = await safeGetSession();
-
-	// 	if (!user) throw 'Missing user data';
-
-	// 	const data = await request.formData();
-	// 	const form = await superValidate(data, zod(updateCustomerFormSchema));
-
-	// 	if (!form.valid) {
-	// 		return fail(400, {
-	// 			form
-	// 		});
-	// 	}
-
-	// 	const { id, ...details } = form.data;
-
-	// 	const { error } = await supabase
-	// 		.from('customer')
-	// 		.update({
-	// 			details
-	// 		})
-	// 		.eq('id', id);
-
-	// 	if (error) throw error;
-
-	// 	return {
-	// 		form,
-	// 		success: true
-	// 	};
-	// }
 };
