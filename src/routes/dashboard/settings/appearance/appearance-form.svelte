@@ -76,7 +76,7 @@
 								<div class="h-2 w-[100px] rounded-lg bg-[#ecedef]"></div>
 							</div>
 							<div class="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
-								<div class="h-4 w-4 rounded-full bg-[#ecedef]" />
+								<div class="h-4 w-4 rounded-full bg-[#ecedef]"></div>
 								<div class="h-2 w-[100px] rounded-lg bg-[#ecedef]"></div>
 							</div>
 							<div class="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">

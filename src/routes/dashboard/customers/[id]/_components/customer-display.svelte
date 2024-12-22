@@ -22,7 +22,7 @@
 		Trash2
 	} from 'lucide-svelte';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { customerNoteFormSchema, type CustomerNoteFormSchema } from '../../customerSchema';
+	import { customerNoteFormSchema, type CustomerNoteFormSchema } from '../../../../../lib/schemas/customer';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as Form from '$lib/components/ui/form';
 	import type { Customer } from '../../+layout.server';

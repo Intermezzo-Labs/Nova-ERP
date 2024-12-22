@@ -1,14 +1,14 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
+	import * as Form from '$lib/components/ui/form';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import SuperDebug, { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
+	import { companyFormSchema, type CompanyFormSchema } from '$lib/schemas/company';
+	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { browser } from '$app/environment';
-	import * as Form from '$lib/components/ui/form';
 	import { Plus } from 'lucide-svelte';
-	import { companyFormSchema, type CompanyFormSchema } from '../companySchema';
 
 	export let data: SuperValidated<Infer<CompanyFormSchema>>;
 

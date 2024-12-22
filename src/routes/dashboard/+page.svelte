@@ -5,21 +5,21 @@
 	import RecentSales from './_components/recent-sales.svelte';
 	import Overview from './_components/overview.svelte';
 	import { Separator } from '$lib/components/ui/select';
+	import MainContainerLayout from '$lib/components/layouts/main-container-layout.svelte';
 </script>
 
+{#snippet tabOptions()}
+	<Tabs.List class="sm:ml-auto">
+		<Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+		<Tabs.Trigger value="analytics" disabled>Analytics</Tabs.Trigger>
+		<Tabs.Trigger value="reports" disabled>Reports</Tabs.Trigger>
+		<Tabs.Trigger value="notifications" disabled>Notifications</Tabs.Trigger>
+	</Tabs.List>
+{/snippet}
+
 <Tabs.Root value="overview" class="sm:flex sm:h-full sm:flex-col">
-	<div class="flex flex-col items-center gap-2 px-4 py-2 sm:flex-row">
-		<h1 class="text-xl font-bold">Dashboard</h1>
-		<Tabs.List class="sm:ml-auto">
-			<Tabs.Trigger value="overview">Overview</Tabs.Trigger>
-			<Tabs.Trigger value="analytics" disabled>Analytics</Tabs.Trigger>
-			<Tabs.Trigger value="reports" disabled>Reports</Tabs.Trigger>
-			<Tabs.Trigger value="notifications" disabled>Notifications</Tabs.Trigger>
-		</Tabs.List>
-	</div>
-	<Separator />
-	<div class="h-full flex-1 overflow-auto px-4 pt-2">
-		<Tabs.Content value="overview" class="space-y-4">
+	<MainContainerLayout title="Dashboard" actions={tabOptions}>
+		<Tabs.Content value="overview" class="m-0 space-y-4 p-4">
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 				<Card.Root>
 					<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -82,5 +82,5 @@
 				</Card.Root>
 			</div>
 		</Tabs.Content>
-	</div>
+	</MainContainerLayout>
 </Tabs.Root>

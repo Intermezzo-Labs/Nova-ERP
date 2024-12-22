@@ -8,17 +8,17 @@
 
 	import type { PageData } from './$types';
 	import AddCustomerDialog from '../_components/add-customer-dialog.svelte';
+	import MainContainerLayout from '$lib/components/layouts/main-container-layout.svelte';
 
 	export let data: PageData;
 </script>
 
+{#snippet actions()}
+	<AddCustomerDialog data={data.form} />
+{/snippet}
+
 <div class="flex h-full flex-1 divide-x">
-	<section class="flex h-full max-w-lg flex-col md:min-w-96">
-		<div class="flex items-center justify-between gap-4 px-4 py-2">
-			<h1 class="text-xl font-bold">Customers</h1>
-			<AddCustomerDialog data={data.form} />
-		</div>
-		<Separator />
+	<MainContainerLayout title="Customers" {actions} class="md:w-96">
 		<div class="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<form>
 				<div class="relative">
@@ -30,7 +30,7 @@
 			</form>
 		</div>
 		<CustomerList customers={data.customers ?? []} selectedCustomerId={data.selectedCustomer.id} />
-	</section>
+	</MainContainerLayout>
 	<section class="flex h-full flex-1 flex-col">
 		<CustomerDisplay noteForm={data.customerNoteForm} customer={data.selectedCustomer} />
 	</section>

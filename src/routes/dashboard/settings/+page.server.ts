@@ -9,7 +9,7 @@ import {
 	novaUserProfileFormSchema,
 	type NovaUserProfile,
 	type NovaUserProfileForm
-} from '$lib/types/user';
+} from '$lib/schemas/nova-user';
 
 export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase } }) => {
 	const { session, user } = await safeGetSession();

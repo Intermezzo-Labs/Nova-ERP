@@ -5,16 +5,12 @@
 	import * as Select from '$lib/components/ui/select';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
-	import { invoiceFormSchema } from '../invoiceSchema';
+	import { invoiceFormSchema } from '../../../../lib/schemas/invoice';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { Delete, Plus, Trash } from 'lucide-svelte';
+	import { Plus, Trash } from 'lucide-svelte';
 	import * as Form from '$lib/components/ui/form';
 	import { browser } from '$app/environment';
 	import SuperDebug from 'sveltekit-superforms';
-	import type { Tables } from '$lib/types/database.types';
-	import { customerFormSchema } from '../../crm/customers/customerSchema';
-	import Table from '$lib/components/ui/table/table.svelte';
-	import { companyFormSchema } from '../../crm/companies/companySchema';
 	import type { PageData } from '../$types';
 
 	export let data: SuperValidated<Infer<typeof invoiceFormSchema>>;

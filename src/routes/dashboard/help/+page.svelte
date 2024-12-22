@@ -3,7 +3,7 @@
 	import MainContainerLayout from '$lib/components/layouts/main-container-layout.svelte';
 </script>
 
-<MainContainerLayout title="Experimental">
+<MainContainerLayout title="Help">
 	<div class="p-4">
 		<EmptyPlaceholder />
 	</div>

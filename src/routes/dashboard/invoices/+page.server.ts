@@ -1,9 +1,9 @@
 import { superValidate } from 'sveltekit-superforms/server';
-import { invoiceFormSchema } from './invoiceSchema';
+import { invoiceFormSchema } from '../../../lib/schemas/invoice';
 import { fail } from '@sveltejs/kit';
 import { zod } from 'sveltekit-superforms/adapters';
-import { customerFormSchema } from '../crm/customers/customerSchema';
-import { companyFormSchema } from '../crm/companies/companySchema';
+import { customerFormSchema } from '../../../lib/schemas/customer';
+import { companyFormSchema } from '$lib/schemas/company';
 
 export const load = async ({ locals }) => {
 	// Get invoice count with error handling

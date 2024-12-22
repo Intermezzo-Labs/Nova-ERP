@@ -2,7 +2,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { type Actions, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types.js';
-import { customerFormSchema, updateCustomerFormSchema } from './customerSchema.js';
+import { customerFormSchema, updateCustomerFormSchema } from '../../../lib/schemas/customer.js';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	const { form, customers } = await parent();

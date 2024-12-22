@@ -9,7 +9,7 @@
 	import type { FormInputEvent } from '$lib/components/ui/input';
 	import { browser } from '$app/environment';
 	import type { Snippet } from 'svelte';
-	import { novaUserProfileFormSchema, userRoleEnum, userStatusEnum } from '$lib/types/user';
+	import { novaUserProfileFormSchema, userRoleEnum, userStatusEnum } from '$lib/schemas/nova-user';
 
 	interface Props {
 		data: SuperValidated<Infer<typeof novaUserProfileFormSchema>>;

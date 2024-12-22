@@ -7,7 +7,7 @@
 	import { browser } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
 	import { Pencil } from 'lucide-svelte';
-	import { updateCustomerFormSchema, type UpdateCustomerDetails } from '../customerSchema';
+	import { type UpdateCustomerDetails, updateCustomerFormSchema } from '$lib/schemas/customer';
 
 	export let data: UpdateCustomerDetails;
 

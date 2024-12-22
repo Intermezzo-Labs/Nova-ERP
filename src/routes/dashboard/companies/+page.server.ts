@@ -2,7 +2,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { type Actions, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { companyFormSchema, updateCompanyFormSchema } from './companySchema';
+import { companyFormSchema, updateCompanyFormSchema } from '../../../lib/schemas/company';
 
 export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase } }) => {
 	const { user } = await safeGetSession();

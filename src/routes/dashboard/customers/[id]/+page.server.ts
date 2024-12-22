@@ -1,5 +1,5 @@
 import type { Actions, PageServerLoad } from './$types.js';
-import { customerFormSchema, customerNoteFormSchema } from '../customerSchema.js';
+import { customerFormSchema, customerNoteFormSchema } from '../../../../lib/schemas/customer.js';
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';

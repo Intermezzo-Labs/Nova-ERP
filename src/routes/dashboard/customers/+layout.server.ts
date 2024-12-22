@@ -1,7 +1,7 @@
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { LayoutServerLoad } from './$types';
-import { customerFormSchema, type CustomerDetails } from './customerSchema';
+import { customerFormSchema, type CustomerDetails } from '../../../lib/schemas/customer';
 import type { Tables } from '$lib/types/database.types';
 
 export type Customer = Tables<'customer'> & {

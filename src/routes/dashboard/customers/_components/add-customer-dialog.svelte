@@ -5,7 +5,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { browser } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
-	import { customerFormSchema, type CustomerFormSchema } from '../customerSchema';
+	import { customerFormSchema, type CustomerFormSchema } from '../../../../lib/schemas/customer';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { UserPlus } from 'lucide-svelte';
 
