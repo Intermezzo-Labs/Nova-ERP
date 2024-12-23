@@ -29,4 +29,4 @@ jobs:
           key: ${{ secrets.LINODE_SSH_KEY }}
           script: |
             cd /var/www/nova-erp
-            bash deploy.sh
+            bash deployment.sh
