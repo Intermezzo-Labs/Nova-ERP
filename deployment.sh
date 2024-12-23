@@ -29,18 +29,18 @@ fi
 # Ensure correct permissions
 chmod 600 .env
 
-# Stop running containers
-echo "🛑 Stopping running containers..."
-docker-compose down
+# Build new images without stopping containers
+echo "🏗️ Building updated containers..."
+docker-compose build
 
-# Clean up unused resources
+# Restart services one by one to avoid downtime
+echo "🔄 Restarting services with zero downtime..."
+docker-compose up --no-deps -d app
+docker-compose up --no-deps -d nginx
+
+# Clean up unused resources (optional for production)
 echo "🧹 Cleaning up unused resources..."
-docker system prune -f
-
-# Rebuild and start containers
-echo "🏗️ Rebuilding and starting containers..."
-docker-compose build --no-cache
-docker-compose up -d
+docker system prune -f --volumes
 
 # Verify deployment
 echo "✅ Verifying deployment..."
