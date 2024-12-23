@@ -10,6 +10,7 @@
 	$: ({ supabase, session } = data);
 
 	onMount(() => {
+		document.documentElement.classList.add('dark');
 		const { data } = supabase.auth.onAuthStateChange((event, newSession) => {
 			if (newSession?.expires_at !== session?.expires_at) {
 				invalidate('supabase:auth');
