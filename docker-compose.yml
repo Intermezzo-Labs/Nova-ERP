@@ -25,9 +25,9 @@ services:
     environment:
       - DOMAIN=nova.intermezzolabs.com
     volumes:
-      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf  # Mount Nginx config
-      - ./nginx/docker-entrypoint.sh:/docker-entrypoint.sh         # Ensure entrypoint exists
-      - ./nginx/www:/var/www/html                                 # Mount static files
+      - ./nginx/conf.d/default.conf.template:/etc/nginx/conf.d/default.conf.template
+      - ./nginx/docker-entrypoint.sh:/docker-entrypoint.sh
+      - ./nginx/www:/var/www/html
       - /etc/letsencrypt:/etc/letsencrypt:ro
     ports:
       - '80:80'
