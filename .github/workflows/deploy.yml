@@ -10,11 +10,19 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Run SSH commands on the server
+      # Add debug step
+      - name: Debug
+        run: |
+          echo "Checking SSH key presence..."
+          if [ -n "${{ secrets.SSH_PRIVATE_KEY }}" ]; then
+            echo "SSH key is set"
+          else
+            echo "SSH key is NOT set"
+          fi
+
       - name: Run deployment script on the server
         uses: appleboy/ssh-action@master
         env:
@@ -25,7 +33,7 @@ jobs:
           host: ${{ secrets.CICD_LINODE }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
+          debug: true  # Enable debug mode
           envs: PUBLIC_SUPABASE_URL,PUBLIC_SUPABASE_ANON_KEY,DOMAIN
           script: |
             echo "Creating .env if it doesn't exist..."
