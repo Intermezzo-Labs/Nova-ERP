@@ -3,27 +3,39 @@ name: Deploy via SSH
 on:
   push:
     branches:
-      - main  # Trigger this workflow only on pushes to the main branch
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
       # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Run SSH commands on the server to execute deployment.sh
+      # Step 2: Run SSH commands on the server
       - name: Run deployment script on the server
         uses: appleboy/ssh-action@master
+        env:
+          PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+          PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+          DOMAIN: 'nova.intermezzolabs.com'
         with:
-          host: ${{ secrets.SSH_HOST }}           # The IP or domain of your server
-          username: ${{ secrets.SSH_USERNAME }}   # The SSH username
-          key: ${{ secrets.SSH_PRIVATE_KEY }}     # The private SSH key
-          port: 22                                # Default SSH port
+          host: ${{ secrets.CICD_LINODE }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          envs: PUBLIC_SUPABASE_URL,PUBLIC_SUPABASE_ANON_KEY,DOMAIN
           script: |
-            echo "Navigating to the project directory..."
-            cd /var/www/nova-erp                  # Navigate to the deployment directory
-            echo "Running deployment script..."
-            bash deployment.sh                   # Execute your deployment script
+            echo "Creating .env if it doesn't exist..."
+            mkdir -p ~/Nova-ERP
+            if [ ! -f ~/Nova-ERP/.env ]; then
+              echo "PUBLIC_SUPABASE_URL=$PUBLIC_SUPABASE_URL" > ~/Nova-ERP/.env
+              echo "PUBLIC_SUPABASE_ANON_KEY=$PUBLIC_SUPABASE_ANON_KEY" >> ~/Nova-ERP/.env
+              chmod 600 ~/Nova-ERP/.env
+            fi
+
+            echo "Starting deployment..."
+            cd ~/Nova-ERP
+            bash deployment.sh
