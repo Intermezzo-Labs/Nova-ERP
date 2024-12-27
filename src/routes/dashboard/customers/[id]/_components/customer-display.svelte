@@ -77,7 +77,7 @@
 </script>
 
 {#snippet actions()}
-	<div class="flex items-center gap-2">
+	<div class="hidden items-center gap-2 md:flex">
 		<Tooltip.Root openDelay={0} group>
 			<Tooltip.Trigger
 				id="archive_tooltip"

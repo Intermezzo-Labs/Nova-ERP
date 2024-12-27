@@ -17,8 +17,8 @@
 	<AddCustomerDialog data={data.form} />
 {/snippet}
 
-<div class="flex h-full flex-1 divide-x">
-	<MainContainerLayout title="Customers" {actions} class="md:w-96">
+<div class="flex h-full flex-1 flex-col divide-y md:flex-row md:divide-x md:divide-y-0">
+	<MainContainerLayout title="Customers" {actions} class="h-1/2 md:h-auto md:w-96">
 		<div class="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<form>
 				<div class="relative">

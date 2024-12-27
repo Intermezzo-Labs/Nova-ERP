@@ -174,7 +174,7 @@
 {/snippet}
 
 <MainContainerLayout title="Invoices" {actions}>
-	<div class="container mx-auto space-y-4 p-4">
+	<div class="w-full flex-1 space-y-4 p-4">
 		{#if $page.error}
 			<div
 				class="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-red-900 dark:text-red-300"
@@ -216,7 +216,7 @@
 			<Table.Root>
 				<Table.Header>
 					<Table.Row>
-						<Table.Head>Invoice ID</Table.Head>
+						<Table.Head class="text-nowrap">Invoice ID</Table.Head>
 						<Table.Head>Customer</Table.Head>
 						<Table.Head>Status</Table.Head>
 						<Table.Head>Total</Table.Head>

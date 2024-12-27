@@ -16,7 +16,7 @@
 	</Tabs.List>
 {/snippet}
 
-<Tabs.Root value="overview" class="sm:flex sm:h-full sm:flex-col">
+<Tabs.Root value="overview" class="flex h-full flex-col">
 	<MainContainerLayout title="Dashboard" actions={tabOptions}>
 		<Tabs.Content value="overview" class="m-0 space-y-4 p-4">
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

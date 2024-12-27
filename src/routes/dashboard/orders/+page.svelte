@@ -5,6 +5,6 @@
 
 <MainContainerLayout title="Orders">
 	<div class="p-4">
-		<EmptyPlaceholder />
+		<EmptyPlaceholder itemLabel="orders" />
 	</div>
 </MainContainerLayout>

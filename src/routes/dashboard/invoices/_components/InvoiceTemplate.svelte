@@ -32,7 +32,7 @@
 			<Dialog.Title>Invoice #{invoice.id}</Dialog.Title>
 		</Dialog.Header>
 
-		<div bind:this={invoiceRef} class="rounded-lg bg-white p-8">
+		<div bind:this={invoiceRef} class="rounded-lg bg-white p-8 text-background">
 			<!-- Company Details -->
 			<div class="mb-8">
 				<h2 class="mb-2 text-2xl font-bold">{company?.name}</h2>

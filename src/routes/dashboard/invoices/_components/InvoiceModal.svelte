@@ -186,7 +186,7 @@
 				<SuperDebug data={$formData} />
 			{/if}
 
-			<Dialog.Footer>
+			<Dialog.Footer class="gap-2">
 				<Form.Button type="button" variant="outline" on:click={() => (open = false)}>
 					Cancel
 				</Form.Button>

@@ -1,14 +1,10 @@
 <script lang="ts">
-	import * as Dialog from '$lib/components/ui/dialog';
-	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import { Label } from '$lib/components/ui/label';
 	import type { Snippet } from 'svelte';
 
 	type Props = {
-		icon: Snippet;
+		icon?: Snippet;
 		itemLabel: string;
-		children: Snippet;
+		children?: Snippet;
 	};
 	let { icon, itemLabel, children }: Props = $props();
 </script>
