@@ -13,15 +13,14 @@ export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase 
 		.from('company')
 		.select('*')
 		.eq('user_id', user.id)
+		.order('archived_at', { nullsFirst: true })
 		.limit(20);
 
 	return {
 		form: await superValidate(zod(companyFormSchema)),
 		companies:
 			companies?.map((company) => ({
-				id: company.id,
-				created: new Date(company.created_at).toLocaleString(),
-				updated: new Date(company.updated_at).toLocaleString(),
+				...company,
 				details: companyFormSchema.parse(company.details)
 			})) ?? [],
 		error
@@ -76,13 +75,80 @@ export const actions: Actions = {
 			.update({
 				details
 			})
-			.eq('id', id);
+			.eq('id', id)
+			.is('archived_at', null);
 
-		if (error) throw error;
+		if (error) {
+			fail(400, {
+				form,
+				error
+			});
+		}
 
 		return {
 			form,
 			success: true
+		};
+	},
+	archive: async ({ locals: { supabase, safeGetSession }, request }) => {
+		const { user } = await safeGetSession();
+
+		if (!user) throw 'Missing user data';
+
+		const data = await request.formData();
+		const form = await superValidate(data, zod(updateCompanyFormSchema));
+
+		const { id } = form.data;
+
+		const response = await supabase
+			.from('company')
+			.update({ archived_at: new Date().toISOString() })
+			.eq('id', id);
+
+		if (response.error) {
+			fail(400, {
+				form,
+				error: response.error
+			});
+		}
+
+		return {
+			form,
+			success: true
+		};
+	},
+	unarchive: async ({ locals: { supabase, safeGetSession }, request }) => {
+		const { user } = await safeGetSession();
+
+		if (!user) throw 'Missing user data';
+
+		const data = await request.formData();
+		const form = await superValidate(data, zod(updateCompanyFormSchema));
+
+		const { id } = form.data;
+
+		const response = await supabase.from('company').update({ archived_at: null }).eq('id', id);
+
+		if (response.error) {
+			fail(400, {
+				form,
+				error: response.error
+			});
+		}
+
+		return {
+			form,
+			success: true
+		};
+	},
+	select: async ({ request, cookies }) => {
+		const data = await request.formData();
+		const id = data.get('id')?.toString();
+		if (id) {
+			cookies.set('nova-company-id', String(id), { path: '/' });
+		}
+		return {
+			status: 200
 		};
 	}
 };

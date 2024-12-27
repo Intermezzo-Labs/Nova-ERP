@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS public.company (
     user_id UUID REFERENCES auth.users NOT NULL,
     details jsonb not null,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+    archived_at TIMESTAMP
 );
 
 -- Create the trigger

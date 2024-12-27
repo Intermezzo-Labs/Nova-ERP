@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS public.nova_users (
     role nova_user_role NOT NULL DEFAULT 'User',
     status nova_user_status NOT NULL DEFAULT 'Active',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+    archived_at TIMESTAMP
 );
 
 -- Drop the trigger if it already exists

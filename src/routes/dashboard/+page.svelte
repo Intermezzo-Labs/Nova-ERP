@@ -4,7 +4,6 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import RecentSales from './_components/recent-sales.svelte';
 	import Overview from './_components/overview.svelte';
-	import { Separator } from '$lib/components/ui/select';
 	import MainContainerLayout from '$lib/components/layouts/main-container-layout.svelte';
 </script>
 

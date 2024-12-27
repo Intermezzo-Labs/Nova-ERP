@@ -3,12 +3,15 @@
 	import { cn } from '$lib/utils';
 	import { Separator } from '$lib/components/ui/select';
 	import Menu from './_components/menu.svelte';
-	import AccountSwitcher from './_components/account-switcher.svelte';
+	import CompanySwitcher from './_components/company-switcher.svelte';
 	import Nav from './_components/nav.svelte';
 
-	import { accounts } from './customers/[id]/data';
 	import Toast from '$lib/components/ui/toast/Toast.svelte';
-	export let defaultCollapsed = false;
+	import type { LayoutData } from './$types';
+	import type { Snippet } from 'svelte';
+
+	type Props = { data: LayoutData; children: Snippet; defaultCollapsed: boolean };
+	let { data, children, defaultCollapsed = false }: Props = $props();
 
 	let isCollapsed = defaultCollapsed;
 </script>
@@ -21,7 +24,11 @@
 			<div
 				class={cn('flex h-[52px] items-center justify-center', isCollapsed ? 'h-[52px]' : 'px-2')}
 			>
-				<AccountSwitcher {isCollapsed} {accounts} />
+				<CompanySwitcher
+					{isCollapsed}
+					selectedCompanyId={data.currentCompanyId}
+					availableCompanies={data.companies}
+				/>
 			</div>
 			<Separator />
 			<Nav {isCollapsed} routes={primaryRoutes} />
@@ -29,7 +36,7 @@
 			<Nav {isCollapsed} routes={secondaryRoutes} />
 		</nav>
 		<main class="sm:h-full sm:flex-1">
-			<slot />
+			{@render children()}
 		</main>
 	</div>
 </div>

@@ -30,6 +30,7 @@ export type Database = {
 		Tables: {
 			company: {
 				Row: {
+					archived_at: string | null;
 					created_at: string;
 					details: Json;
 					id: number;
@@ -37,6 +38,7 @@ export type Database = {
 					user_id: string;
 				};
 				Insert: {
+					archived_at?: string | null;
 					created_at?: string;
 					details: Json;
 					id?: number;
@@ -44,6 +46,7 @@ export type Database = {
 					user_id: string;
 				};
 				Update: {
+					archived_at?: string | null;
 					created_at?: string;
 					details?: Json;
 					id?: number;
@@ -54,23 +57,32 @@ export type Database = {
 			};
 			customer: {
 				Row: {
+					archived_at: string | null;
 					created_at: string;
 					details: Json;
+					email: string | null;
 					id: number;
+					phone: string | null;
 					updated_at: string;
 					user_id: string;
 				};
 				Insert: {
+					archived_at?: string | null;
 					created_at?: string;
 					details: Json;
+					email?: string | null;
 					id?: number;
+					phone?: string | null;
 					updated_at?: string;
 					user_id: string;
 				};
 				Update: {
+					archived_at?: string | null;
 					created_at?: string;
 					details?: Json;
+					email?: string | null;
 					id?: number;
+					phone?: string | null;
 					updated_at?: string;
 					user_id?: string;
 				};
@@ -79,7 +91,7 @@ export type Database = {
 			customer_note: {
 				Row: {
 					created_at: string;
-					customer_id: number;
+					customer_id: number | null;
 					id: number;
 					note: string;
 					updated_at: string;
@@ -87,7 +99,7 @@ export type Database = {
 				};
 				Insert: {
 					created_at?: string;
-					customer_id: number;
+					customer_id?: number | null;
 					id?: number;
 					note: string;
 					updated_at?: string;
@@ -95,7 +107,7 @@ export type Database = {
 				};
 				Update: {
 					created_at?: string;
-					customer_id?: number;
+					customer_id?: number | null;
 					id?: number;
 					note?: string;
 					updated_at?: string;
@@ -107,6 +119,44 @@ export type Database = {
 						columns: ['customer_id'];
 						isOneToOne: false;
 						referencedRelation: 'customer';
+						referencedColumns: ['id'];
+					}
+				];
+			};
+			inventory_item: {
+				Row: {
+					company_id: number;
+					created_at: string;
+					details: Json;
+					id: number;
+					quantity: number | null;
+					updated_at: string;
+					user_id: string;
+				};
+				Insert: {
+					company_id: number;
+					created_at?: string;
+					details: Json;
+					id?: number;
+					quantity?: number | null;
+					updated_at?: string;
+					user_id: string;
+				};
+				Update: {
+					company_id?: number;
+					created_at?: string;
+					details?: Json;
+					id?: number;
+					quantity?: number | null;
+					updated_at?: string;
+					user_id?: string;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'inventory_item_company_id_fkey';
+						columns: ['company_id'];
+						isOneToOne: false;
+						referencedRelation: 'company';
 						referencedColumns: ['id'];
 					}
 				];
@@ -166,7 +216,7 @@ export type Database = {
 				Row: {
 					created_at: string;
 					id: number;
-					invoice_id: number;
+					invoice_id: number | null;
 					note: string;
 					updated_at: string;
 					user_id: string;
@@ -174,7 +224,7 @@ export type Database = {
 				Insert: {
 					created_at?: string;
 					id?: number;
-					invoice_id: number;
+					invoice_id?: number | null;
 					note: string;
 					updated_at?: string;
 					user_id: string;
@@ -182,7 +232,7 @@ export type Database = {
 				Update: {
 					created_at?: string;
 					id?: number;
-					invoice_id?: number;
+					invoice_id?: number | null;
 					note?: string;
 					updated_at?: string;
 					user_id?: string;
@@ -197,43 +247,9 @@ export type Database = {
 					}
 				];
 			};
-			line_item: {
-				Row: {
-					company_id: number;
-					created_at: string;
-					details: Json;
-					id: number;
-					updated_at: string;
-					user_id: string;
-				};
-				Insert: {
-					company_id: number;
-					created_at?: string;
-					details: Json;
-					id?: number;
-					updated_at?: string;
-					user_id: string;
-				};
-				Update: {
-					company_id?: number;
-					created_at?: string;
-					details?: Json;
-					id?: number;
-					updated_at?: string;
-					user_id?: string;
-				};
-				Relationships: [
-					{
-						foreignKeyName: 'line_item_company_id_fkey';
-						columns: ['company_id'];
-						isOneToOne: false;
-						referencedRelation: 'company';
-						referencedColumns: ['id'];
-					}
-				];
-			};
 			nova_users: {
 				Row: {
+					archived_at: string | null;
 					created_at: string;
 					email: string | null;
 					id: number;
@@ -244,6 +260,7 @@ export type Database = {
 					user_id: string;
 				};
 				Insert: {
+					archived_at?: string | null;
 					created_at?: string;
 					email?: string | null;
 					id?: number;
@@ -254,6 +271,7 @@ export type Database = {
 					user_id: string;
 				};
 				Update: {
+					archived_at?: string | null;
 					created_at?: string;
 					email?: string | null;
 					id?: number;
@@ -271,7 +289,7 @@ export type Database = {
 					created_at: string;
 					details: Json;
 					id: number;
-					line_item_id: number;
+					inventory_item_id: number | null;
 					updated_at: string;
 					user_id: string;
 				};
@@ -280,7 +298,7 @@ export type Database = {
 					created_at?: string;
 					details: Json;
 					id?: number;
-					line_item_id: number;
+					inventory_item_id?: number | null;
 					updated_at?: string;
 					user_id: string;
 				};
@@ -289,7 +307,7 @@ export type Database = {
 					created_at?: string;
 					details?: Json;
 					id?: number;
-					line_item_id?: number;
+					inventory_item_id?: number | null;
 					updated_at?: string;
 					user_id?: string;
 				};
@@ -302,10 +320,10 @@ export type Database = {
 						referencedColumns: ['id'];
 					},
 					{
-						foreignKeyName: 'product_line_item_id_fkey';
-						columns: ['line_item_id'];
+						foreignKeyName: 'product_inventory_item_id_fkey';
+						columns: ['inventory_item_id'];
 						isOneToOne: false;
-						referencedRelation: 'line_item';
+						referencedRelation: 'inventory_item';
 						referencedColumns: ['id'];
 					}
 				];

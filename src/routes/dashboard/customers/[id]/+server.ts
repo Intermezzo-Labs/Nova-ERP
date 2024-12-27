@@ -6,9 +6,11 @@ export const DELETE: RequestHandler = async ({ locals: { safeGetSession, supabas
 
 	if (!user) throw 'Missing user data';
 
-	const everything = await supabase.from('customer').delete({ count: 'exact' }).eq('id', params.id);
-	console.log(everything, params.id);
-	if (everything.error) throw everything.error;
+	const response = await supabase
+		.from('customer')
+		.update({ archived_at: new Date().toISOString() })
+		.eq('id', params.id);
+	if (response.error) throw response.error;
 
-	return json(params.id, { status: 200 });
+	return json(response);
 };

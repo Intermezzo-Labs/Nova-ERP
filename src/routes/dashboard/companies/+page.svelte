@@ -2,21 +2,28 @@
 	import type { PageData } from './$types';
 	import * as Card from '$lib/components/ui/card';
 	import Switch from '$lib/components/ui/switch/switch.svelte';
-	import { Bell, LucideOctagonMinus } from 'lucide-svelte';
+	import { Bell, Building, Settings, LucideOctagonMinus } from 'lucide-svelte';
 	import * as Alert from '$lib/components/ui/alert';
-	import AddCompanyDialog from '../_components/add-company-dialog.svelte';
-	import EditCompanyDialog from '../_components/edit-company-dialog.svelte';
+	import AddCompanyDialog from './_components/add-company-dialog.svelte';
+	import EditCompanyDialog from './_components/edit-company-dialog.svelte';
+	import MainContainerLayout from '$lib/components/layouts/main-container-layout.svelte';
+	import EmptyPlaceholder from '$lib/components/empty-placeholder.svelte';
+	import type { UpdateCompanyDetails } from '$lib/schemas/company';
+	import Button from '$lib/components/ui/button/button.svelte';
 
-	export let data: PageData;
+	let { data }: { data: PageData } = $props();
+	let selectedCompany = $state<UpdateCompanyDetails | null>(null);
 </script>
 
-<div class="flex-1 space-y-4 p-8 pt-6">
-	<div class="flex items-center justify-between space-y-2">
-		<h2 class="text-3xl font-bold tracking-tight">Companies</h2>
-		<div class="flex items-center space-x-2">
-			<AddCompanyDialog data={data.form} />
-		</div>
-	</div>
+{#snippet actions()}
+	<AddCompanyDialog data={data.form} />
+{/snippet}
+
+{#snippet icon()}
+	<Building class="size-5" />
+{/snippet}
+
+<MainContainerLayout title="Companies" actions={data.companies.length ? actions : undefined}>
 	{#if data.error}
 		<Alert.Root variant="destructive">
 			<LucideOctagonMinus class="size-5" />
@@ -24,13 +31,13 @@
 			<Alert.Description>{data.error}</Alert.Description>
 		</Alert.Root>
 	{/if}
-	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+	<div class="grid items-start gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
 		{#each data.companies as company}
 			<Card.Root>
 				<Card.Header class="flex flex-row items-start justify-between space-y-0 pb-2 lg:gap-4">
-					<Card.Title class="whitespace-nowrap text-sm font-medium"
-						>{company.details.name}</Card.Title
-					>
+					<Card.Title class="whitespace-nowrap text-sm font-medium">
+						{company.details.name}
+					</Card.Title>
 					<Card.Description class="lg:text-right">{company.details.description}</Card.Description>
 				</Card.Header>
 				<Card.Content class="grid gap-4">
@@ -48,32 +55,53 @@
 							<div class="space-y-1">
 								<p class="text-sm font-medium leading-none">Created</p>
 								<p class="text-sm text-muted-foreground">
-									{company.created}
+									{company.created_at}
 								</p>
 							</div>
 						</div>
+						{#if company.archived_at}
+							<div class="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
+								<span class="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500"></span>
+								<div class="space-y-1">
+									<p class="text-sm font-medium leading-none">Archived</p>
+									<p class="text-sm text-muted-foreground">
+										{company.archived_at}
+									</p>
+								</div>
+							</div>
+						{/if}
 					</div>
 				</Card.Content>
 				<Card.Footer>
-					<EditCompanyDialog data={Object.assign({ id: company.id }, company.details)} />
+					<Button
+						class="w-full"
+						variant="outline"
+						onclick={() =>
+							(selectedCompany = {
+								id: company.id,
+								...company.details
+							})}
+					>
+						<Settings class="mr-2 size-4" /> Manage
+					</Button>
 				</Card.Footer>
 			</Card.Root>
 		{/each}
 	</div>
 	{#if data.companies.length < 1}
-		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-			<Card.Root class="col-span-3">
-				<Card.Header>
-					<Card.Title>You have no companies</Card.Title>
-					<Card.Description>
-						You can start tracking leads as soon as you add a company.
-					</Card.Description>
-				</Card.Header>
-				<Card.Content>
-					<p class="mb-4 text-sm text-muted-foreground"></p>
-					<AddCompanyDialog data={data.form} />
-				</Card.Content>
-			</Card.Root>
+		<div class="p-4">
+			<EmptyPlaceholder {icon} itemLabel="companies">
+				{@render actions()}
+			</EmptyPlaceholder>
 		</div>
 	{/if}
-</div>
+</MainContainerLayout>
+
+{#if selectedCompany}
+	<EditCompanyDialog
+		data={selectedCompany}
+		open={!!selectedCompany}
+		handleClose={() => (selectedCompany = null)}
+		archived={!!data.companies.find((c) => c.id === selectedCompany?.id)?.archived_at}
+	/>
+{/if}

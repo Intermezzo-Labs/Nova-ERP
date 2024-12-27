@@ -70,6 +70,7 @@
 			method: 'DELETE'
 		});
 		if (response.ok) goto('/dashboard/customers');
+		alert(response.statusText);
 	}
 
 	let openEditDialog = $state(false);

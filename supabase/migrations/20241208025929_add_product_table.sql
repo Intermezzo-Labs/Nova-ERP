@@ -56,6 +56,25 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Create the "Users can delete own data" policy
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_policies
+        WHERE schemaname = 'public'
+          AND tablename = 'product'
+          AND policyname = 'Users can delete own data'
+    ) THEN
+        EXECUTE FORMAT(
+            'CREATE POLICY "Users can delete own data" ON public.product
+                FOR DELETE
+                USING (auth.uid() = user_id)'
+        );
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
 -- Create the "Service role can insert users" policy
 DO $$
 BEGIN

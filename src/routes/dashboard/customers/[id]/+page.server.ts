@@ -21,6 +21,7 @@ export const load: PageServerLoad = async ({
 		const { data, error } = await supabase
 			.from('customer')
 			.select('*, customer_note(*)')
+			.is('archived_at', null)
 			.eq('id', params.id)
 			.eq('user_id', user!.id)
 			.single();

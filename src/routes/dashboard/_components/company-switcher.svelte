@@ -1,0 +1,61 @@
+<script lang="ts">
+	import * as Select from '$lib/components/ui/select';
+	import { cn } from '$lib/utils';
+	import { Building } from 'lucide-svelte';
+	import type { PageData } from '../$types';
+	import { invalidateAll } from '$app/navigation';
+
+	type Props = {
+		isCollapsed: boolean;
+		selectedCompanyId?: number | null;
+		availableCompanies: PageData['companies'];
+	};
+	let { isCollapsed, selectedCompanyId = $bindable(null), availableCompanies }: Props = $props();
+
+	let selectedCompany = $derived(availableCompanies?.find((c) => c.id === selectedCompanyId));
+
+	const handleSelectedChange = async (id?: number | null) => {
+		if (!id) return;
+		const form = new FormData();
+		form.append('id', String(id));
+		await fetch('/dashboard/companies/?/select', { method: 'POST', body: form });
+		await invalidateAll();
+	};
+</script>
+
+<Select.Root
+	portal={null}
+	selected={{ value: selectedCompany?.id, label: selectedCompany?.details.name }}
+	onSelectedChange={(e) => handleSelectedChange(e?.value)}
+>
+	<Select.Trigger
+		class={cn(
+			'flex items-center gap-2 [&>span]:line-clamp-1 [&>span]:flex [&>span]:w-full [&>span]:items-center [&>span]:gap-1 [&>span]:truncate [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0',
+			isCollapsed &&
+				'flex h-9 w-9 shrink-0 items-center justify-center p-0 [&>div>svg]:hidden [&>span]:w-auto'
+		)}
+		aria-label="Select account"
+	>
+		<span class="pointer-events-none">
+			<Building class="ml-2" />
+			<span class={cn(isCollapsed ? '!ml-0 !hidden' : 'ml-2')}>
+				{selectedCompany?.details.name}
+			</span>
+		</span>
+	</Select.Trigger>
+	<Select.Content sameWidth={!isCollapsed} align={isCollapsed ? 'start' : undefined}>
+		<Select.Group>
+			{#each availableCompanies ?? [] as company}
+				<Select.Item value={company.id} label={company.details.name}>
+					<div
+						class="flex items-center gap-3 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground"
+					>
+						<Building aria-hidden="true" class="size-4 shrink-0 text-foreground" />
+						{company.details.name}
+					</div>
+				</Select.Item>
+			{/each}
+		</Select.Group>
+	</Select.Content>
+	<Select.Input hidden name="account" />
+</Select.Root>
