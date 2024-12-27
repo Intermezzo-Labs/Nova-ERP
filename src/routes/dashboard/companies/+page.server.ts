@@ -3,6 +3,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { type Actions, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { companyFormSchema, updateCompanyFormSchema } from '../../../lib/schemas/company';
+import { formatDateShort, timeAgo } from '$lib/utils/dates';
 
 export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase } }) => {
 	const { user } = await safeGetSession();
@@ -21,6 +22,9 @@ export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase 
 		companies:
 			companies?.map((company) => ({
 				...company,
+				created_at: formatDateShort(company.created_at),
+				updated_at: timeAgo(company.updated_at),
+				archived_at: company.archived_at ? formatDateShort(company.archived_at) : null,
 				details: companyFormSchema.parse(company.details)
 			})) ?? [],
 		error

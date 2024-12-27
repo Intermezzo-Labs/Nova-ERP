@@ -31,7 +31,7 @@
 			<Alert.Description>{data.error}</Alert.Description>
 		</Alert.Root>
 	{/if}
-	<div class="grid items-start gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
+	<div class="grid items-start gap-4 p-4 lg:grid-cols-3">
 		{#each data.companies as company}
 			<Card.Root>
 				<Card.Header class="flex flex-row items-start justify-between space-y-0 pb-2 lg:gap-4">
@@ -41,14 +41,6 @@
 					<Card.Description class="lg:text-right">{company.details.description}</Card.Description>
 				</Card.Header>
 				<Card.Content class="grid gap-4">
-					<div class="flex items-center space-x-4 rounded-md border p-4">
-						<Bell />
-						<div class="flex-1 space-y-1">
-							<p class="text-sm font-medium leading-none">Push Notifications</p>
-							<p class="text-sm text-muted-foreground">Send notifications to device.</p>
-						</div>
-						<Switch />
-					</div>
 					<div>
 						<div class="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
 							<span class="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500"></span>
@@ -76,6 +68,7 @@
 					<Button
 						class="w-full"
 						variant="outline"
+						size="lg"
 						onclick={() =>
 							(selectedCompany = {
 								id: company.id,
