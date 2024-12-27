@@ -7,12 +7,17 @@ import {
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import { getCompanyId } from '$lib/utils/company-id.js';
+import { formatDate } from '$lib/utils/dates.js';
 
 export const load: PageServerLoad = async ({
 	parent,
 	params,
-	locals: { supabase, safeGetSession }
+	locals: { supabase, safeGetSession },
+	cookies
 }) => {
+	const companyId = getCompanyId(cookies);
+
 	const { form, customers } = await parent();
 	const { user } = await safeGetSession();
 
@@ -23,13 +28,21 @@ export const load: PageServerLoad = async ({
 			.select('*, customer_note(*)')
 			.is('archived_at', null)
 			.eq('id', params.id)
+			.eq('company_id', companyId)
 			.eq('user_id', user!.id)
 			.single();
 
-		if (error) throw error;
+		if (error) {
+			console.error(error);
+			redirect(302, '/dashboard/customers');
+		}
 
 		selectedCustomer = {
 			...data,
+			customer_note: data.customer_note.map((note) => ({
+				...note,
+				created_at: formatDate(note.created_at)
+			})),
 			details: customerFormSchema.parse(data.details)
 		};
 		customers?.push(selectedCustomer);

@@ -24,7 +24,6 @@
 </script>
 
 <Select.Root
-	portal={null}
 	selected={{ value: selectedCompany?.id, label: selectedCompany?.details.name }}
 	onSelectedChange={(e) => handleSelectedChange(e?.value)}
 >
@@ -43,7 +42,7 @@
 			</span>
 		</span>
 	</Select.Trigger>
-	<Select.Content sameWidth={!isCollapsed} align={isCollapsed ? 'start' : undefined}>
+	<Select.Content sameWidth={false} align={isCollapsed ? 'start' : undefined}>
 		<Select.Group>
 			{#each availableCompanies ?? [] as company}
 				<Select.Item value={company.id} label={company.details.name}>

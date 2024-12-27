@@ -2,6 +2,7 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { fail } from '@sveltejs/kit';
 import { zod } from 'sveltekit-superforms/adapters';
 import { productFormSchema } from '$lib/schemas/product';
+import { getCompanyId } from '$lib/utils/company-id.js';
 
 export const load = async ({ locals }) => {
 	// Get invoice count with error handling
@@ -22,7 +23,8 @@ export const load = async ({ locals }) => {
 };
 
 export const actions = {
-	create: async ({ locals: { supabase, safeGetSession }, request }) => {
+	create: async ({ locals: { supabase, safeGetSession }, request, cookies }) => {
+		const companyId = getCompanyId(cookies);
 		const { user } = await safeGetSession();
 
 		if (!user) throw 'Missing user data';
@@ -38,6 +40,7 @@ export const actions = {
 
 		const { error } = await supabase.from('product').insert({
 			user_id: user.id,
+			company_id: companyId,
 			details: {
 				name: form.data.name,
 				description: form.data.description,

@@ -3,6 +3,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { type Actions, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types.js';
 import { customerFormSchema, updateCustomerFormSchema } from '../../../lib/schemas/customer.js';
+import { getCompanyId } from '$lib/utils/company-id.js';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	const { form, customers } = await parent();
@@ -17,7 +18,8 @@ export const load: PageServerLoad = async ({ parent }) => {
 };
 
 export const actions: Actions = {
-	create: async ({ locals: { supabase, safeGetSession }, request }) => {
+	create: async ({ locals: { supabase, safeGetSession }, request, cookies }) => {
+		const companyId = getCompanyId(cookies);
 		const { user } = await safeGetSession();
 
 		if (!user) throw 'Missing user data';
@@ -33,6 +35,7 @@ export const actions: Actions = {
 
 		const { error } = await supabase.from('customer').insert({
 			details: form.data,
+			company_id: companyId,
 			user_id: user.id
 		});
 

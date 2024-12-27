@@ -3,13 +3,16 @@ import { zod } from 'sveltekit-superforms/adapters';
 import type { LayoutServerLoad } from './$types';
 import { customerFormSchema, type CustomerDetails } from '../../../lib/schemas/customer';
 import type { Tables } from '$lib/types/database.types';
+import { getCompanyId } from '$lib/utils/company-id';
 
 export type Customer = Tables<'customer'> & {
 	details: CustomerDetails;
 	customer_note: Tables<'customer_note'>[];
 };
 
-export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabase } }) => {
+export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabase }, cookies }) => {
+	const companyId = getCompanyId(cookies);
+
 	const { user } = await safeGetSession();
 
 	if (!user) throw 'Missing user data';
@@ -18,6 +21,7 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
 		.from('customer')
 		.select('*, customer_note(*)')
 		.eq('user_id', user.id)
+		.eq('company_id', companyId)
 		.is('archived_at', null)
 		.order('updated_at', { ascending: false })
 		.limit(20);

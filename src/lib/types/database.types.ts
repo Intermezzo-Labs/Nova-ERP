@@ -34,6 +34,7 @@ export type Database = {
 					created_at: string;
 					details: Json;
 					id: number;
+					shared_with: Json | null;
 					updated_at: string;
 					user_id: string;
 				};
@@ -42,6 +43,7 @@ export type Database = {
 					created_at?: string;
 					details: Json;
 					id?: number;
+					shared_with?: Json | null;
 					updated_at?: string;
 					user_id: string;
 				};
@@ -50,6 +52,7 @@ export type Database = {
 					created_at?: string;
 					details?: Json;
 					id?: number;
+					shared_with?: Json | null;
 					updated_at?: string;
 					user_id?: string;
 				};
@@ -58,6 +61,7 @@ export type Database = {
 			customer: {
 				Row: {
 					archived_at: string | null;
+					company_id: number | null;
 					created_at: string;
 					details: Json;
 					email: string | null;
@@ -68,6 +72,7 @@ export type Database = {
 				};
 				Insert: {
 					archived_at?: string | null;
+					company_id?: number | null;
 					created_at?: string;
 					details: Json;
 					email?: string | null;
@@ -78,6 +83,7 @@ export type Database = {
 				};
 				Update: {
 					archived_at?: string | null;
+					company_id?: number | null;
 					created_at?: string;
 					details?: Json;
 					email?: string | null;
@@ -86,7 +92,15 @@ export type Database = {
 					updated_at?: string;
 					user_id?: string;
 				};
-				Relationships: [];
+				Relationships: [
+					{
+						foreignKeyName: 'customer_company_id_fkey';
+						columns: ['company_id'];
+						isOneToOne: false;
+						referencedRelation: 'company';
+						referencedColumns: ['id'];
+					}
+				];
 			};
 			customer_note: {
 				Row: {
