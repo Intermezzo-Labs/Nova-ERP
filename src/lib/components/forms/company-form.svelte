@@ -13,7 +13,7 @@
 		action: string;
 		header: Snippet;
 		footer: Snippet;
-		readonly: boolean;
+		readonly?: boolean;
 	};
 	let { form, header, footer, action, readonly }: Props = $props();
 	let { enhance, form: formData } = form;

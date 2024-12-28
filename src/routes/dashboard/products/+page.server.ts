@@ -14,11 +14,14 @@ export const load = async ({ locals }) => {
 	// Initialize the form with default data
 	const form = await superValidate(zod(productFormSchema));
 
-	const { data: products } = await supabase.from('product').select('*').limit(100);
+	const { data } = await supabase.from('product').select('*').limit(100);
 
 	return {
 		form,
-		products
+		products: data?.map((product) => ({
+			...product,
+			details: productFormSchema.parse(product.details)
+		}))
 	};
 };
 

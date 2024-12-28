@@ -1,15 +1,12 @@
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog';
-	import Input from '$lib/components/ui/input/input.svelte';
-	import SuperDebug, { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
+	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { browser } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { PlusCircle } from 'lucide-svelte';
 	import { productFormSchema, type ProductFormSchema } from '$lib/schemas/product';
-	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
-	import type { PageData } from '../$types';
+	import ProductForm from '$lib/components/forms/product-form.svelte';
 
 	type Props = { data: SuperValidated<Infer<ProductFormSchema>> };
 	const { data }: Props = $props();
@@ -22,9 +19,20 @@
 			if (response.result.status === 200) open = false;
 		}
 	});
-
-	const { form: formData, enhance } = form;
 </script>
+
+{#snippet header()}
+	<Dialog.Header>
+		<Dialog.Title>Add product</Dialog.Title>
+		<Dialog.Description>Add product details and click save when you're done.</Dialog.Description>
+	</Dialog.Header>
+{/snippet}
+
+{#snippet footer()}
+	<Dialog.Footer>
+		<Form.Button>Save customer</Form.Button>
+	</Dialog.Footer>
+{/snippet}
 
 <Dialog.Root bind:open>
 	<Dialog.Trigger asChild let:builder>
@@ -33,49 +41,6 @@
 		</Button>
 	</Dialog.Trigger>
 	<Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
-		<form method="POST" use:enhance action="/dashboard/products/?/create">
-			<Dialog.Header>
-				<Dialog.Title>Add product</Dialog.Title>
-				<Dialog.Description>
-					Add product details and click save when you're done.
-				</Dialog.Description>
-			</Dialog.Header>
-
-			<div class="grid py-6">
-				<Form.Field {form} name="name" autofocus>
-					<Form.Control let:attrs>
-						<Form.Label>Name</Form.Label>
-						<Input {...attrs} required bind:value={$formData.name} placeholder="Cookies n' cream" />
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-				<Form.Field {form} name="price">
-					<Form.Control let:attrs>
-						<Form.Label>Price</Form.Label>
-						<Input {...attrs} required bind:value={$formData.price} placeholder="$5.99" />
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-				<Form.Field {form} name="description">
-					<Form.Control let:attrs>
-						<Form.Label>Description</Form.Label>
-						<Textarea
-							{...attrs}
-							bind:value={$formData.description}
-							placeholder="Lorem, ipsum dolor sit amet consectetur adipisicing elit..."
-						/>
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-			</div>
-
-			{#if browser}
-				<SuperDebug data={$formData} />
-			{/if}
-
-			<Dialog.Footer>
-				<Form.Button>Save customer</Form.Button>
-			</Dialog.Footer>
-		</form>
+		<ProductForm action="/dashboard/products/?/create" {header} {footer} {form} />
 	</Dialog.Content>
 </Dialog.Root>

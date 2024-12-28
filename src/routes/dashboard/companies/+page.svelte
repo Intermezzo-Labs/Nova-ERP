@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import * as Card from '$lib/components/ui/card';
-	import Switch from '$lib/components/ui/switch/switch.svelte';
-	import { Bell, Building, Settings, LucideOctagonMinus } from 'lucide-svelte';
+	import { Building, Settings, LucideOctagonMinus } from 'lucide-svelte';
 	import * as Alert from '$lib/components/ui/alert';
 	import AddCompanyDialog from './_components/add-company-dialog.svelte';
 	import EditCompanyDialog from './_components/edit-company-dialog.svelte';

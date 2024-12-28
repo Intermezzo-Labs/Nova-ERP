@@ -1,3 +1,4 @@
+import type { Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = async (event) => {
@@ -12,4 +13,17 @@ export const load: PageServerLoad = async (event) => {
 	if (collapsedCookie) collapsed = JSON.parse(collapsedCookie);
 
 	return { layout, collapsed };
+};
+
+export const actions: Actions = {
+	collapse: async ({ cookies, request }) => {
+		const formData = await request.formData();
+		const collapse = formData.get('collapse');
+		console.log(collapse);
+		cookies.set('PaneForge:collapsed', String(collapse), { path: '/' });
+
+		return {
+			collapse
+		};
+	}
 };

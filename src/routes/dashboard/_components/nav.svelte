@@ -42,7 +42,7 @@
 					<Tooltip.Content side="right" class="flex items-center gap-4">
 						{route.title}
 						{#if route.label}
-							<span class="ml-auto text-muted-foreground">
+							<span class="ml-auto text-background">
 								{route.label}
 							</span>
 						{/if}
