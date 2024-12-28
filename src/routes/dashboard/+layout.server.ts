@@ -27,7 +27,7 @@ export const load: LayoutServerLoad = async ({
 		})) ?? [];
 
 	const companyIdCookie = cookies.get('nova-company-id');
-	if (!companyIdCookie) {
+	if (!companyIdCookie && companies.length) {
 		const [firstCompany] = companies;
 		cookies.set('nova-company-id', String(firstCompany.id), { path: '/' });
 	}
