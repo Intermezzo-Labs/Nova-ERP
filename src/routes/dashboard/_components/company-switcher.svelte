@@ -7,17 +7,16 @@
 
 	type Props = {
 		isCollapsed: boolean;
-		selectedCompanyId?: number | null;
+		selectedCompanyId: string;
 		availableCompanies: PageData['companies'];
 	};
-	let { isCollapsed, selectedCompanyId = $bindable(null), availableCompanies }: Props = $props();
+	let { isCollapsed, selectedCompanyId = $bindable(''), availableCompanies }: Props = $props();
 
 	let selectedCompany = $derived(availableCompanies?.find((c) => c.id === selectedCompanyId));
 
-	const handleSelectedChange = async (id?: number | null) => {
-		if (!id) return;
+	const handleSelectedChange = async (id: string) => {
 		const form = new FormData();
-		form.append('id', String(id));
+		form.append('id', id);
 		await fetch('/dashboard/companies/?/select', { method: 'POST', body: form });
 		await invalidateAll();
 	};
@@ -25,7 +24,7 @@
 
 <Select.Root
 	selected={{ value: selectedCompany?.id, label: selectedCompany?.details.name }}
-	onSelectedChange={(e) => handleSelectedChange(e?.value)}
+	onSelectedChange={(e) => handleSelectedChange(e?.value ?? '')}
 >
 	<Select.Trigger
 		class={cn(

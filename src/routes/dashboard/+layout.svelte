@@ -24,7 +24,11 @@
 
 <Toast />
 <div class="h-screen w-screen overflow-hidden">
-	<Menu class="flex" />
+	<Menu
+		class="flex"
+		selectedCompanyId={data.currentCompanyId ?? ''}
+		availableCompanies={data.companies}
+	/>
 	<div class="h-main-window flex divide-x overflow-hidden">
 		<nav class={cn('flex shrink-0 flex-col', isCollapsed ? '' : 'md:w-56')}>
 			<div
@@ -35,7 +39,7 @@
 			>
 				<CompanySwitcher
 					{isCollapsed}
-					selectedCompanyId={data.currentCompanyId}
+					selectedCompanyId={data.currentCompanyId ?? ''}
 					availableCompanies={data.companies}
 				/>
 			</div>

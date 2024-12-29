@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
-import { companyFormSchema } from '$lib/schemas/company';
+import { companyDetailsSchema } from '$lib/schemas/company';
 
 export const load: LayoutServerLoad = async ({
 	locals: { safeGetSession, supabase },
@@ -22,18 +22,18 @@ export const load: LayoutServerLoad = async ({
 
 	const companies =
 		response.data?.map((company) => ({
-			...company,
-			details: companyFormSchema.parse(company.details)
+			id: String(company.id),
+			details: companyDetailsSchema.parse(company.details)
 		})) ?? [];
 
-	const companyIdCookie = cookies.get('nova-company-id');
-	if (!companyIdCookie && companies.length) {
+	const currentCompanyId = cookies.get('nova-company-id');
+	if (!currentCompanyId && companies.length) {
 		const [firstCompany] = companies;
-		cookies.set('nova-company-id', String(firstCompany.id), { path: '/' });
+		cookies.set('nova-company-id', firstCompany.id, { path: '/' });
 	}
 
 	return {
 		companies,
-		currentCompanyId: Number(companyIdCookie)
+		currentCompanyId
 	};
 };

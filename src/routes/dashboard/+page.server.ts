@@ -19,7 +19,6 @@ export const actions: Actions = {
 	collapse: async ({ cookies, request }) => {
 		const formData = await request.formData();
 		const collapse = formData.get('collapse');
-		console.log(collapse);
 		cookies.set('PaneForge:collapsed', String(collapse), { path: '/' });
 
 		return {

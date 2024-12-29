@@ -2,7 +2,12 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { type Actions, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { companyFormSchema, updateCompanyFormSchema } from '../../../lib/schemas/company';
+import {
+	companyFormSchema,
+	updateCompanyFormSchema,
+	companyDetailsSchema,
+	companySharedWithSchema
+} from '$lib/schemas/company';
 import { formatDateShort, timeAgo } from '$lib/utils/dates';
 
 export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase } }) => {
@@ -25,7 +30,8 @@ export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase 
 				created_at: formatDateShort(company.created_at),
 				updated_at: timeAgo(company.updated_at),
 				archived_at: company.archived_at ? formatDateShort(company.archived_at) : null,
-				details: companyFormSchema.parse(company.details)
+				details: companyDetailsSchema.parse(company.details),
+				shared_with: companySharedWithSchema.parse(company.shared_with ?? [])
 			})) ?? [],
 		error
 	};
@@ -47,7 +53,8 @@ export const actions: Actions = {
 		}
 
 		const { error } = await supabase.from('company').insert({
-			details: form.data,
+			details: form.data.details,
+			shared_with: form.data.shared_with,
 			user_id: user.id
 		});
 
@@ -72,12 +79,13 @@ export const actions: Actions = {
 			});
 		}
 
-		const { id, ...details } = form.data;
+		const { id, details, shared_with } = form.data;
 
 		const { error } = await supabase
 			.from('company')
 			.update({
-				details
+				details,
+				shared_with
 			})
 			.eq('id', id)
 			.is('archived_at', null);

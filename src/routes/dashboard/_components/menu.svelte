@@ -3,39 +3,59 @@
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { cn } from '$lib/utils';
 	import { Mic, Smile } from 'lucide-svelte';
+	import type { PageData } from '../$types';
+	import { goto } from '$app/navigation';
 
 	type $$Props = HTMLAttributes<HTMLDivElement>;
+	type Props = {
+		class: $$Props['class'];
+		selectedCompanyId: string;
+		availableCompanies: PageData['companies'];
+	};
 
-	let className: $$Props['class'] = undefined;
-	export { className as class };
+	let {
+		class: className,
+		selectedCompanyId = $bindable(''),
+		availableCompanies,
+		...restProps
+	}: Props = $props();
+
+	type MenuItem = {
+		label: string;
+		shortcut?: string;
+		handleClick?: () => void;
+		separator?: boolean;
+		children?: MenuItem[];
+	};
+	const novaErp: MenuItem[] = [
+		{
+			label: 'Settings',
+			handleClick: () => goto('/dashboard/settings')
+		}
+	];
 </script>
 
 <Menubar.Root
 	class={cn('rounded-none border-x-0 border-b border-t-0 px-2 lg:px-4', className)}
-	{...$$restProps}
+	{...restProps}
 >
 	<Menubar.Menu>
 		<Menubar.Trigger class="font-bold">Nova ERP</Menubar.Trigger>
 		<Menubar.Content>
-			<Menubar.Item>About Music</Menubar.Item>
-			<Menubar.Separator />
-			<Menubar.Item>
-				Preferences... <Menubar.Shortcut>⌘,</Menubar.Shortcut>
-			</Menubar.Item>
-			<Menubar.Separator />
-			<Menubar.Item>
-				Hide Music... <Menubar.Shortcut>⌘H</Menubar.Shortcut>
-			</Menubar.Item>
-			<Menubar.Item>
-				Hide Others... <Menubar.Shortcut>⇧⌘H</Menubar.Shortcut>
-			</Menubar.Item>
-			<Menubar.Shortcut />
-			<Menubar.Item>
-				Quit Music <Menubar.Shortcut>⌘Q</Menubar.Shortcut>
-			</Menubar.Item>
+			{#each novaErp as item}
+				<Menubar.Item onclick={item.handleClick}>
+					{item.label}
+					{#if item.shortcut}
+						<Menubar.Shortcut>{item.shortcut}</Menubar.Shortcut>
+					{/if}
+				</Menubar.Item>
+				{#if item.separator}
+					<Menubar.Separator />
+				{/if}
+			{/each}
 		</Menubar.Content>
 	</Menubar.Menu>
-	<Menubar.Menu>
+	<!-- <Menubar.Menu>
 		<Menubar.Trigger class="relative">File</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Sub>
@@ -146,23 +166,23 @@
 			<Menubar.Item inset>Hide Sidebar</Menubar.Item>
 			<Menubar.Item disabled inset>Enter Full Screen</Menubar.Item>
 		</Menubar.Content>
-	</Menubar.Menu>
+	</Menubar.Menu> -->
 	<Menubar.Menu>
 		<Menubar.Trigger class="hidden md:block">Account</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Group>
 				<Menubar.Label inset>Switch Account</Menubar.Label>
 				<Menubar.Separator />
-				<Menubar.RadioGroup value="benoit">
-					<Menubar.RadioItem value="andy">Bruce Wayne</Menubar.RadioItem>
-					<Menubar.RadioItem value="benoit">Alex Valle</Menubar.RadioItem>
-					<Menubar.RadioItem value="Luis">Son Goku</Menubar.RadioItem>
+				<Menubar.RadioGroup value={selectedCompanyId}>
+					{#each availableCompanies ?? [] as company}
+						<Menubar.RadioItem value={String(company.id)}>{company.details.name}</Menubar.RadioItem>
+					{/each}
 				</Menubar.RadioGroup>
 			</Menubar.Group>
 			<Menubar.Separator />
-			<Menubar.Item inset>Manage Family...</Menubar.Item>
+			<Menubar.Item inset href="/dashboard/companies">Manage Company...</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item inset>Add Account...</Menubar.Item>
+			<Menubar.Item inset href="/dashboard/companies">Add Company...</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
 </Menubar.Root>
