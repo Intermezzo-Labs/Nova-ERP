@@ -40,6 +40,16 @@ function createChatStore() {
             ...state,
             error
         })),
+        clearError: () => update(state => ({
+            ...state,
+            error: null
+        })),
+        updateMessage: (id: string, updates: Partial<Message>) => update(state => ({
+            ...state,
+            messages: state.messages.map(msg => 
+                msg.id === id ? { ...msg, ...updates } : msg
+            )
+        })),
         reset: () => set({
             messages: [],
             loading: false,

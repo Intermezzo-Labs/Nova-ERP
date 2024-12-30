@@ -55,13 +55,17 @@
 	},
 	"dependencies": {
 		"@elizaos/core": "0.1.7-alpha.2",
+		"@google-cloud/vertexai": "^1.9.2",
+		"@langchain/core": "^0.3.26",
 		"@supabase/ssr": "^0.5.2",
 		"@supabase/supabase-js": "^2.46.1",
 		"d3-scale": "^4.0.2",
 		"date-fns": "^4.1.0",
+		"dotenv": "^16.3.1",
 		"html-to-image": "^1.11.11",
 		"lucide-svelte": "^0.461.0",
 		"mode-watcher": "^0.5.0",
+		"openai": "^4.73.0",
 		"validator": "^13.12.0"
 	}
 }
