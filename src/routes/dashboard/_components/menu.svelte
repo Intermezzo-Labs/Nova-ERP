@@ -8,12 +8,14 @@
 
 	type $$Props = HTMLAttributes<HTMLDivElement>;
 	type Props = {
+		email: string;
 		class: $$Props['class'];
 		selectedCompanyId: string;
 		availableCompanies: PageData['companies'];
 	};
 
 	let {
+		email,
 		class: className,
 		selectedCompanyId = $bindable(''),
 		availableCompanies,
@@ -29,8 +31,17 @@
 	};
 	const novaErp: MenuItem[] = [
 		{
+			label: email,
+			separator: true
+		},
+		{
 			label: 'Settings',
-			handleClick: () => goto('/dashboard/settings')
+			handleClick: () => goto('/dashboard/settings'),
+			separator: true
+		},
+		{
+			label: 'Logout',
+			handleClick: () => goto('/auth/logout')
 		}
 	];
 </script>

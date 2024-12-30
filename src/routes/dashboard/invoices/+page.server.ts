@@ -16,8 +16,8 @@ export const load = async ({ locals }) => {
 	const form = await superValidate(zod(invoiceFormSchema));
 
 	const invoicesReq = supabase.from('invoice').select('*, customer(details)', { count: 'exact' });
-	const customersReq = supabase.from('customer').select('id, details').eq('user_id', user.id);
-	const companiesReq = supabase.from('company').select('id, details').eq('user_id', user.id);
+	const customersReq = supabase.from('customer').select('id, details');
+	const companiesReq = supabase.from('company').select('id, details');
 
 	const [invoicesResponse, customersResponse, companiesResponse] = await Promise.all([
 		invoicesReq,

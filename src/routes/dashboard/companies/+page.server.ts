@@ -18,7 +18,6 @@ export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase 
 	const { data: companies, error } = await supabase
 		.from('company')
 		.select('*')
-		.eq('user_id', user.id)
 		.order('archived_at', { nullsFirst: true })
 		.limit(20);
 

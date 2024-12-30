@@ -25,6 +25,7 @@
 <Toast />
 <div class="h-screen w-screen overflow-hidden">
 	<Menu
+		email={data.user?.email ?? 'unknown'}
 		class="flex"
 		selectedCompanyId={data.currentCompanyId ?? ''}
 		availableCompanies={data.companies}

@@ -63,7 +63,6 @@
 			method="POST"
 			use:enhance={{
 				onResult: (ev) => {
-					console.log('nice', ev);
 					open = false;
 				}
 			}}

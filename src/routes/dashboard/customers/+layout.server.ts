@@ -20,7 +20,6 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
 	const { data, error } = await supabase
 		.from('customer')
 		.select('*, customer_note(*)')
-		.eq('user_id', user.id)
 		.eq('company_id', companyId)
 		.is('archived_at', null)
 		.order('updated_at', { ascending: false })

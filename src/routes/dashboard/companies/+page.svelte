@@ -11,7 +11,6 @@
 
 	let { data }: { data: PageData } = $props();
 	let selectedCompany = $state<UpdateCompanyForm | null>(null);
-	console.log(data.form);
 </script>
 
 {#snippet actions()}
