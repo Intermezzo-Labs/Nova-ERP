@@ -18,7 +18,7 @@ export class AIService {
    private messageManager: IMemoryManager;
 
    constructor(supabaseClient: SupabaseClient, openAIToken: string) {
-       const databaseAdapter = this.createDatabaseAdapter(supabase);
+       const databaseAdapter = this.createDatabaseAdapter(supabaseClient);
        
        const character: Character = {
            name: 'Nova Assistant',
