@@ -1,8 +1,7 @@
 import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './business-cards/$types';
 import { novaUserProfileSchema } from '$lib/schemas/nova-user';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load = async ({ locals }) => {
 	const { supabase } = locals;
 	const { user } = await locals.safeGetSession();
 

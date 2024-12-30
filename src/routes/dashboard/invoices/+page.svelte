@@ -238,7 +238,7 @@
 										href="/dashboard/customers/{invoice.customer_id}"
 										class="text-blue-600 hover:underline dark:text-blue-400"
 									>
-										{invoice.customer.name ?? 'N/A'}
+										{invoice.customer?.name ?? 'N/A'}
 									</a>
 								</Table.Cell>
 								<Table.Cell>

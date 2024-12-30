@@ -3,7 +3,7 @@ import { invoiceFormSchema } from '../../../lib/schemas/invoice';
 import { fail } from '@sveltejs/kit';
 import { zod } from 'sveltekit-superforms/adapters';
 import { customerFormSchema } from '../../../lib/schemas/customer';
-import { companyFormSchema } from '$lib/schemas/company';
+import { companyDetailsSchema } from '$lib/schemas/company';
 
 export const load = async ({ locals }) => {
 	// Get invoice count with error handling
@@ -27,10 +27,13 @@ export const load = async ({ locals }) => {
 
 	return {
 		form,
-		invoices: invoicesResponse.data?.map((invoice) => ({
-			...invoice,
-			customer: customerFormSchema.parse(invoice.customer?.details)
-		})),
+		invoices: invoicesResponse.data?.map((invoice) => {
+			const result = customerFormSchema.safeParse(invoice.customer?.details);
+			return {
+				...invoice,
+				customer: result.success ? result.data : null
+			};
+		}),
 		invoicesCount: invoicesResponse.count,
 		customers: customersResponse.data?.map((customer) => ({
 			id: customer.id,
@@ -38,7 +41,7 @@ export const load = async ({ locals }) => {
 		})),
 		companies: companiesResponse.data?.map((company) => ({
 			id: company.id,
-			details: companyFormSchema.parse(company.details)
+			details: companyDetailsSchema.parse(company.details)
 		}))
 	};
 };
