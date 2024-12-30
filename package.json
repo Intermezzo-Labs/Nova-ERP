@@ -54,6 +54,7 @@
 		"zod": "^3.23.8"
 	},
 	"dependencies": {
+		"@elizaos/core": "0.1.7-alpha.2",
 		"@supabase/ssr": "^0.5.2",
 		"@supabase/supabase-js": "^2.46.1",
 		"d3-scale": "^4.0.2",

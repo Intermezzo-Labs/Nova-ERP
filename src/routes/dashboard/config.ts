@@ -20,6 +20,12 @@ export type Route = {
 
 export const primaryRoutes: Route[] = [
 	{
+		title: 'Experimental Agent',
+		path: '/dashboard/experimental/ai-agent',
+		label: '',
+		icon: FlaskConical
+	},
+	{
 		title: 'Dashboard',
 		path: '/dashboard',
 		label: '128',
@@ -54,12 +60,6 @@ export const primaryRoutes: Route[] = [
 		path: '/dashboard/marketing',
 		label: '',
 		icon: Megaphone
-	},
-	{
-		title: 'Experimental',
-		path: '/dashboard/experimental',
-		label: '',
-		icon: FlaskConical
 	}
 ];
 
