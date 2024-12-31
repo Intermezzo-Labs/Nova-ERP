@@ -3,10 +3,8 @@
 
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { Button, buttonVariants } from '$lib/components/ui/button';
-	import { Calendar } from '$lib/components/ui/calendar';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Label } from '$lib/components/ui/label';
-	import * as Popover from '$lib/components/ui/popover';
 	import { Separator } from '$lib/components/ui/separator';
 	import { Switch } from '$lib/components/ui/switch';
 	import { Textarea } from '$lib/components/ui/textarea';
@@ -14,7 +12,6 @@
 	import {
 		Archive,
 		ArchiveX,
-		Clock,
 		EllipsisVertical,
 		Forward,
 		Reply,
@@ -78,128 +75,79 @@
 
 {#snippet actions()}
 	<div class="hidden items-center gap-2 md:flex">
-		<Tooltip.Root openDelay={0} group>
-			<Tooltip.Trigger
-				id="archive_tooltip"
-				class={buttonVariants({ variant: 'ghost', size: 'icon' })}
-				disabled={!customer}
-			>
-				<Archive class="size-4" />
-				<span class="sr-only">Archive</span>
-			</Tooltip.Trigger>
-			<Tooltip.Content>Archive</Tooltip.Content>
-		</Tooltip.Root>
-		<Tooltip.Root openDelay={0} group>
-			<Tooltip.Trigger
-				id="move_to_junk_tooltip"
-				class={buttonVariants({ variant: 'ghost', size: 'icon' })}
-				disabled={!customer}
-			>
-				<ArchiveX class="size-4" />
-				<span class="sr-only">Move to junk</span>
-			</Tooltip.Trigger>
-			<Tooltip.Content>Move to junk</Tooltip.Content>
-		</Tooltip.Root>
-		<Tooltip.Root openDelay={0} group>
-			<Tooltip.Trigger
-				id="move_to_trash_tooltip"
-				class={buttonVariants({ variant: 'ghost', size: 'icon' })}
-				onclick={handleDelete}
-				disabled={!customer}
-			>
-				<Trash2 class="size-4" />
-				<span class="sr-only">Move to trash</span>
-			</Tooltip.Trigger>
-			<Tooltip.Content>Move to trash</Tooltip.Content>
-		</Tooltip.Root>
-		<Separator orientation="vertical" class="mx-1 h-6" />
-		<Tooltip.Root openDelay={0} group>
-			<Popover.Root portal={null}>
-				<Tooltip.Trigger asChild let:builder={tooltip_builder} id="snooze_popover">
-					<Popover.Trigger asChild let:builder={popover_builder} id="snooze_popover">
-						<Button
-							builders={[tooltip_builder, popover_builder]}
-							variant="ghost"
-							size="icon"
-							disabled={!customer}
-						>
-							<Clock class="size-4" />
-							<span class="sr-only">Snooze</span>
-						</Button>
-					</Popover.Trigger>
+		<Tooltip.Provider>
+			<Tooltip.Root delayDuration={0}>
+				<Tooltip.Trigger
+					id="archive_tooltip"
+					class={buttonVariants({ variant: 'ghost', size: 'icon' })}
+					disabled={!customer}
+				>
+					<Archive class="size-4" />
+					<span class="sr-only">Archive</span>
 				</Tooltip.Trigger>
-				<Popover.Content class="flex w-[535px] p-0">
-					<div class="flex flex-col gap-2 border-r px-2 py-4">
-						<div class="px-4 text-sm font-medium">Snooze until</div>
-						<div class="grid min-w-[250px] gap-1">
-							<Button variant="ghost" class="justify-start font-normal">
-								Later today
-								<span class="ml-auto text-muted-foreground">
-									{relativeFormatter.format(todayDate.add({ hours: 4 }).toDate())}
-								</span>
-							</Button>
-							<Button variant="ghost" class="justify-start font-normal">
-								Tomorrow
-								<span class="ml-auto text-muted-foreground">
-									{relativeFormatter.format(todayDate.add({ days: 1 }).toDate())}
-								</span>
-							</Button>
-							<Button variant="ghost" class="justify-start font-normal">
-								This weekend
-								<span class="ml-auto text-muted-foreground">
-									{relativeFormatter.format(getClosestWeekend())}
-								</span>
-							</Button>
-							<Button variant="ghost" class="justify-start font-normal">
-								Next week
-								<span class="ml-auto text-muted-foreground">
-									{relativeFormatter.format(todayDate.add({ weeks: 1 }).toDate())}
-								</span>
-							</Button>
-						</div>
-					</div>
-					<div class="p-2">
-						<Calendar bind:value={todayDate} initialFocus />
-					</div>
-				</Popover.Content>
-			</Popover.Root>
-			<Tooltip.Content>Snooze</Tooltip.Content>
-		</Tooltip.Root>
+				<Tooltip.Content>Archive</Tooltip.Content>
+			</Tooltip.Root>
+			<Tooltip.Root delayDuration={0}>
+				<Tooltip.Trigger
+					id="move_to_junk_tooltip"
+					class={buttonVariants({ variant: 'ghost', size: 'icon' })}
+					disabled={!customer}
+				>
+					<ArchiveX class="size-4" />
+					<span class="sr-only">Move to junk</span>
+				</Tooltip.Trigger>
+				<Tooltip.Content>Move to junk</Tooltip.Content>
+			</Tooltip.Root>
+			<Tooltip.Root delayDuration={0}>
+				<Tooltip.Trigger
+					id="move_to_trash_tooltip"
+					class={buttonVariants({ variant: 'ghost', size: 'icon' })}
+					onclick={handleDelete}
+					disabled={!customer}
+				>
+					<Trash2 class="size-4" />
+					<span class="sr-only">Move to trash</span>
+				</Tooltip.Trigger>
+				<Tooltip.Content>Move to trash</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
 	</div>
 	<div class="ml-auto flex items-center gap-2">
-		<Tooltip.Root openDelay={0} group>
-			<Tooltip.Trigger
-				id="reply_tooltip"
-				class={buttonVariants({ variant: 'ghost', size: 'icon' })}
-				disabled={!customer}
-			>
-				<Reply class="size-4" />
-				<span class="sr-only">Reply</span>
-			</Tooltip.Trigger>
-			<Tooltip.Content>Reply</Tooltip.Content>
-		</Tooltip.Root>
-		<Tooltip.Root openDelay={0} group>
-			<Tooltip.Trigger
-				id="reply_all_tooltip"
-				class={buttonVariants({ variant: 'ghost', size: 'icon' })}
-				disabled={!customer}
-			>
-				<ReplyAll class="size-4" />
-				<span class="sr-only">Reply all</span>
-			</Tooltip.Trigger>
-			<Tooltip.Content>Reply all</Tooltip.Content>
-		</Tooltip.Root>
-		<Tooltip.Root openDelay={0} group>
-			<Tooltip.Trigger
-				id="forward_tooltip"
-				class={buttonVariants({ variant: 'ghost', size: 'icon' })}
-				disabled={!customer}
-			>
-				<Forward class="size-4" />
-				<span class="sr-only">Forward</span>
-			</Tooltip.Trigger>
-			<Tooltip.Content>Forward</Tooltip.Content>
-		</Tooltip.Root>
+		<Tooltip.Provider>
+			<Tooltip.Root delayDuration={0}>
+				<Tooltip.Trigger
+					id="reply_tooltip"
+					class={buttonVariants({ variant: 'ghost', size: 'icon' })}
+					disabled={!customer}
+				>
+					<Reply class="size-4" />
+					<span class="sr-only">Reply</span>
+				</Tooltip.Trigger>
+				<Tooltip.Content>Reply</Tooltip.Content>
+			</Tooltip.Root>
+			<Tooltip.Root delayDuration={0}>
+				<Tooltip.Trigger
+					id="reply_all_tooltip"
+					class={buttonVariants({ variant: 'ghost', size: 'icon' })}
+					disabled={!customer}
+				>
+					<ReplyAll class="size-4" />
+					<span class="sr-only">Reply all</span>
+				</Tooltip.Trigger>
+				<Tooltip.Content>Reply all</Tooltip.Content>
+			</Tooltip.Root>
+			<Tooltip.Root delayDuration={0}>
+				<Tooltip.Trigger
+					id="forward_tooltip"
+					class={buttonVariants({ variant: 'ghost', size: 'icon' })}
+					disabled={!customer}
+				>
+					<Forward class="size-4" />
+					<span class="sr-only">Forward</span>
+				</Tooltip.Trigger>
+				<Tooltip.Content>Forward</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
 		<Separator orientation="vertical" class="mx-2 h-6" />
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger
@@ -270,15 +218,17 @@
 			<form method="POST" use:enhance action="?/create-note">
 				<div class="grid gap-4">
 					<Form.Field {form} name="note" autofocus>
-						<Form.Control let:attrs>
-							<Form.Label hidden>Note</Form.Label>
-							<Textarea
-								{...attrs}
-								required
-								bind:value={$formData.note}
-								class="p-4"
-								placeholder={`Reply to ${customer.details.name}...`}
-							/>
+						<Form.Control>
+							{#snippet children({ props })}
+								<Form.Label hidden>Note</Form.Label>
+								<Textarea
+									{...props}
+									required
+									bind:value={$formData.note}
+									class="p-4"
+									placeholder={`Reply to ${customer.details.name}...`}
+								/>
+							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>

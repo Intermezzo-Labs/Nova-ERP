@@ -23,40 +23,48 @@
 	<div class="grid py-6">
 		{#if 'id' in $formData}
 			<Form.Field {form} name="id">
-				<Form.Control let:attrs>
-					<Input {...attrs} required bind:value={$formData.id} type="hidden" readonly />
+				<Form.Control>
+					{#snippet children({ props })}
+						<Input {...props} required bind:value={$formData.id} type="hidden" readonly />
+					{/snippet}
 				</Form.Control>
 			</Form.Field>
 		{/if}
 		<Form.Field {form} name="name" autofocus>
-			<Form.Control let:attrs>
-				<Form.Label>Name</Form.Label>
-				<Input
-					{...attrs}
-					required
-					bind:value={$formData.name}
-					placeholder="Cookies n' cream"
-					{readonly}
-				/>
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label>Name</Form.Label>
+					<Input
+						{...props}
+						required
+						bind:value={$formData.name}
+						placeholder="Cookies n' cream"
+						{readonly}
+					/>
+				{/snippet}
 			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
 		<Form.Field {form} name="price">
-			<Form.Control let:attrs>
-				<Form.Label>Price</Form.Label>
-				<Input {...attrs} required bind:value={$formData.price} placeholder="$5.99" {readonly} />
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label>Price</Form.Label>
+					<Input {...props} required bind:value={$formData.price} placeholder="$5.99" {readonly} />
+				{/snippet}
 			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
 		<Form.Field {form} name="description">
-			<Form.Control let:attrs>
-				<Form.Label>Description</Form.Label>
-				<Textarea
-					{...attrs}
-					bind:value={$formData.description}
-					placeholder="Lorem, ipsum dolor sit amet consectetur adipisicing elit..."
-					{readonly}
-				/>
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label>Description</Form.Label>
+					<Textarea
+						{...props}
+						bind:value={$formData.description}
+						placeholder="Lorem, ipsum dolor sit amet consectetur adipisicing elit..."
+						{readonly}
+					/>
+				{/snippet}
 			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>

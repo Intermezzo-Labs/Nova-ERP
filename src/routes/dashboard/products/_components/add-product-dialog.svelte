@@ -35,10 +35,12 @@
 {/snippet}
 
 <Dialog.Root bind:open>
-	<Dialog.Trigger asChild let:builder>
-		<Button builders={[builder]}>
-			<PlusCircle class="mr-2 size-4" /> Add products
-		</Button>
+	<Dialog.Trigger>
+		{#snippet child({ props })}
+			<Button {...props}>
+				<PlusCircle class="mr-2 size-4" /> Add products
+			</Button>
+		{/snippet}
 	</Dialog.Trigger>
 	<Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
 		<ProductForm action="/dashboard/products/?/create" {header} {footer} {form} />

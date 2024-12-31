@@ -186,12 +186,9 @@
 		<!-- Filters -->
 		<div class="flex flex-wrap gap-4">
 			<div class="w-full md:w-auto">
-				<Select.Root
-					selected={{ value: statusFilter, label: statusFilter }}
-					onSelectedChange={(s) => s && (statusFilter = s.value)}
-				>
+				<Select.Root bind:value={statusFilter} type="single">
 					<Select.Trigger class="w-full md:w-[200px]">
-						<Select.Value placeholder="Filter by status" />
+						{statusFilter ?? 'Filter by status'}
 					</Select.Trigger>
 					<Select.Content>
 						<Select.Item value="all">All Statuses</Select.Item>
@@ -259,16 +256,16 @@
 								<Table.Cell>{new Date(invoice.created_at).toLocaleDateString()}</Table.Cell>
 								<Table.Cell class="text-right">
 									<div class="flex justify-end gap-2">
-										<Button variant="outline" size="sm" on:click={() => handleViewInvoice(invoice)}>
+										<Button variant="outline" size="sm" onclick={() => handleViewInvoice(invoice)}>
 											View
 										</Button>
-										<Button variant="outline" size="sm" on:click={() => handleEditInvoice(invoice)}>
+										<Button variant="outline" size="sm" onclick={() => handleEditInvoice(invoice)}>
 											Edit
 										</Button>
 										<Button
 											variant="destructive"
 											size="sm"
-											on:click={() => handleDeleteInvoice(invoice)}
+											onclick={() => handleDeleteInvoice(invoice)}
 										>
 											Delete
 										</Button>
@@ -295,7 +292,7 @@
 					variant="outline"
 					size="sm"
 					disabled={currentPage === 1}
-					on:click={() => currentPage--}
+					onclick={() => currentPage--}
 				>
 					Previous
 				</Button>
@@ -303,7 +300,7 @@
 					variant="outline"
 					size="sm"
 					disabled={currentPage * pageSize >= totalCount}
-					on:click={() => currentPage++}
+					onclick={() => currentPage++}
 				>
 					Next
 				</Button>

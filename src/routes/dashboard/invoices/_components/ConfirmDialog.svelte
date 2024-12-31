@@ -27,10 +27,10 @@
 		</Dialog.Header>
 
 		<div class="flex justify-end gap-2">
-			<Button variant="outline" on:click={() => (open = false)}>
+			<Button variant="outline" onclick={() => (open = false)}>
 				{cancelText}
 			</Button>
-			<Button variant="destructive" on:click={handleConfirm}>
+			<Button variant="destructive" onclick={handleConfirm}>
 				{confirmText}
 			</Button>
 		</div>

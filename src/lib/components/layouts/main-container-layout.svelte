@@ -21,8 +21,10 @@
 			{@render actions()}
 		{/if}
 	</div>
-	<Separator class="my-0" />
-	<div class="h-full flex-1 overflow-auto">
-		{@render children?.()}
-	</div>
+	{#if children}
+		<Separator class="my-0" />
+		<div class="h-full flex-1 overflow-auto">
+			{@render children()}
+		</div>
+	{/if}
 </div>

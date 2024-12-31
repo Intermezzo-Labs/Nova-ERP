@@ -75,8 +75,8 @@
 		</div>
 
 		<div class="mt-4 flex justify-end gap-2">
-			<Button variant="outline" on:click={() => (open = false)}>Close</Button>
-			<Button variant="default" on:click={downloadAsPNG}>Download</Button>
+			<Button variant="outline" onclick={() => (open = false)}>Close</Button>
+			<Button variant="default" onclick={downloadAsPNG}>Download</Button>
 		</div>
 	</Dialog.Content>
 </Dialog.Root>
