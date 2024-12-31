@@ -15,35 +15,30 @@
 	let inputMessage = '';
 
 	async function handleSubmit() {
-		if (!inputMessage.trim()) return;
-
-		const userMessage: Message = {
-			id: crypto.randomUUID(),
-			role: 'user',
-			content: inputMessage,
-			timestamp: new Date().toLocaleTimeString()
-		};
-
-		chatStore.addMessage(userMessage);
-		chatStore.setLoading(true);
-		inputMessage = '';
-
-		try {
-			const response = await data.aiService.processMessage(userMessage.content, data.roomId);
-
-			const aiMessage: Message = {
-				id: crypto.randomUUID(),
-				role: 'assistant',
-				content: response,
-				timestamp: new Date().toLocaleTimeString()
-			};
-
-			chatStore.addMessage(aiMessage);
-		} catch (err) {
-			chatStore.setError('Failed to get AI response');
-		} finally {
-			chatStore.setLoading(false);
-		}
+		// if (!inputMessage.trim()) return;
+		// const userMessage: Message = {
+		// 	id: crypto.randomUUID(),
+		// 	role: 'user',
+		// 	content: inputMessage,
+		// 	timestamp: new Date().toLocaleTimeString()
+		// };
+		// chatStore.addMessage(userMessage);
+		// chatStore.setLoading(true);
+		// inputMessage = '';
+		// try {
+		// 	const response = await data.aiService.processMessage(userMessage.content, data.roomId);
+		// 	const aiMessage: Message = {
+		// 		id: crypto.randomUUID(),
+		// 		role: 'assistant',
+		// 		content: response,
+		// 		timestamp: new Date().toLocaleTimeString()
+		// 	};
+		// 	chatStore.addMessage(aiMessage);
+		// } catch (err) {
+		// 	chatStore.setError('Failed to get AI response');
+		// } finally {
+		// 	chatStore.setLoading(false);
+		// }
 	}
 
 	$: messages = $chatStore.messages;

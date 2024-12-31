@@ -1,21 +1,20 @@
 // src/lib/services/ai/agent.ts
-import { AgentRuntime } from '@elizaos/core';
-import type {
-	IDatabaseAdapter,
-	IMemoryManager,
-	Memory,
-	State,
-	UUID,
-	Character,
+import { AgentRuntime, Clients } from '@elizaos/core';
+import {
+	type IDatabaseAdapter,
+	type IMemoryManager,
+	type Memory,
+	type UUID,
+	type Character,
 	ModelProviderName,
-	ICacheManager
+	type ICacheManager
 } from '@elizaos/core';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { chatStore } from '$lib/stores/ai';
 
 export class AIService {
 	private runtime: AgentRuntime;
-	private messageManager: IMemoryManager;
+	private messageManager?: IMemoryManager;
 
 	constructor(supabaseClient: SupabaseClient, openAIToken: string) {
 		const databaseAdapter = this.createDatabaseAdapter(supabaseClient);
@@ -24,7 +23,7 @@ export class AIService {
 			name: 'Nova Assistant',
 			modelProvider: 'openai' as ModelProviderName,
 			bio: 'AI assistant for Nova ERP',
-			clients: ['direct'],
+			clients: [Clients.DIRECT],
 			plugins: [],
 			lore: [],
 			messageExamples: [],
@@ -60,20 +59,22 @@ export class AIService {
 			serverUrl: 'http://localhost:7998',
 			token: openAIToken,
 			character,
-			modelProvider: 'openai' as ModelProviderName,
+			modelProvider: ModelProviderName.OPENAI,
 			databaseAdapter,
 			cacheManager,
-			clients: {},
 			conversationLength: 32,
 			actions: [],
 			evaluators: [],
 			providers: [],
-			services: new Map()
+			services: []
 		});
 
 		const manager = this.runtime.getMemoryManager('messages');
-		if (!manager) throw new Error('Message manager not initialized');
-		this.messageManager = manager;
+		if (manager) {
+			this.messageManager = manager;
+		} else {
+			console.error('Message manager not initialized');
+		}
 	}
 
 	async processMessage(message: string, roomId: string): Promise<string> {
@@ -90,11 +91,12 @@ export class AIService {
 				agentId: this.runtime.agentId
 			};
 
-			await this.messageManager.createMemory(memory);
+			await this.messageManager?.createMemory(memory);
 			const state = await this.runtime.composeState(memory);
 
-			const responses: string[] = [];
+			const responses: Memory[] = [];
 			await this.runtime.processActions(memory, responses, state, async (newMessages) => {
+				console.log('🤖 message: ', newMessages);
 				return [memory];
 			});
 
@@ -104,12 +106,12 @@ export class AIService {
 				throw new Error('No response generated');
 			}
 
-			const response = responses[0];
+			const [response] = responses;
 
-			await this.messageManager.createMemory({
+			await this.messageManager?.createMemory({
 				id: crypto.randomUUID() as UUID,
 				content: {
-					text: response,
+					text: response.content.text,
 					type: 'assistant_response',
 					timestamp: new Date().toISOString()
 				},
@@ -118,7 +120,7 @@ export class AIService {
 				agentId: this.runtime.agentId
 			});
 
-			return response;
+			return response.content.text;
 		} catch (error) {
 			console.error('Error processing message:', error);
 			throw new Error('Failed to process message');
@@ -127,7 +129,7 @@ export class AIService {
 
 	async clearConversation(roomId: string): Promise<void> {
 		try {
-			await this.messageManager.removeAllMemories(roomId as UUID);
+			await this.messageManager?.removeAllMemories(roomId as UUID);
 			chatStore.reset();
 		} catch (error) {
 			console.error('Error clearing conversation:', error);
