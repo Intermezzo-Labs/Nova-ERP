@@ -57,7 +57,7 @@
 	</Dialog.Footer>
 {/snippet}
 
-<Dialog.Root {open} onOpenChange={handleClose}>
+<Dialog.Root bind:open onOpenChange={handleClose}>
 	<Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
 		<CompanyForm
 			{header}

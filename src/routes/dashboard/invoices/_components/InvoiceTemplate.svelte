@@ -4,10 +4,14 @@
 	import { toPng } from 'html-to-image';
 	import type { Database } from '$lib/types/database.types';
 
-	export let open = true;
-	export let invoice: Database['public']['Tables']['invoice']['Row'];
-	export let company: any; // TODO: Add proper typing
-	export let customer: any; // TODO: Add proper typing
+	type Props = {
+		open: boolean;
+		invoice: Database['public']['Tables']['invoice']['Row'];
+		company: any; // TODO: Add proper typing
+		customer: any; // TODO: Add proper typing
+		handleClose: () => void;
+	};
+	let { open, handleClose, invoice, company, customer }: Props = $props();
 
 	let invoiceRef: HTMLElement;
 
@@ -26,7 +30,7 @@
 	}
 </script>
 
-<Dialog.Root bind:open>
+<Dialog.Root bind:open onOpenChange={handleClose}>
 	<Dialog.Content class="max-w-3xl">
 		<Dialog.Header>
 			<Dialog.Title>Invoice #{invoice.id}</Dialog.Title>

@@ -2,7 +2,6 @@
 	import * as Menubar from '$lib/components/ui/menubar';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { cn } from '$lib/utils';
-	import { Mic, Smile } from 'lucide-svelte';
 	import type { PageData } from '../$types';
 	import { goto } from '$app/navigation';
 
@@ -182,7 +181,7 @@
 		<Menubar.Trigger class="hidden md:block">Account</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Group>
-				<Menubar.Label inset>Switch Account</Menubar.Label>
+				<Menubar.GroupHeading inset>Switch Account</Menubar.GroupHeading>
 				<Menubar.Separator />
 				<Menubar.RadioGroup value={selectedCompanyId}>
 					{#each availableCompanies ?? [] as company}
@@ -191,9 +190,11 @@
 				</Menubar.RadioGroup>
 			</Menubar.Group>
 			<Menubar.Separator />
-			<Menubar.Item inset href="/dashboard/companies">Manage Company...</Menubar.Item>
+			<Menubar.Item inset onclick={() => goto('/dashboard/companies')}>
+				Manage Company...
+			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item inset href="/dashboard/companies">Add Company...</Menubar.Item>
+			<Menubar.Item inset onclick={() => goto('/dashboard/companies')}>Add Company...</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
 </Menubar.Root>

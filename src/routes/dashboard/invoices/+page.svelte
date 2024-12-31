@@ -5,19 +5,14 @@
 	import * as Select from '$lib/components/ui/select';
 	import { Input } from '$lib/components/ui/input';
 	import { toast } from '$lib/stores/toast';
-	import Toast from '$lib/components/ui/toast/Toast.svelte';
 	import type { Database } from '$lib/types/database.types';
-	import { onMount } from 'svelte';
-	import type { SuperValidated } from 'sveltekit-superforms';
-	import { superForm } from 'sveltekit-superforms/client';
 	import InvoiceModal from './_components/InvoiceModal.svelte';
 	import ConfirmDialog from './_components/ConfirmDialog.svelte';
 	import InvoiceTemplate from './_components/InvoiceTemplate.svelte';
-	import type { InvoiceForm } from '../../../lib/schemas/invoice';
 	import type { PageData } from './$types';
 	import MainContainerLayout from '$lib/components/layouts/main-container-layout.svelte';
 
-	export let data: PageData;
+	let { data }: { data: PageData } = $props();
 
 	type Invoice = Database['public']['Tables']['invoice']['Row'] & {
 		customer_name?: string;
@@ -26,18 +21,18 @@
 	};
 
 	// Modal states
-	let showConfirmDelete = false;
-	let showInvoiceTemplate = false;
-	let selectedInvoice: Invoice | null = null;
+	let showConfirmDelete = $state(false);
+	let showInvoiceTemplate = $state(false);
+	let selectedInvoice = $state<Invoice | null>(null);
 
 	// Pagination
-	let currentPage = 1;
-	let pageSize = 10;
-	let totalCount = 0;
+	let currentPage = $state(1);
+	let pageSize = $state(10);
+	let totalCount = $state(0);
 
 	// Filters
-	let statusFilter: Database['public']['Enums']['invoice_status'] | 'all' = 'all';
-	let searchQuery = '';
+	let statusFilter: Database['public']['Enums']['invoice_status'] | 'all' = $state('all');
+	let searchQuery = $state('');
 
 	async function loadInvoices() {
 		// try {
@@ -73,11 +68,10 @@
 		// }
 	}
 
-	$: {
-		// Reload when filters or pagination changes
-		currentPage, pageSize, statusFilter, searchQuery;
-		loadInvoices();
-	}
+	// Reload when filters or pagination changes
+	$effect(() => {
+		if (currentPage || pageSize || statusFilter || searchQuery) loadInvoices();
+	});
 
 	async function loadCustomersAndCompanies() {
 		// try {
@@ -347,6 +341,11 @@
 
 {#if showInvoiceTemplate && selectedInvoice}
 	<InvoiceTemplate
+		open={showInvoiceTemplate}
+		handleClose={() => {
+			selectedInvoice = null;
+			showInvoiceTemplate = false;
+		}}
 		invoice={selectedInvoice}
 		company={selectedInvoice.company_details}
 		customer={selectedInvoice.customer_details}

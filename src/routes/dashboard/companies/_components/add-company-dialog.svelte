@@ -37,8 +37,10 @@
 {/snippet}
 
 <Dialog.Root {open} onOpenChange={(bool) => (open = bool)}>
-	<Dialog.Trigger asChild let:builder>
-		<Form.Button builders={[builder]}><Plus class="mr-2 size-4" /> Add Company</Form.Button>
+	<Dialog.Trigger>
+		{#snippet child({ props })}
+			<Form.Button {...props}><Plus class="mr-2 size-4" /> Add Company</Form.Button>
+		{/snippet}
 	</Dialog.Trigger>
 	<Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
 		<CompanyForm {header} {footer} {form} action="?/create" />

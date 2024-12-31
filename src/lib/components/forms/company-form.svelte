@@ -40,23 +40,29 @@
 	<div class="grid gap-6 py-6">
 		{#if 'id' in $formData}
 			<Form.Field {form} name="id">
-				<Form.Control let:attrs>
-					<Input {...attrs} required bind:value={$formData.id} type="hidden" readonly />
+				<Form.Control>
+					{#snippet children({ props })}
+						<Input {...props} required bind:value={$formData.id} type="hidden" readonly />
+					{/snippet}
 				</Form.Control>
 			</Form.Field>
 		{/if}
 		<Form.Field {form} name="details.name">
-			<Form.Control let:attrs>
-				<Form.Label for="name">Name</Form.Label>
-				<Input {...attrs} required bind:value={$formData.details.name} {readonly} />
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label for="name">Name</Form.Label>
+					<Input {...props} required bind:value={$formData.details.name} {readonly} />
+				{/snippet}
 			</Form.Control>
 			<Form.Description>The legal name of your company.</Form.Description>
 			<Form.FieldErrors />
 		</Form.Field>
 		<Form.Field {form} name="details.description">
-			<Form.Control let:attrs>
-				<Form.Label for="name">Description</Form.Label>
-				<Textarea {...attrs} rows={3} bind:value={$formData.details.description} {readonly} />
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label for="name">Description</Form.Label>
+					<Textarea {...props} rows={3} bind:value={$formData.details.description} {readonly} />
+				{/snippet}
 			</Form.Control>
 			<Form.Description>Short description of your company.</Form.Description>
 			<Form.FieldErrors />
@@ -72,8 +78,10 @@
 						<Form.Description class={cn(i !== 0 && 'sr-only')}>
 							Add email to list to share customers, products and invoices.
 						</Form.Description>
-						<Form.Control let:attrs>
-							<Input {...attrs} bind:value={$formData.shared_with[i]} />
+						<Form.Control>
+							{#snippet children({ props })}
+								<Input {...props} bind:value={$formData.shared_with[i]} />
+							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.ElementField>
