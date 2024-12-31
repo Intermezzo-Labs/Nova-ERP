@@ -1,10 +1,9 @@
-
 graph TD
-    Client[Client Browser]
-    SvelteKit[SvelteKit Application]
-    Supabase[Supabase Backend]
-    Storage[Supabase Storage]
-    Database[(PostgreSQL Database)]
+Client[Client Browser]
+SvelteKit[SvelteKit Application]
+Supabase[Supabase Backend]
+Storage[Supabase Storage]
+Database[(PostgreSQL Database)]
 
     subgraph Frontend
         Client -->|HTTP/WebSocket| SvelteKit

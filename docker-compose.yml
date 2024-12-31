@@ -36,7 +36,7 @@ services:
       - app
     networks:
       - nova-network
-    entrypoint: ["/docker-entrypoint.sh"]
+    entrypoint: ['/docker-entrypoint.sh']
 
 networks:
   nova-network:

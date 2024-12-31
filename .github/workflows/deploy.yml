@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -33,7 +33,7 @@ jobs:
           host: ${{ secrets.CICD_LINODE }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          debug: true  # Enable debug mode
+          debug: true # Enable debug mode
           envs: PUBLIC_SUPABASE_URL,PUBLIC_SUPABASE_ANON_KEY,DOMAIN
           script: |
             echo "Creating .env if it doesn't exist..."
