@@ -3,12 +3,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { onMount } from 'svelte';
-	import type { PageData } from '../business-cards/$types';
+	import type { PageData } from '../$types';
 	import type { NovaUserProfile } from '$lib/schemas/nova-user';
-	import { Label } from '$lib/components/ui/label';
-	import Separator from '$lib/components/ui/separator/separator.svelte';
-	import * as Tabs from '$lib/components/ui/tabs';
-	import { Textarea } from '$lib/components/ui/textarea';
 	import { Clock, Download, IdCard, Laptop, Presentation } from 'lucide-svelte';
 
 	export let data: PageData;
@@ -216,7 +212,7 @@
 					</div>
 				</div>
 				<div class="flex items-center space-x-2">
-					<Button on:click={downloadBusinessCard} disabled={!browser}>
+					<Button onclick={downloadBusinessCard} disabled={!browser}>
 						<Download class="mr-2 size-4" /> Download Business Card
 					</Button>
 					<Button disabled>Save</Button>
