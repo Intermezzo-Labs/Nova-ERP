@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Input from '$lib/components/ui/input/input.svelte';
-	import SuperDebug, { type SuperForm } from 'sveltekit-superforms';
-	import { browser } from '$app/environment';
+	import { type SuperForm } from 'sveltekit-superforms';
 	import * as Form from '$lib/components/ui/form';
 	import { type ProductDetails, type UpdateProductDetails } from '$lib/schemas/product';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
@@ -69,10 +68,6 @@
 			<Form.FieldErrors />
 		</Form.Field>
 	</div>
-
-	{#if browser}
-		<SuperDebug data={$formData} />
-	{/if}
 
 	{@render footer()}
 </form>

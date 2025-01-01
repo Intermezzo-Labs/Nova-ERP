@@ -9,17 +9,10 @@
 	import Toast from '$lib/components/ui/toast/Toast.svelte';
 	import type { LayoutData } from './$types';
 	import type { Snippet } from 'svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
-	import { Maximize2 } from 'lucide-svelte';
+	import MobileNav from './_components/mobile-nav.svelte';
 
-	type Props = { data: LayoutData; children: Snippet; defaultCollapsed: boolean };
-	let { data, children, defaultCollapsed = true }: Props = $props();
-
-	let isCollapsed = $state(defaultCollapsed);
-
-	const handleCollapse = async () => {
-		isCollapsed = !isCollapsed;
-	};
+	type Props = { data: LayoutData; children: Snippet };
+	let { data, children }: Props = $props();
 </script>
 
 <Toast />
@@ -31,31 +24,17 @@
 		availableCompanies={data.companies}
 	/>
 	<div class="h-main-window flex divide-x overflow-hidden">
-		<nav class={cn('flex shrink-0 flex-col', isCollapsed ? '' : 'md:w-56')}>
-			<div
-				class={cn(
-					'flex items-center justify-center md:h-[52px] md:px-0',
-					isCollapsed ? 'h-[52px]' : 'px-2'
-				)}
-			>
+		<nav class={cn('hidden shrink-0 flex-col md:flex md:w-56')}>
+			<div class={cn('flex items-center justify-center px-2 md:h-[52px] md:px-0')}>
 				<CompanySwitcher
-					{isCollapsed}
 					selectedCompanyId={data.currentCompanyId ?? ''}
 					availableCompanies={data.companies}
 				/>
 			</div>
 			<Separator />
-			<Nav {isCollapsed} routes={primaryRoutes} />
+			<Nav routes={primaryRoutes} />
 			<Separator />
-			<Nav {isCollapsed} routes={secondaryRoutes} />
-			<Button
-				variant="ghost"
-				size="icon"
-				class="mx-auto mb-4 mt-auto md:hidden"
-				onclick={handleCollapse}
-			>
-				<Maximize2 class="size-4" />
-			</Button>
+			<Nav routes={secondaryRoutes} />
 		</nav>
 		<main class="h-full flex-1">
 			{@render children()}

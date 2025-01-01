@@ -6,7 +6,6 @@
 	import type { CompanyForm, UpdateCompanyForm } from '$lib/schemas/company';
 	import { tick, type Snippet } from 'svelte';
 	import type { SuperForm } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms';
 	import Separator from '../ui/separator/separator.svelte';
 	import Button from '../ui/button/button.svelte';
 	import { cn } from '$lib/utils';
@@ -92,10 +91,6 @@
 			</Button>
 		</div>
 	</div>
-
-	{#if browser}
-		<SuperDebug data={$formData} />
-	{/if}
 
 	{@render footer()}
 </form>

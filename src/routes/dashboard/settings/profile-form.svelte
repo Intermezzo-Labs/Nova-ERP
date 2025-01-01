@@ -1,12 +1,11 @@
 <script lang="ts">
-	import SuperDebug, { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
+	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as Form from '$lib/components/ui/form';
 	import * as Select from '$lib/components/ui/select';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
-	import { browser } from '$app/environment';
 	import type { Snippet } from 'svelte';
 	import { novaUserProfileFormSchema, userRoleEnum, userStatusEnum } from '$lib/schemas/nova-user';
 
@@ -164,7 +163,3 @@
 
 	<Button type="submit">Save preferences</Button>
 </form>
-
-{#if browser}
-	<SuperDebug data={$formData} />
-{/if}

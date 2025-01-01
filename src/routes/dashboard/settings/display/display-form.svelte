@@ -36,9 +36,7 @@
 
 <script lang="ts">
 	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { browser } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
 	import * as Checkbox from '$lib/components/ui/checkbox';
 
@@ -86,7 +84,3 @@
 	</Form.Fieldset>
 	<Form.Button>Update display</Form.Button>
 </form>
-
-{#if browser}
-	<SuperDebug data={$formData} />
-{/if}

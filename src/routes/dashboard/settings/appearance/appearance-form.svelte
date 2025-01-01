@@ -16,9 +16,8 @@
 
 <script lang="ts">
 	import { ChevronDown } from 'lucide-svelte';
-	import SuperDebug, { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
+	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils.js';
 	import * as Form from '$lib/components/ui/form';
 	import { buttonVariants } from '$lib/components/ui/button';
@@ -117,7 +116,3 @@
 	</Form.Fieldset>
 	<Form.Button>Update preferences</Form.Button>
 </form>
-
-{#if browser}
-	<SuperDebug data={$formData} />
-{/if}

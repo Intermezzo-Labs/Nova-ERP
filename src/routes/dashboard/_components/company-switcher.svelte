@@ -6,11 +6,10 @@
 	import { invalidateAll } from '$app/navigation';
 
 	type Props = {
-		isCollapsed: boolean;
 		selectedCompanyId: string;
 		availableCompanies: PageData['companies'];
 	};
-	let { isCollapsed, selectedCompanyId = $bindable(''), availableCompanies }: Props = $props();
+	let { selectedCompanyId = $bindable(''), availableCompanies }: Props = $props();
 
 	let selectedCompany = $derived(
 		availableCompanies?.find((c) => c.id === selectedCompanyId)?.details.name ?? 'Select company'
@@ -32,20 +31,18 @@
 >
 	<Select.Trigger
 		class={cn(
-			'flex items-center gap-2 [&>span]:line-clamp-1 [&>span]:flex [&>span]:w-full [&>span]:items-center [&>span]:gap-1 [&>span]:truncate [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0',
-			isCollapsed &&
-				'flex h-9 w-9 shrink-0 items-center justify-center p-0 [&>span]:w-auto [&>svg]:hidden'
+			'flex items-center gap-2 [&>span]:line-clamp-1 [&>span]:flex [&>span]:w-full [&>span]:items-center [&>span]:gap-1 [&>span]:truncate [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0'
 		)}
 		aria-label="Select account"
 	>
 		<span class="pointer-events-none">
-			<Building class={cn(isCollapsed ? '' : '')} />
-			<span class={cn('ml-2', isCollapsed && 'hidden')}>
+			<Building />
+			<span class={cn('ml-2')}>
 				{selectedCompany}
 			</span>
 		</span>
 	</Select.Trigger>
-	<Select.Content align={isCollapsed ? 'start' : undefined}>
+	<Select.Content>
 		<Select.Group>
 			{#each availableCompanies ?? [] as company}
 				<Select.Item value={company.id} label={company.details.name}>

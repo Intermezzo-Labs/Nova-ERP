@@ -5,76 +5,38 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { page } from '$app/state';
 
-	type Props = { isCollapsed: boolean; routes: Route[] };
-	let { isCollapsed, routes }: Props = $props();
+	type Props = { routes: Route[] };
+	let { routes }: Props = $props();
 
 	let activeRoute = $derived(page.url.pathname);
 
 	const getVariant = (path?: string) => (activeRoute === path ? 'default' : 'ghost');
 </script>
 
-<div
-	data-collapsed={isCollapsed}
-	class="group flex-col gap-4 py-2 data-[collapsed=true]:py-2 md:flex"
->
-	<nav
-		class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2"
-	>
+<div class="group flex-col gap-4 py-2 data-[collapsed=true]:py-2 md:flex">
+	<nav class="grid gap-1 px-2">
 		{#each routes as route}
-			{#if isCollapsed}
-				<Tooltip.Provider>
-					<Tooltip.Root delayDuration={0}>
-						<Tooltip.Trigger>
-							{#snippet child({ props })}
-								<Button
-									{...props}
-									href={route.path}
-									variant={getVariant(route.path)}
-									size="icon"
-									class={cn(
-										'size-9',
-										getVariant(route.path) === 'default' &&
-											'dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white'
-									)}
-								>
-									<svelte:component this={route.icon} class="size-4" aria-hidden="true" />
-									<span class="sr-only">{route.title}</span>
-								</Button>
-							{/snippet}
-						</Tooltip.Trigger>
-						<Tooltip.Content side="right" class="flex items-center gap-4">
-							{route.title}
-							{#if route.label}
-								<span class="ml-auto text-background">
-									{route.label}
-								</span>
-							{/if}
-						</Tooltip.Content>
-					</Tooltip.Root>
-				</Tooltip.Provider>
-			{:else}
-				<Button
-					href={route.path}
-					variant={getVariant(route.path)}
-					size="sm"
-					class={cn('justify-start', {
-						'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white':
-							getVariant(route.path) === 'default'
-					})}
-				>
-					<svelte:component this={route.icon} class="mr-2 size-4" aria-hidden="true" />
-					{route.title}
-					{#if route.label}
-						<span
-							class={cn('ml-auto', {
-								'text-background dark:text-white': getVariant(route.path) === 'default'
-							})}
-						>
-							{route.label}
-						</span>
-					{/if}
-				</Button>
-			{/if}
+			<Button
+				href={route.path}
+				variant={getVariant(route.path)}
+				size="sm"
+				class={cn('justify-start', {
+					'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white':
+						getVariant(route.path) === 'default'
+				})}
+			>
+				<svelte:component this={route.icon} class="mr-2 size-4" aria-hidden="true" />
+				{route.title}
+				{#if route.label}
+					<span
+						class={cn('ml-auto', {
+							'text-background dark:text-white': getVariant(route.path) === 'default'
+						})}
+					>
+						{route.label}
+					</span>
+				{/if}
+			</Button>
 		{/each}
 	</nav>
 </div>

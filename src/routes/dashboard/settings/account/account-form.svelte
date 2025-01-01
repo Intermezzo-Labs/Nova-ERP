@@ -38,7 +38,7 @@
 
 <script lang="ts">
 	import { CalendarIcon, ChevronDown, Check } from 'lucide-svelte';
-	import SuperDebug, { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
+	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import {
 		DateFormatter,
@@ -47,7 +47,6 @@
 		parseDate
 	} from '@internationalized/date';
 	import { cn } from '$lib/utils.js';
-	import { browser } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
 	import * as Popover from '$lib/components/ui/popover';
 	import * as Command from '$lib/components/ui/command';
@@ -171,7 +170,3 @@
 
 	<Form.Button>Update account</Form.Button>
 </form>
-
-{#if browser}
-	<SuperDebug data={$formData} />
-{/if}

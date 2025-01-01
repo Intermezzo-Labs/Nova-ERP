@@ -28,13 +28,13 @@ export const primaryRoutes: Route[] = [
 	{
 		title: 'Dashboard',
 		path: '/dashboard',
-		label: '128',
+		label: '',
 		icon: ChartColumnIncreasing
 	},
 	{
 		title: 'Customers',
 		path: '/dashboard/customers',
-		label: '9',
+		label: '',
 		icon: User
 	},
 	{
@@ -52,7 +52,7 @@ export const primaryRoutes: Route[] = [
 	{
 		title: 'Products',
 		path: '/dashboard/products',
-		label: '23',
+		label: '',
 		icon: Package
 	},
 	{

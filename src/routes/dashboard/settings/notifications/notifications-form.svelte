@@ -14,11 +14,10 @@
 </script>
 
 <script lang="ts">
-	import SuperDebug, { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
+	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as Form from '$lib/components/ui/form';
 	import * as RadioGroup from '$lib/components/ui/radio-group';
-	import { browser } from '$app/environment';
 	import Switch from '$lib/components/ui/switch/switch.svelte';
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 
@@ -137,7 +136,3 @@
 	</Form.Field>
 	<Form.Button>Update notifications</Form.Button>
 </form>
-
-{#if browser}
-	<SuperDebug data={$formData} />
-{/if}

@@ -9,8 +9,6 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { Plus, Trash } from 'lucide-svelte';
 	import * as Form from '$lib/components/ui/form';
-	import { browser } from '$app/environment';
-	import SuperDebug from 'sveltekit-superforms';
 	import type { PageData } from '../$types';
 
 	type Props = {
@@ -196,10 +194,6 @@
 					Total: ${$formData.total.toFixed(2)}
 				</div>
 			</div>
-
-			{#if browser}
-				<SuperDebug data={$formData} />
-			{/if}
 
 			<Dialog.Footer class="gap-2">
 				<Form.Button type="button" variant="outline" onclick={() => (open = false)}>

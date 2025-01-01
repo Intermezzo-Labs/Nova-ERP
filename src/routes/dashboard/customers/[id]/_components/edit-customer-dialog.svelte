@@ -1,9 +1,8 @@
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import SuperDebug, { superForm } from 'sveltekit-superforms';
+	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { browser } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
 	import { type UpdateCustomerDetails, updateCustomerFormSchema } from '$lib/schemas/customer';
 
@@ -59,10 +58,6 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
-
-			{#if browser}
-				<SuperDebug data={$formData} />
-			{/if}
 
 			<Dialog.Footer>
 				<Form.Button>Update customer</Form.Button>
