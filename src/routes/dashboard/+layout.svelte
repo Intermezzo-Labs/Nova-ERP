@@ -9,7 +9,6 @@
 	import Toast from '$lib/components/ui/toast/Toast.svelte';
 	import type { LayoutData } from './$types';
 	import type { Snippet } from 'svelte';
-	import MobileNav from './_components/mobile-nav.svelte';
 
 	type Props = { data: LayoutData; children: Snippet };
 	let { data, children }: Props = $props();

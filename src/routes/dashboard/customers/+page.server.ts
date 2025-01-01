@@ -22,7 +22,7 @@ export const actions: Actions = {
 		const companyId = getCompanyId(cookies);
 		const { user } = await safeGetSession();
 
-		if (!user) throw 'Missing user data';
+		if (!user || !companyId) redirect(302, '/dashboard/companies');
 
 		const data = await request.formData();
 		const form = await superValidate(data, zod(customerFormSchema));

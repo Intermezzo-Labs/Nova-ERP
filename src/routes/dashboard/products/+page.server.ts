@@ -3,6 +3,7 @@ import { fail } from '@sveltejs/kit';
 import { zod } from 'sveltekit-superforms/adapters';
 import { productFormSchema } from '$lib/schemas/product';
 import { getCompanyId } from '$lib/utils/company-id.js';
+import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ locals }) => {
 	// Get invoice count with error handling
@@ -30,7 +31,7 @@ export const actions = {
 		const companyId = getCompanyId(cookies);
 		const { user } = await safeGetSession();
 
-		if (!user) throw 'Missing user data';
+		if (!user || !companyId) redirect(302, '/dashboard/companies');
 
 		const data = await request.formData();
 		const form = await superValidate(data, zod(productFormSchema));

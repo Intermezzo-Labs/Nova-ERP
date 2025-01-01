@@ -21,7 +21,7 @@
 	<Building class="size-5" />
 {/snippet}
 
-<MainContainerLayout title="Companies" actions={data.companies.length ? actions : undefined}>
+<MainContainerLayout title="Account" actions={data.companies.length ? actions : undefined}>
 	{#if data.error}
 		<Alert.Root variant="destructive">
 			<LucideOctagonMinus class="size-5" />

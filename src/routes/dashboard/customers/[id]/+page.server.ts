@@ -16,10 +16,11 @@ export const load: PageServerLoad = async ({
 	locals: { supabase, safeGetSession },
 	cookies
 }) => {
+	const { user } = await safeGetSession();
 	const companyId = getCompanyId(cookies);
+	if (!user || !companyId) redirect(302, '/dashboard/companies');
 
 	const { form, customers } = await parent();
-	const { user } = await safeGetSession();
 
 	let selectedCustomer = customers?.find((c) => c.id === +params.id);
 	if (!selectedCustomer) {

@@ -4,6 +4,7 @@ import type { LayoutServerLoad } from './$types';
 import { customerFormSchema, type CustomerDetails } from '../../../lib/schemas/customer';
 import type { Tables } from '$lib/types/database.types';
 import { getCompanyId } from '$lib/utils/company-id';
+import { redirect } from '@sveltejs/kit';
 
 export type Customer = Tables<'customer'> & {
 	details: CustomerDetails;
@@ -12,10 +13,9 @@ export type Customer = Tables<'customer'> & {
 
 export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabase }, cookies }) => {
 	const companyId = getCompanyId(cookies);
-
 	const { user } = await safeGetSession();
 
-	if (!user) throw 'Missing user data';
+	if (!user || !companyId) redirect(302, '/dashboard/companies');
 
 	const { data, error } = await supabase
 		.from('customer')

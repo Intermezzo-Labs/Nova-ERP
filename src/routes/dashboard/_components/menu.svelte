@@ -179,22 +179,26 @@
 		</Menubar.Content>
 	</Menubar.Menu> -->
 	<Menubar.Menu>
-		<Menubar.Trigger class="hidden md:block">Account</Menubar.Trigger>
+		<Menubar.Trigger>Account</Menubar.Trigger>
 		<Menubar.Content>
-			<Menubar.Group>
-				<Menubar.GroupHeading inset>Switch Account</Menubar.GroupHeading>
+			{#if availableCompanies?.length}
+				<Menubar.Group>
+					<Menubar.GroupHeading inset>Switch Account</Menubar.GroupHeading>
+					<Menubar.Separator />
+					<Menubar.RadioGroup value={selectedCompanyId}>
+						{#each availableCompanies ?? [] as company}
+							<Menubar.RadioItem value={String(company.id)}
+								>{company.details.name}</Menubar.RadioItem
+							>
+						{/each}
+					</Menubar.RadioGroup>
+				</Menubar.Group>
 				<Menubar.Separator />
-				<Menubar.RadioGroup value={selectedCompanyId}>
-					{#each availableCompanies ?? [] as company}
-						<Menubar.RadioItem value={String(company.id)}>{company.details.name}</Menubar.RadioItem>
-					{/each}
-				</Menubar.RadioGroup>
-			</Menubar.Group>
-			<Menubar.Separator />
-			<Menubar.Item inset onclick={() => goto('/dashboard/companies')}>
-				Manage Company...
-			</Menubar.Item>
-			<Menubar.Separator />
+				<Menubar.Item inset onclick={() => goto('/dashboard/companies')}>
+					Manage Company...
+				</Menubar.Item>
+				<Menubar.Separator />
+			{/if}
 			<Menubar.Item inset onclick={() => goto('/dashboard/companies')}>Add Company...</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
