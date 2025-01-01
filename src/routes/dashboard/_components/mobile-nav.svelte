@@ -9,6 +9,7 @@
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import type { PageData } from '../$types';
 	import type { HTMLAttributes } from 'svelte/elements';
+	import { page } from '$app/state';
 
 	type $$Props = HTMLAttributes<HTMLDivElement>;
 	type Props = {
@@ -17,10 +18,15 @@
 		availableCompanies: PageData['companies'];
 	};
 	const { class: className, availableCompanies, selectedCompanyId }: Props = $props();
+
+	$effect(() => {
+		if (page.route.id) open = false;
+	});
+	let open = $state(false);
 </script>
 
 <div class={cn(className)}>
-	<Sheet.Root>
+	<Sheet.Root bind:open>
 		<Sheet.Trigger class={buttonVariants({ variant: 'ghost' })}>
 			<Menu class="size-4" />
 		</Sheet.Trigger>
