@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { novaUserProfileSchema } from '$lib/schemas/nova-user';
 
 export const load = async ({ locals }) => {
@@ -15,19 +15,14 @@ export const load = async ({ locals }) => {
 		.eq('user_id', user.id)
 		.single();
 
-	if (userError) {
-		console.error('Database error:', userError);
-		// throw error(404, 'Error fetching user data');
-	}
-
-	if (!userData) {
-		console.warn('User data not found:', userData);
-		// throw error(404, 'User data not found');
+	if (userError || !userData) {
+		console.warn(userData, userError);
+		redirect(302, '/dashboard/settings');
 	}
 
 	// Sanitize the logo_url if it exists
 	const sanitizedProfile = novaUserProfileSchema.safeParse(userData?.preferences);
-	if (sanitizedProfile.error) console.warn('woops', sanitizedProfile.error);
+	if (sanitizedProfile.error) console.warn(sanitizedProfile.error);
 	if (sanitizedProfile.success && sanitizedProfile.data.logoUrl) {
 		try {
 			const { data: publicUrl } = await supabase.storage
