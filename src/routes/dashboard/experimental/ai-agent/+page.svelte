@@ -1,51 +1,22 @@
 <script lang="ts">
-	import { chatStore, type Message } from '$lib/stores/ai';
+	// import { chatStore, type Message } from '$lib/stores/ai';
 	import MainContainerLayout from '$lib/components/layouts/main-container-layout.svelte';
-	import * as Card from '$lib/components/ui/card';
-	import * as Avatar from '$lib/components/ui/avatar';
-	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import { cn } from '$lib/utils';
-	import { Bot, SendHorizonal, User } from 'lucide-svelte';
-	import type { PageData } from './$types';
+	// import * as Card from '$lib/components/ui/card';
+	// import * as Avatar from '$lib/components/ui/avatar';
+	// import { Button } from '$lib/components/ui/button';
+	// import { Input } from '$lib/components/ui/input';
+	// import { cn } from '$lib/utils';
+	// import { Bot, SendHorizonal, User } from 'lucide-svelte';
+	// import type { PageData } from './$types';
+	import ComingSoon from '$lib/components/ui/coming-soon/coming-soon.svelte';
 
-	export let data: PageData;
-
-	let messageContainer: HTMLDivElement;
-	let inputMessage = '';
-
-	async function handleSubmit() {
-		// if (!inputMessage.trim()) return;
-		// const userMessage: Message = {
-		// 	id: crypto.randomUUID(),
-		// 	role: 'user',
-		// 	content: inputMessage,
-		// 	timestamp: new Date().toLocaleTimeString()
-		// };
-		// chatStore.addMessage(userMessage);
-		// chatStore.setLoading(true);
-		// inputMessage = '';
-		// try {
-		// 	const response = await data.aiService.processMessage(userMessage.content, data.roomId);
-		// 	const aiMessage: Message = {
-		// 		id: crypto.randomUUID(),
-		// 		role: 'assistant',
-		// 		content: response,
-		// 		timestamp: new Date().toLocaleTimeString()
-		// 	};
-		// 	chatStore.addMessage(aiMessage);
-		// } catch (err) {
-		// 	chatStore.setError('Failed to get AI response');
-		// } finally {
-		// 	chatStore.setLoading(false);
-		// }
-	}
-
-	$: messages = $chatStore.messages;
 </script>
 
 <MainContainerLayout title="Nova Agent">
-	<div class="flex h-full flex-col divide-y">
+	<div class="p-4">
+		<ComingSoon />
+	</div>
+	<!-- <div class="flex h-full flex-col divide-y">
 		<div bind:this={messageContainer} class="flex-1 overflow-auto">
 			<Card.Root class="h-full rounded-none border-0">
 				<div class="flex h-full flex-col">
@@ -100,5 +71,5 @@
 				</Button>
 			</form>
 		</div>
-	</div>
+	</div> -->
 </MainContainerLayout>
