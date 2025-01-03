@@ -9,7 +9,7 @@
 
 	onMount(() => {
 		// Set dark mode as default
-		document.documentElement.classList.add('dark');
+		document.documentElement.dataset.mode = 'dark';
 
 		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
 			if (newSession?.expires_at !== session?.expires_at) {
