@@ -1,3 +1,4 @@
+import { PUBLIC_DISCORD_URL } from '$env/static/public';
 import {
 	ChartColumnIncreasing,
 	CircleHelp,
@@ -73,6 +74,7 @@ export const secondaryRoutes: Route[] = [
 	{
 		title: 'Join our Discord',
 		label: '',
+		path: PUBLIC_DISCORD_URL,
 		icon: MessageSquare
 	}
 ];

@@ -75,8 +75,8 @@
 
 {#snippet actions()}
 	<div class="hidden items-center gap-2 md:flex">
-		<Tooltip.Provider>
-			<Tooltip.Root delayDuration={0}>
+		<Tooltip.Provider delayDuration={0}>
+			<Tooltip.Root>
 				<Tooltip.Trigger
 					id="archive_tooltip"
 					class={buttonVariants({ variant: 'ghost', size: 'icon' })}
@@ -87,7 +87,7 @@
 				</Tooltip.Trigger>
 				<Tooltip.Content>Archive</Tooltip.Content>
 			</Tooltip.Root>
-			<Tooltip.Root delayDuration={0}>
+			<Tooltip.Root>
 				<Tooltip.Trigger
 					id="move_to_junk_tooltip"
 					class={buttonVariants({ variant: 'ghost', size: 'icon' })}
@@ -98,7 +98,7 @@
 				</Tooltip.Trigger>
 				<Tooltip.Content>Move to junk</Tooltip.Content>
 			</Tooltip.Root>
-			<Tooltip.Root delayDuration={0}>
+			<Tooltip.Root>
 				<Tooltip.Trigger
 					id="move_to_trash_tooltip"
 					class={buttonVariants({ variant: 'ghost', size: 'icon' })}
@@ -114,7 +114,7 @@
 	</div>
 	<div class="ml-auto flex items-center gap-2">
 		<Tooltip.Provider>
-			<Tooltip.Root delayDuration={0}>
+			<Tooltip.Root>
 				<Tooltip.Trigger
 					id="reply_tooltip"
 					class={buttonVariants({ variant: 'ghost', size: 'icon' })}
@@ -125,7 +125,7 @@
 				</Tooltip.Trigger>
 				<Tooltip.Content>Reply</Tooltip.Content>
 			</Tooltip.Root>
-			<Tooltip.Root delayDuration={0}>
+			<Tooltip.Root>
 				<Tooltip.Trigger
 					id="reply_all_tooltip"
 					class={buttonVariants({ variant: 'ghost', size: 'icon' })}
@@ -136,7 +136,7 @@
 				</Tooltip.Trigger>
 				<Tooltip.Content>Reply all</Tooltip.Content>
 			</Tooltip.Root>
-			<Tooltip.Root delayDuration={0}>
+			<Tooltip.Root>
 				<Tooltip.Trigger
 					id="forward_tooltip"
 					class={buttonVariants({ variant: 'ghost', size: 'icon' })}
