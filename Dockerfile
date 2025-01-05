@@ -3,22 +3,23 @@ FROM node:23.3.0-slim AS builder
 
 WORKDIR /app
 
-# Copy package.json and package-lock.json
 COPY package.json package-lock.json ./
-
-# Install all dependencies, including devDependencies
 RUN npm ci
 
-# Copy the application code
 COPY . .
 
 ARG PUBLIC_SUPABASE_URL
 ARG PUBLIC_SUPABASE_ANON_KEY
+ARG PRIVATE_SUPABASE_API_KEY
+ARG PRIVATE_SUPABASE_JWT_SECRET
+ARG PRIVATE_SUPABASE_SERVICE_ROLE
 
 ENV PUBLIC_SUPABASE_URL=${PUBLIC_SUPABASE_URL}
 ENV PUBLIC_SUPABASE_ANON_KEY=${PUBLIC_SUPABASE_ANON_KEY}
+ENV PRIVATE_SUPABASE_API_KEY=${PRIVATE_SUPABASE_API_KEY}
+ENV PRIVATE_SUPABASE_JWT_SECRET=${PRIVATE_SUPABASE_JWT_SECRET}
+ENV PRIVATE_SUPABASE_SERVICE_ROLE=${PRIVATE_SUPABASE_SERVICE_ROLE}
 
-# Build the application
 RUN npm run build
 
 # Stage 2: Prepare the production image
@@ -26,19 +27,13 @@ FROM node:23.3.0-slim
 
 WORKDIR /app
 
-# Copy production dependencies from builder
 COPY --from=builder /app/package.json /app/package-lock.json ./
 COPY --from=builder /app/node_modules ./node_modules
-
-# Copy built application from builder
 COPY --from=builder /app/build ./build
 
-# Add non-root user
 RUN addgroup --system nodejs && adduser --system --ingroup nodejs --no-create-home nodejs
 USER nodejs
 
-# Expose the application port
 EXPOSE 3000
 
-# Start the application
 CMD ["node", "build"]
