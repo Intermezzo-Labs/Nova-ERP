@@ -68,7 +68,7 @@
 						<span class="bg-background px-2 text-muted-foreground"> Or continue with </span>
 					</div>
 				</div>
-				<UserWeb3Form {loading} />
+				<UserWeb3Form />
 				<p class="px-8 text-center text-sm text-muted-foreground">
 					By clicking continue, you agree to our
 					<a href="/terms" class="underline underline-offset-4 hover:text-primary">

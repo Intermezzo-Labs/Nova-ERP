@@ -5,7 +5,7 @@ import { connection } from '$lib/components/web3/solana';
 import { PUBLIC_NONCE_MESSAGE } from '$env/static/public';
 import type { RequestHandler } from './$types';
 import { json } from '@sveltejs/kit';
-import { adminAuthClient, getUserByPublicKey } from '$lib/utils/auth';
+import { adminAuthClient } from '$lib/utils/auth';
 
 const BLOCK_VALID_FOR_N_SECONDS = 60;
 
@@ -30,30 +30,39 @@ export const POST: RequestHandler = async ({ request, locals: { supabase } }) =>
 
 	if (!verified) throw verified;
 
-	const { data: existingUser } = await getUserByPublicKey({ publicKey });
-	let user = existingUser;
-
 	const email = `${publicKey}@demo.novadova.com`;
-	// create a row in our user table (if it's not there already)
-	if (!user) {
-		const { data, error } = await adminAuthClient.createUser({
+	const password = 'foobar';
+	const getAuthTokenResponse = () => supabase.auth.signInWithPassword({ email, password });
+
+	/**
+	 * we cant create supabase users without email or phone. so let's create a phony email addresses using their solana account. we can't get access to the user database table so the `get_user_by_pubkey` database function isn't very useful right now.
+	 * stopgap: try to login and if it fails, create a user. ultimately set the session server side.
+	 */
+	const firstAttempt = await getAuthTokenResponse();
+	let token = firstAttempt.data;
+
+	if (!token || firstAttempt.error) {
+		console.warn("user doens't exist?", firstAttempt.error);
+		// create a row in our user table (if it's not there already)
+		const { error: createUserError } = await adminAuthClient.createUser({
 			email,
 			email_confirm: true,
-			password: 'foobar',
+			password,
 			user_metadata: {
 				publicKey
 			}
 		});
 
-		if (error) throw error;
-		user = data.user;
+		if (createUserError) throw createUserError;
+		const secondAttempt = await getAuthTokenResponse();
+
+		if (secondAttempt.error) throw secondAttempt.error;
+		token = secondAttempt.data;
 	}
 
-	const authTokenResponse = await supabase.auth.signInWithPassword({ email, password: 'foobar' });
-
 	await supabase.auth.setSession({
-		access_token: authTokenResponse.data.session!.access_token,
-		refresh_token: authTokenResponse.data.session!.refresh_token
+		access_token: token.session!.access_token,
+		refresh_token: token.session!.refresh_token
 	});
 
 	return json({

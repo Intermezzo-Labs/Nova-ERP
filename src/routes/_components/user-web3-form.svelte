@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { wallet } from '$lib/stores/wallet';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { LoaderPinwheel } from 'lucide-svelte';
+	import { FileSignature, LoaderPinwheel } from 'lucide-svelte';
 	import { PUBLIC_NONCE_MESSAGE } from '$env/static/public';
 	import { goto } from '$app/navigation';
 
-	let { loading } = $props();
+	let loading = $state(false);
 	let availableWallets = ['Phantom', 'Solflare'];
 
 	const shortener = (str?: string) => {
@@ -23,6 +23,7 @@
 		}
 
 		try {
+			loading = true;
 			const nonceResponse = await fetch('/auth/web3/nonce?platform=solana');
 			const nonceData = await nonceResponse.json();
 
@@ -50,6 +51,8 @@
 			}
 		} catch (error) {
 			console.error('Signing error:', error);
+		} finally {
+			loading = false;
 		}
 	}
 
@@ -63,13 +66,13 @@
 	}
 </script>
 
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-2">
 	{#if $wallet.error}
 		<p style="color: red;">{$wallet.error}</p>
 	{/if}
 
 	{#if $wallet.connecting}
-		<p>Connecting...</p>
+		<p class=" text-center text-sm text-muted-foreground">Connecting...</p>
 	{:else if $wallet.connected}
 		<p class=" text-center text-sm">Connected address: <code>{publicKeyShort}</code></p>
 		<Button variant="outline" onclick={disconnectWallet}>Disconnect</Button>
@@ -83,7 +86,7 @@
 			{#if loading}
 				<LoaderPinwheel class="mr-2 h-4 w-4 animate-spin" />
 			{:else}
-				Sign Message
+				<FileSignature /> Sign Message
 			{/if}
 		</Button>
 	{:else}
