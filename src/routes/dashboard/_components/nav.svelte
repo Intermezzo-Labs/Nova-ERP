@@ -24,8 +24,10 @@
 					'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white':
 						getVariant(route.path) === 'default'
 				})}
+				disabled={route.disabled}
 			>
-				<svelte:component this={route.icon} class="mr-2 size-4" aria-hidden="true" />
+				<svelte:component this={route.icon} class="mr-2 size-4" aria-hidden="true"
+				></svelte:component>
 				{route.title}
 				{#if route.label}
 					<span

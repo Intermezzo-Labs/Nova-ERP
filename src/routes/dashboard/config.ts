@@ -3,7 +3,7 @@ import {
 	ChartColumnIncreasing,
 	CircleHelp,
 	FileText,
-	FlaskConical,
+	Hammer,
 	Megaphone,
 	MessageSquare,
 	Package,
@@ -17,14 +17,16 @@ export type Route = {
 	path?: string;
 	label: string;
 	icon: typeof Icon;
+	disabled?: boolean;
 };
 
 export const primaryRoutes: Route[] = [
 	{
-		title: 'Experimental Agent',
+		title: 'Agent Builder',
 		path: '/dashboard/experimental/ai-agent',
-		label: '',
-		icon: FlaskConical
+		label: '🚀',
+		icon: Hammer,
+		disabled: true
 	},
 	{
 		title: 'Dashboard',

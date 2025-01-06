@@ -9,10 +9,9 @@
 	// import { Bot, SendHorizonal, User } from 'lucide-svelte';
 	// import type { PageData } from './$types';
 	import ComingSoon from '$lib/components/ui/coming-soon/coming-soon.svelte';
-
 </script>
 
-<MainContainerLayout title="Nova Agent">
+<MainContainerLayout title="Agent Builder">
 	<div class="p-4">
 		<ComingSoon />
 	</div>

@@ -24,7 +24,7 @@
 	/>
 	<div class="h-main-window flex divide-x overflow-hidden">
 		<nav class={cn('hidden shrink-0 flex-col md:flex md:w-56')}>
-			<div class={cn('flex items-center justify-center px-2 md:h-[52px] md:px-0')}>
+			<div class={cn('flex items-center justify-center px-2 md:h-[52px]')}>
 				<CompanySwitcher
 					selectedCompanyId={data.currentCompanyId ?? ''}
 					availableCompanies={data.companies}
