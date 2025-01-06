@@ -1,54 +1,94 @@
-<script lang="ts" module>
-	const signMessage = async () => {
-		const nonceResponse = await fetch('/auth/web3/nonce?platform=solana');
-		const nonceData = await nonceResponse.json();
-
-		alert(nonceData.nonce);
-
-		const message = `Sign this message to log in to stillearly.io // ${nonceData.nonce}`;
-		const data = new TextEncoder().encode(message);
-		// const signature = await this.adapter.signMessage(data, 'hex');
-		const verified = await fetch('/auth/web3/verify', {
-			method: 'POST',
-			body: JSON.stringify({
-				// publicKey: this.adapter.publicKey.toBase58(),
-				nonce: nonceData.nonce
-				// signature: base58.encode(signature)
-			})
-		});
-		console.log(verified);
-		//   if (verified.accessToken) {
-		//     this.accessToken = verified.accessToken
-		//   }
-	};
-</script>
-
 <script lang="ts">
+	import { wallet } from '$lib/stores/wallet';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { LoaderPinwheel, Wallet } from 'lucide-svelte';
+	import { LoaderPinwheel } from 'lucide-svelte';
+	import { PUBLIC_NONCE_MESSAGE } from '$env/static/public';
+	import { goto } from '$app/navigation';
 
 	let { loading } = $props();
+	let availableWallets = ['Phantom', 'Solflare'];
+
+	const shortener = (str?: string) => {
+		const start = str?.substring(0, 4);
+		const end = str?.substring(str.length - 4, str.length);
+		if (!start || !end) return '';
+		return [start, end].join('...');
+	};
+	let publicKeyShort = $derived(shortener($wallet.publicKey?.toBase58()));
+
+	async function signMessage() {
+		if (!$wallet.adapter || !$wallet.connected) {
+			alert('Please connect your wallet first.');
+			return;
+		}
+
+		try {
+			const nonceResponse = await fetch('/auth/web3/nonce?platform=solana');
+			const nonceData = await nonceResponse.json();
+
+			const message = `${PUBLIC_NONCE_MESSAGE} // ${nonceData.nonce}`;
+
+			const signature = await wallet.signMessage(message); // Use the adapter's signMessage
+
+			const verified = await fetch('/auth/web3/verify', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					publicKey: $wallet.publicKey?.toBase58(),
+					nonce: nonceData.nonce,
+					signature
+				})
+			});
+			const verifiedData = await verified.json();
+			if (verified.ok) {
+				console.log('verification successful', verifiedData);
+				goto('/dashboard');
+			} else {
+				console.error('verification error', verifiedData);
+			}
+		} catch (error) {
+			console.error('Signing error:', error);
+		}
+	}
+
+	async function connectWallet(walletName: string) {
+		wallet.setWallet(walletName);
+		await wallet.connect(walletName);
+	}
+
+	async function disconnectWallet() {
+		await wallet.disconnect();
+	}
 </script>
 
-<Tooltip.Provider delayDuration={0}>
-	<Tooltip.Root>
-		<Tooltip.Trigger>
-			<Button
-				variant="outline"
-				class="w-full bg-pink-600 disabled:opacity-50"
-				type="button"
-				onclick={signMessage}
-				disabled
-			>
-				{#if loading}
-					<LoaderPinwheel class="mr-2 h-4 w-4 animate-spin" />
-				{:else}
-					<Wallet class="mr-2 h-4 w-4" />
-				{/if}
-				Connect Wallet
-			</Button>
-		</Tooltip.Trigger>
-		<Tooltip.Content sideOffset={24}>Coming soon...</Tooltip.Content>
-	</Tooltip.Root>
-</Tooltip.Provider>
+<div class="flex flex-col gap-4">
+	{#if $wallet.error}
+		<p style="color: red;">{$wallet.error}</p>
+	{/if}
+
+	{#if $wallet.connecting}
+		<p>Connecting...</p>
+	{:else if $wallet.connected}
+		<p class=" text-center text-sm">Connected address: <code>{publicKeyShort}</code></p>
+		<Button variant="outline" onclick={disconnectWallet}>Disconnect</Button>
+		<Button
+			variant="outline"
+			class="w-full bg-pink-600 disabled:opacity-50"
+			type="button"
+			onclick={signMessage}
+			disabled={loading}
+		>
+			{#if loading}
+				<LoaderPinwheel class="mr-2 h-4 w-4 animate-spin" />
+			{:else}
+				Sign Message
+			{/if}
+		</Button>
+	{:else}
+		{#each availableWallets as walletName}
+			<Button variant="secondary" onclick={() => connectWallet(walletName)}>{walletName}</Button>
+		{/each}
+	{/if}
+</div>
