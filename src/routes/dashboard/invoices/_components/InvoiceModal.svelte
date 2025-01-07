@@ -72,7 +72,7 @@
 		<form
 			method="POST"
 			use:enhance={{
-				onResult: (ev) => {
+				onResult: () => {
 					open = false;
 				}
 			}}
@@ -95,7 +95,6 @@
 								value={String($formData.customer_id)}
 								type="single"
 								onValueChange={(v) => ($formData.customer_id = +v)}
-								controlledValue
 							>
 								<Select.Trigger>
 									{selectedCustomer}
@@ -123,7 +122,6 @@
 								value={String($formData.company_id)}
 								type="single"
 								onValueChange={(v) => ($formData.company_id = +v)}
-								controlledValue
 							>
 								<Select.Trigger>
 									{selectedCompany}

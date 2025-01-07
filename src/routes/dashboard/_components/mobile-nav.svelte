@@ -13,7 +13,7 @@
 
 	type $$Props = HTMLAttributes<HTMLDivElement>;
 	type Props = {
-		class: $$Props['class'];
+		class?: $$Props['class'];
 		selectedCompanyId: string;
 		availableCompanies: PageData['companies'];
 	};

@@ -26,8 +26,7 @@
 				})}
 				disabled={route.disabled}
 			>
-				<svelte:component this={route.icon} class="mr-2 size-4" aria-hidden="true"
-				></svelte:component>
+				<route.icon class="mr-2 size-4" aria-hidden="true" />
 				{route.title}
 				{#if route.label}
 					<span

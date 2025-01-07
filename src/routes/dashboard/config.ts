@@ -68,7 +68,7 @@ export const primaryRoutes: Route[] = [
 export const secondaryRoutes: Route[] = [
 	{
 		title: 'Help',
-		label: 'Join our Discord',
+		label: '',
 		path: PUBLIC_DISCORD_URL,
 		icon: CircleHelp
 	}

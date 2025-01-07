@@ -5,7 +5,7 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from '../$types';
 	import type { NovaUserProfile } from '$lib/schemas/nova-user';
-	import { Clock, Download, IdCard, Laptop, Presentation } from 'lucide-svelte';
+	import { Clock, Download } from 'lucide-svelte';
 
 	export let data: PageData;
 	let userData =

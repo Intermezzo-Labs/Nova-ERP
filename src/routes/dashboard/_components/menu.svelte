@@ -5,6 +5,7 @@
 	import type { PageData } from '../$types';
 	import { goto } from '$app/navigation';
 	import MobileNav from './mobile-nav.svelte';
+	import ThemeSwitcher from './theme-switcher.svelte';
 
 	type $$Props = HTMLAttributes<HTMLDivElement>;
 	type Props = {
@@ -203,5 +204,8 @@
 		</Menubar.Content>
 	</Menubar.Menu>
 
-	<MobileNav class=" absolute right-0 top-0 md:hidden" {selectedCompanyId} {availableCompanies} />
+	<div class="absolute right-0 top-0 flex md:hidden">
+		<ThemeSwitcher />
+		<MobileNav {selectedCompanyId} {availableCompanies} />
+	</div>
 </Menubar.Root>
