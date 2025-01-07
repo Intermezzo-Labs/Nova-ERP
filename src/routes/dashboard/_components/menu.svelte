@@ -204,8 +204,8 @@
 		</Menubar.Content>
 	</Menubar.Menu>
 
-	<div class="absolute right-0 top-0 flex md:hidden">
+	<div class="absolute md:static right-0 top-0 flex">
 		<ThemeSwitcher />
-		<MobileNav {selectedCompanyId} {availableCompanies} />
+		<MobileNav class="md:hidden" {selectedCompanyId} {availableCompanies} />
 	</div>
 </Menubar.Root>

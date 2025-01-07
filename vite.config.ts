@@ -8,9 +8,6 @@ export default defineConfig({
 	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
-	},
-	ssr: {
-		noExternal: ['bs58', 'base-x']
 	}
 });
 

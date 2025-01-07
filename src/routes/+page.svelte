@@ -3,7 +3,6 @@
 	import UserAuthForm from './_components/user-auth-form.svelte';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { LucideOctagonMinus, Mail } from 'lucide-svelte';
-	import UserWeb3Form from './_components/user-web3-form.svelte';
 
 	export let form: ActionData;
 
@@ -60,15 +59,6 @@
 						{form?.errors?.email}
 					</span>
 				{/if}
-				<div class="relative">
-					<div class="absolute inset-0 flex items-center">
-						<span class="w-full border-t"></span>
-					</div>
-					<div class="relative flex justify-center text-xs uppercase">
-						<span class="bg-background px-2 text-muted-foreground"> Or continue with </span>
-					</div>
-				</div>
-				<UserWeb3Form />
 				<p class="px-8 text-center text-sm text-muted-foreground">
 					By clicking continue, you agree to our
 					<a href="/terms" class="underline underline-offset-4 hover:text-primary">
