@@ -5,7 +5,6 @@ import {
 	FileText,
 	Hammer,
 	Megaphone,
-	MessageSquare,
 	Package,
 	Receipt,
 	User,
@@ -69,14 +68,8 @@ export const primaryRoutes: Route[] = [
 export const secondaryRoutes: Route[] = [
 	{
 		title: 'Help',
-		label: '',
-		path: '/dashboard/help',
-		icon: CircleHelp
-	},
-	{
-		title: 'Join our Discord',
-		label: '',
+		label: 'Join our Discord',
 		path: PUBLIC_DISCORD_URL,
-		icon: MessageSquare
+		icon: CircleHelp
 	}
 ];

@@ -30,9 +30,9 @@
 					availableCompanies={data.companies}
 				/>
 			</div>
-			<Separator />
+			<Separator class="mx-0" />
 			<Nav routes={primaryRoutes} />
-			<Separator />
+			<Separator class="mx-0" />
 			<Nav routes={secondaryRoutes} />
 		</nav>
 		<main class="h-full flex-1">
