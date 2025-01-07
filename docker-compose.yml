@@ -26,20 +26,25 @@ services:
    networks:
      - nova-network
 
- nginx:
-   image: nginx:alpine
-   container_name: nova-nginx
-   restart: unless-stopped
-   volumes:
-     - ./nginx/conf.d:/etc/nginx/conf.d:ro
-     - /etc/letsencrypt:/etc/letsencrypt:ro
-   ports:
-     - "80:80"
-     - "443:443"
-   depends_on:
-     - app
-   networks:
-     - nova-network
+nginx:
+  image: nginx:alpine
+  container_name: nova-nginx
+  restart: unless-stopped
+  volumes:
+    - ./nginx/conf.d:/etc/nginx/conf.d.template:ro
+    - ./nginx/conf.d:/etc/nginx/conf.d:rw
+    - /etc/letsencrypt:/etc/letsencrypt:ro
+  ports:
+    - "80:80"
+    - "443:443"
+  depends_on:
+    - app
+  networks:
+    - nova-network
+  environment:
+    - DOMAIN=${DOMAIN}
+  command: /bin/sh -c "envsubst '\$DOMAIN' < /etc/nginx/conf.d.template/default.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+
 
 networks:
  nova-network:
